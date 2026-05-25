@@ -1,0 +1,63 @@
+﻿<div class="total-info" ng-controller="OrderTotalController as vm">
+
+    @Html.Partial("_AjaxLoader", "order-total-content-loader")
+
+    <table class="cart-total">
+        <tbody>
+            <tr>
+                <td class="cart-total-left">
+                    <span>@T("ShoppingCart.Totals.SubTotal"):</span>
+                </td>
+                <td class="cart-total-right">
+                    <span><span class="product-price">{{vm.orderTotalData.subTotal}}</span></span>
+                </td>
+            </tr>
+
+            <tr ng-show="vm.orderTotalData.subTotalDiscount">
+                <td class="cart-total-left"><span>@T("ShoppingCart.Totals.SubTotalDiscount"):</span></td>
+                <td class="cart-total-right"><span><span class="product-price">{{vm.orderTotalData.subTotalDiscount}}</span></span></td>
+            </tr>
+            <tr ng-show="vm.orderTotalData.paymentMethodAdditionalFee">
+                <td class="cart-total-left"><span>@T("ShoppingCart.Totals.PaymentMethodAdditionalFee"):</span></td>
+                <td class="cart-total-right"><span class="product-price">{{vm.orderTotalData.paymentMethodAdditionalFee}}</span></td>
+            </tr>
+
+            <tr ng-show="vm.orderTotalData.displayTaxRates && vm.orderTotalData.taxRates.length > 0" ng-repeat="taxRate in vm.orderTotalData.taxRates">
+                <td class="cart-total-left"><span>{{vm.stringFormat('@T("ShoppingCart.Totals.TaxRateLine")', taxRate.rate) }}</span></td>
+                <td class="cart-total-right"><span>{{taxRate.value}}</span></td>
+            </tr>
+            <tr ng-show="vm.orderTotalData.displayTax">
+                <td class="cart-total-left"><span>@T("ShoppingCart.Totals.Tax"):</span></td>
+                <td class="cart-total-right"><span><span class="product-price">{{vm.orderTotalData.tax}}</span></span></td>
+            </tr>
+            <tr ng-show="vm.orderTotalData.orderTotalDiscount">
+                <td class="cart-total-left"><span>@T("ShoppingCart.Totals.OrderTotalDiscount"):</span></td>
+                <td class="cart-total-right"><span class="product-price">{{vm.orderTotalData.orderTotalDiscount}}</span></td>
+            </tr>
+            <tr>
+                <td class="cart-total-left"><span>@T("ShoppingCart.Totals.Shipping"):</span></td>
+                <td class="cart-total-right">
+                    <span>
+                        <span ng-if="vm.orderTotalData.requiresShipping">
+                            <span ng-if="vm.orderTotalData.shipping && vm.orderTotalData.selectedShippingMethod.indexOf('Collect') == 0">{{vm.orderTotalData.selectedShippingMethod}} (TBD)</span>
+                            <span ng-if="vm.orderTotalData.shipping && vm.orderTotalData.selectedShippingMethod.indexOf('Collect') == -1" class="product-price">{{vm.orderTotalData.shipping}}</span>
+                            <span ng-if="!vm.orderTotalData.shipping">@T("ShoppingCart.Totals.CalculatedDuringCheckout")</span>
+                        </span>
+                        <span ng-if="!vm.orderTotalData.requiresShipping"><span id="shippingNotRequired">@T("ShoppingCart.Totals.Shipping.NotRequired")</span></span>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="cart-total-left">
+                    <span>@T("ShoppingCart.Totals.OrderTotal"):</span>
+                </td>
+                <td class="cart-total-right">
+                    <span>
+                        <span ng-if="vm.orderTotalData.orderTotal" class="product-price order-total"><strong>{{vm.orderTotalData.orderTotal}}</strong></span>
+                        <span ng-if="!vm.orderTotalData.orderTotal">@T("ShoppingCart.Totals.CalculatedDuringCheckout")</span>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>sku</FeedCaption>
+    <FeedName>SKU</FeedName>
+    <FieldNameCode>id</FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>productName</FeedCaption>
+    <FeedName>Product Name</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>name</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>200</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>productIdType</FeedCaption>
+    <FeedName>Product ID Type</FeedName>
+    <DefaultValue>UPC</DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <RowSourceType>1</RowSourceType>
+    <RowSource>UPC,EAN,GCID,GTIN</RowSource>
+    <AttributeControlType>1</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>productId</FeedCaption>
+    <FeedName>Product ID</FeedName>
+    <DefaultValue />
+    <FieldNameCode>gtin</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>shortDescription</FeedCaption>
+    <FeedName>Description</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <CharsLimit>4000</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>keyFeatures</FeedCaption>
+    <FeedName>Key Features</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit>500</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>ProductTaxCode</FeedCaption>
+    <FeedName>Product Tax Code</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>brand</FeedCaption>
+    <FeedName>Brand</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>manufacturer</FeedCaption>
+    <FeedName>Manufacturer</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>manufacturerPartNumber</FeedCaption>
+    <FeedName>Manufacturer Part Number</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>manufacturerpartnumber</FieldNameCode>
+    <CharsLimit>60</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>20</Id>
+    <FeedCaption>multipackQuantity</FeedCaption>
+    <FeedName>Multipack Quantity</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>21</Id>
+    <FeedCaption>countPerPack</FeedCaption>
+    <FeedName>Count Per Pack</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>22</Id>
+    <FeedCaption>countPerPack</FeedCaption>
+    <FeedName>Count Per Pack</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>23</Id>
+    <FeedCaption>count</FeedCaption>
+    <FeedName>Total Count</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>24</Id>
+    <FeedCaption>ProductIdUpdate</FeedCaption>
+    <FeedName>Product Id Update</FeedName>
+    <DefaultValue>Yes</DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>25</Id>
+    <FeedCaption>SkuUpdate</FeedCaption>
+    <FeedName>SKU Update</FeedName>
+    <DefaultValue>Yes</DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>30</Id>
+    <FeedCaption>mainImageUrl</FeedCaption>
+    <FeedName>Main Image URL</FeedName>
+    <FieldNameCode>picture</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>31</Id>
+    <FeedCaption>productSecondaryImageURL</FeedCaption>
+    <FeedName>Additional Image URL</FeedName>
+    <FieldNameCode>picture2</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>33</Id>
+    <FeedCaption>price</FeedCaption>
+    <FeedName>Price</FeedName>
+    <FieldNameCode>priceincludetax</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>35</Id>
+    <FeedCaption>StartDate</FeedCaption>
+    <FeedName>Site Start Date</FeedName>
+    <FieldNameCode>availablestartdate</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>36</Id>
+    <FeedCaption>EndDate</FeedCaption>
+    <FeedName>Site End Date</FeedName>
+    <FieldNameCode>availableenddate</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>50</Id>
+    <FeedCaption>color</FeedCaption>
+    <FeedName>Color</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>51</Id>
+    <FeedCaption>colorCategory</FeedCaption>
+    <FeedName>Color Category</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>52</Id>
+    <FeedCaption>finish</FeedCaption>
+    <FeedName>Finish</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>53</Id>
+    <FeedCaption>numberOfBurners</FeedCaption>
+    <FeedName>Number of Burners</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>200</Id>
+    <FeedCaption>keywords</FeedCaption>
+    <FeedName>Keywords</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

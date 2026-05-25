@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>Code</FeedCaption>
+    <FeedName>Code</FeedName>
+    <FieldNameCode>id</FieldNameCode>
+    <CharsLimit>50</CharsLimit>
+    <Required>true</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+<FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>Name</FeedCaption>
+    <FeedName>Name</FeedName>
+    <FieldNameCode>name</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>true</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>1</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>LongDescription</FeedCaption>
+    <FeedName>LongDescription</FeedName>
+    <DefaultValue />
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit>2000</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>1</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>Price</FeedCaption>
+    <FeedName>Price</FeedName>
+    <FieldNameCode>priceincludetax</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>true</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>Image</FeedCaption>
+    <FeedName>Image</FeedName>
+    <FieldNameCode>picture</FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>1</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>Link</FeedCaption>
+    <FeedName>Link</FeedName>
+    <FieldNameCode>url</FieldNameCode>
+    <Required>true</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>FineRecord</FeedCaption>
+    <FeedName>Image3</FeedName>
+    <FieldNameCode>picture3</FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

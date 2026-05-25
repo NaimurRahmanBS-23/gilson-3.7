@@ -1,0 +1,3 @@
+﻿@model IList<ProductOverviewModel>
+@using Nop.Web.Models.Catalog;
+<div class="block block-recently-viewed-products"><div class="title"><strong>@T("Products.RecentlyViewedProducts")</strong></div><div class="listbox"><ul class="list">@for (var i = 0; i < Model.Count; i++){var product = Model[i];<li @(i == Model.Count - 1 ? @Html.Raw(" class=\"last\"") : null)>@if (!String.IsNullOrEmpty(product.DefaultPictureModel.ImageUrl)){<a class="product-picture" href="@Url.RouteUrl("Product", new { SeName = product.SeName })"><img loading="lazy" src="@product.DefaultPictureModel.ImageUrl" alt="@product.Name" /></a>}<a class="product-name" href="@Url.RouteUrl("Product", new { SeName = product.SeName })">@product.Name</a></li>}</ul></div></div>

@@ -1,0 +1,38 @@
+﻿@model Nop.Plugin.Tax.Vertex.Controllers.VertexECWModel
+@using Nop.Web.Framework.UI
+@using Nop.Web.Models.Customer
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";   // inherits theme chrome
+    Html.AddTitleParts("Vertex Portal");            // standard nop helpers still work
+
+    //Html.AddCssFileParts(ResourceLocation.Head,"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css");
+    Html.AddScriptParts(ResourceLocation.Head, "https://ccwizard.vertexsmb.com/wizard/button.js");
+    // Html.AddScriptParts(ResourceLocation.Head,"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js");
+}
+@section left
+{
+    @Html.Action("CustomerNavigation", "Customer", new { selectedTabId = 0 })
+    }
+
+    <div class="page account-page customer-info-page">
+        <div class="page-title">
+            <h1>Tax Exemption</h1>
+        </div>
+
+
+        <p>Insert text instructions customers to fill out this account infomation for tax exemption purpososes.</p>
+        <p>Instruct them to goto the <a href="/customer/info">Account Information page</a> to submit the required information needed to launch the wizard.</p>
+        <p>TODO: Add JS validation here to check required information is present.</p>
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <button id="wizard-btn" type="button" class="button-1">
+                Launch Exemption Certificate Wizard
+            </button>
+        }
+    </div>
+
+    <script type="text/javascript"> (function () { var wizardInitialized = false; function setStatus(message) { var el = document.getElementById("vertex-status"); if (el) el.innerHTML = message || ""; } function getAntiForgeryToken() { var input = document.querySelector('input[name="__RequestVerificationToken"]'); return input ? input.value : ""; } function ensureWizardLibraryLoaded() { var hasVertex = (typeof vertex !== "undefined"); if (!hasVertex) { setStatus("Vertex wizard library is not loaded."); return false; } if (typeof vertex.Wizard === "undefined") { setStatus("Vertex wizard library loaded, but vertex.Wizard is missing."); return false; } return true; } function initWizard(cfg) { if (wizardInitialized) return; if (!cfg || !cfg.accessToken) { setStatus("Invalid ECW configuration returned by server."); return; } if (!cfg.sellerCode) { setStatus("Missing sellerCode in ECW configuration."); return; } if (!cfg.partitionUuid) { setStatus("Missing partitionUuid in ECW configuration."); return; } if (cfg.buyerCode) { $(".buyercode").text(cfg.buyerCode); } try { new vertex.Wizard({ domNode: document.getElementById("wizard-btn"), wizardPath: "https://ccwizard.vertexsmb.com", accessToken: cfg.accessToken, action: "CREATE", sellerCodes: [cfg.sellerCode], partitionUuid: cfg.partitionUuid, buyerCode: cfg.buyerCode, overrides: cfg.overrides }); wizardInitialized = true; setStatus("Wizard ready. Click the button to launch."); } catch (e) { console.log("Wizard initialization error:", e); setStatus("Failed to initialize wizard. See console."); } } document.addEventListener("DOMContentLoaded", function () { console.log("ECW page loaded, initializing wizard..."); if (!ensureWizardLibraryLoaded()) return; var token = getAntiForgeryToken(); console.log("Anti-forgery token:", token); if (!token) { setStatus("Missing anti-forgery token."); return; } setStatus("Preparing exemption certificate wizard..."); $.ajax({ url: '@Url.Action("GetEcwConfig", "VertexCert")', type: "POST", data: { "__RequestVerificationToken": token } }) .done(function (cfg) { console.log("ECW config received:", cfg); initWizard(cfg); }) .fail(function (xhr) { console.log("GetEcwConfig failed:", xhr); setStatus("Failed to load wizard configuration. Status: " + xhr.status); }); window.addEventListener("message", function (event) { if (!event || !event.data) return; if (event.data.type === "createdCertificates") { console.log("createdCertificates event:", event.data); var certIds = []; if (event.data.data && event.data.data.length) { for (var i = 0; i < event.data.data.length; i++) { certIds.push(event.data.data[i].id); } } setStatus("Certificate created. IDs: " + certIds.join(", ")); } }); }); })(); </script>

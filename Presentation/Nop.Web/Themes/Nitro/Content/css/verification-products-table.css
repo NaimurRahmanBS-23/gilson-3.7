@@ -1,0 +1,187 @@
+﻿.products-table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    empty-cells: show;
+    border: solid 1px #002c58;
+    width: 100%;
+}
+
+    .products-table caption {
+        background-color: #002c58;
+        color: #fff;
+        font-size: 17px;
+        font-weight: bold;
+        padding: 5px 0 2px 0;
+    }
+
+    .products-table th {
+        border-bottom: 1px solid #002c58;
+        height: 25px;
+        text-align: center;
+    }
+
+    .products-table td {
+        border-bottom: 1px solid #002c58;
+        font-family: verdana,arial,helvetica,sans-serif;
+        font-size: 14px;
+        line-height: 1.5em;
+        padding: 10px 0 10px 0;
+        text-align: left;
+    }
+
+    .products-table th a,
+    .products-table td a {
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    .products-table img {
+        max-width: 105px;
+        max-height: 105px;
+    }
+
+    .products-table td:nth-of-type(1) {
+        text-align: center;
+        width: 105px;
+    }
+
+    .products-table td:nth-of-type(3) {
+        width: 40px;
+        text-align: center;
+    }
+
+    .products-table th:nth-of-type(3), 
+    .products-table td:nth-of-type(4) {
+        width: 230px;
+        border-left: solid 1px #d3d3d3;
+        text-align: center;
+    }
+
+    .products-table td:nth-of-type(4) select{
+        float: left;
+        font-size: 12px;
+    }
+
+    .products-table .qty-input {
+        width: 34px;
+        height: 30px;
+        text-align: center;
+    }
+
+    .products-table .label {
+        font-weight: bold;
+    }
+
+    .products-table .price {
+        font-size: 15px;
+        font-weight: bold;
+        color: #b80709;
+    }
+
+    .products-table .verification {
+        width: 94%;
+        margin: auto;
+    }
+    
+    .products-table-add-to-cart {
+        margin: -10px 0 10px 0;
+        text-align:right;
+    }
+
+        .products-table-add-to-cart .clear-all {
+            display: inline-block;
+            border: 0;
+            padding: 8px 35px;
+            font-size: 13px;
+            min-width: 140px;
+            color: #555;
+            height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 20px;
+            background: url(../img/icon-minus.png) no-repeat left center, url(../img/icon-minus.png) no-repeat right center #eee;
+        }
+
+        .products-table-add-to-cart .add-to-cart {
+            border: 0;
+            padding: 10px 63px 10px 15px;
+            height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 20px;
+            color: #fff;
+            background-color: #fe9900;
+            background-image: url(../img/btn-product-buy.png);
+            background-position: right;
+            background-repeat: no-repeat;
+        }
+
+@media all and (max-width: 700px) {
+
+    /* Force table to not be like tables anymore */
+    .products-table, .products-table thead, .products-table tbody, .products-table th, .products-table td, .products-table tr {
+        display: block;
+    }
+
+        /* Hide table headers (but not display: none;, for accessibility) */
+        .products-table caption,
+        .products-table thead tr {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        .products-table tr:nth-of-type(even) {
+            background: #eee;
+        }
+
+        .products-table td {
+            border-bottom: inherit;
+            position: relative;
+            padding: 10px 0 10px 27%;
+        }
+
+            .products-table td:before {
+                /* Now like a table header */
+                position: absolute;
+                /* Top/left values mimic padding */
+                top: 6px;
+                left: 6px;
+                padding-right: 25px;
+                white-space: nowrap;
+            }
+
+            /*		Label the data		*/
+            .products-table td:nth-of-type(2):before {
+                padding-top: 7px;
+                content: "Item:";
+                font-weight: bold;
+            }
+
+            .products-table td:nth-of-type(3):before {
+                padding-top: 7px;
+                content: "Qty:";
+                font-weight: bold;
+            }
+
+            .products-table td:nth-of-type(4):before {
+                padding-top: 7px;
+                content: "Grade:";
+                font-weight: bold;
+            }
+
+            .products-table td:nth-of-type(4) select{
+                font-size: inherit;
+            }
+
+            .products-table td:nth-of-type(4) {
+                width: auto;
+                border-left: inherit;
+                text-align: left;
+            }
+
+            .products-table .verification {
+                margin: 0;
+            }
+}
+

@@ -1,0 +1,224 @@
+﻿/*=====================================================
+    
+    TABLETS PORTRAIT & SMARTPHONES LANDSCAPE
+
+=====================================================*/
+
+@media all and (min-width: 481px) {
+
+/* HEADER */
+
+.search-box input.search-box-text {
+	width: 300px !important;
+}
+
+.eu-cookie-bar-notification {
+    width: 450px;
+    max-width: 95%;
+    margin-left: -225px;
+}
+
+/* CATEGORY PAGE & GRIDS */
+
+.item-box {
+	float: left;
+}
+.product-filters .product-filter {
+	float:left;
+	width:48%;
+	min-width:0;
+	margin:0 1%;
+}
+
+/* PASSWORD PROTECTION */
+
+.enter-password-form input[type="password"] {
+	width: 300px !important;
+}
+
+/* SHOPPING CART & CHECKOUT */
+
+.order-review-data {
+	display: table;
+	width: 100%;
+	margin: 0 0 30px;
+}
+.order-review-data ul {
+	display: table-cell;
+}
+.order-details-area td {
+	float: none;
+	width: auto;
+}
+
+.shipment-details-page .shipment-overview > ul {
+    float: left;
+    width: 48%;
+    margin: 0 1% !important;
+}
+
+}
+
+@media all and (min-width: 481px) and (max-width: 768px) {
+
+    .item-box {
+	    width: 49%; /*two per row*/
+	    margin: 0 0 2% 2%;
+    }
+    .item-box:nth-child(2n+1) {
+	    clear: both;
+	    margin-left: 0;
+    }
+
+    .account-page .address-item,
+    .account-page .order-item {
+        float: left;
+        width: 49%;
+        margin: 0 0 3% 1%;
+    }
+	.account-page .address-item:nth-child(2n+1),
+	.account-page .order-item:nth-child(2n+1) {
+		margin-left: 0;
+		clear: both;
+	}
+    .home-page-manufacturers .item-box{
+        width: 32%;
+        float: left;
+        margin: 0 0 0 2%;
+        clear: none;
+    }
+    .home-page-manufacturers .item-box:nth-child(2n+1){
+        margin: 0 0 0 2%;
+    }
+    .home-page-manufacturers .item-box:nth-child(3n+1) {
+        margin-left: 0;
+    }
+}
+
+@media all and (min-width: 522px) {
+
+    .footer-upper .footer-centering {
+        width: 470px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .footer-upper .footer-block {
+        float: left;
+        margin: 0 0 10px 10px;
+    }
+	.footer-upper .footer-block:nth-child(2n+1) {
+		margin-left: 0;
+	}
+
+    .footer-middle .footer-centering {
+        width: 470px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .footer-middle .footer-block {
+        float: left;
+        margin: 0 0 10px 10px;
+    }
+	.footer-middle .footer-block:nth-child(2n+1) {
+		margin-left: 0;
+        clear:both;
+	}
+
+    /* PRODUCT PAGE */
+
+	.ui-tabs .ui-tabs-nav li {
+		margin: 0 2px 0 0;
+		float: left;
+	}
+	.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, 
+	.ui-tabs .ui-state-active.ui-tabs-active a, 
+	.ui-tabs .ui-tabs-nav li a:hover {
+		border-color: #002c58;
+	}
+
+}
+
+@media all and (min-width: 580px) and (max-width: 768px) {
+    .block-category-navigation {
+	    display: none;
+    }
+
+    .side-2 {
+        overflow: hidden;
+        margin: 0 0 50px;
+    }
+    .block {
+        float: left;
+        width: 49%;
+        margin: 0 0 2% 2%;
+    }
+	.block:nth-of-type(2n+1) {
+		clear: both;
+		margin-left: 0;
+	}
+    .mobile-banners{
+        width: 50%;
+    }
+
+}
+
+@media all and (min-width: 560px) {
+
+    .variant-picture {
+	    float: left;
+    }
+    .variant-picture + .variant-overview {
+	    width: auto;
+	    margin: 0 0 0 210px;
+    }
+    .variant-overview {
+        text-align: left;
+    }
+    .variant-overview .free-shipping {
+        margin: 0 0 15px;
+    }
+    .variant-overview .add-to-cart-button {
+	    margin-right: 10px;
+    }
+    .variant-overview .add-to-wishlist-button {
+	    float: left;
+    }
+
+}
+
+@media all and (max-width: 480px) {
+    .block-category-navigation {
+	    display: none;
+    }
+
+    .contact-page .left {
+        float: none;
+        width: 100%;        
+    }
+    .contact-page .right {
+        float: none;
+        width: 100%;
+        margin-top: 50px;
+    }
+
+    .contact-page .address {
+        height: 265px;
+    }
+
+    .contact-page .phone {
+        height: 210px;
+    }
+
+    .contact-page .emails {
+        height: 320px;
+    }
+
+    .contact-page h3 {
+        display: block;
+        margin: 0;
+    }
+
+    .contact-page ul {
+        display: block;
+    }
+}

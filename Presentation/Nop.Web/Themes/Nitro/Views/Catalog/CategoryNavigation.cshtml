@@ -1,0 +1,28 @@
+﻿@model CategoryNavigationModel
+@using Nop.Web.Models.Catalog;
+
+<div class="block block-category-navigation">
+    <div id="cat-title">
+        <div class="title">
+            <strong>@T("Categories")</strong>
+        </div>
+    </div>
+    <div class="listbox">
+        <ul @if (Model.ShowGilsonLhm) {<text>id="gilson-lhm"</text>} class="list">
+            @*<li><a href="/new-products">New Products</a></li>*@
+            <li><a href="/sieve-analysis-equipment">Sieving</a></li>
+            <li><a href="/sieve-shakers">Sieve Shakers</a></li>
+            <li><a href="/screening">Screening</a></li>
+            <li><a href="/sampling-dividing">Sampling &amp; Dividing</a></li>
+            <li><a href="/aggregate-testing-equipment">Aggregates</a></li>
+            <li><a href="/asphalt-testing-equipment">Asphalt</a></li>
+            <li><a href="/concrete-testing-equipment">Concrete</a></li>
+            <li><a href="/soil-testing-equipment">Soils</a></li>
+            <li><a href="/ovens-and-furnaces">Ovens &amp; Furnaces</a></li>
+            <li><a href="/crushers-pulverizers-mills">Crushers, Pulverizers &amp; Mills</a></li>
+            <li><a href="/temperature-humidity">Temperature &amp; Humidity</a></li>
+            <li><a href="/pans-tools-glassware">Pans, Tools &amp; Glassware</a></li>
+            <li><a href="/scales-balances">Scales &amp; Balances</a></li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,3 @@
+﻿@model IList<ProductOverviewModel>
+@using Nop.Web.Models.Catalog;
+@if (Model.Count > 0){<option value="0">Compliance (Included)</option>foreach (var item in Model){if (item.Name.ToLower().Contains("inspection")){<option value="@(item.Id)" title="Model: @(item.Sku + " | " + item.Name)">Inspection (+@(item.ProductPrice.Price))</option>}else if (item.Name.ToLower().Contains("calibration ")){<option value="@(item.Id)" title="Model: @(item.Sku + " | " + item.Name)">Calibration (+@(item.ProductPrice.Price))</option>}else if (item.Name.ToLower().Contains("master-matched")){<option value="@(item.Id)" title="Model: @(item.Sku + " | " + item.Name)">Master-Matched (+@(item.ProductPrice.Price))</option>}}}

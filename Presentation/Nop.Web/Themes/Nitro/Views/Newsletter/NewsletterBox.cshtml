@@ -1,0 +1,19 @@
+﻿@model NewsletterBoxModel
+@using Nop.Web.Models.Newsletter;
+<div class="newsletter">
+    <div class="title">
+        <strong>@T("Newsletter.Title")</strong>
+    </div>
+    <div class="newsletter-subscribe" id="newsletter-subscribe-block">
+        <div class="newsletter-email">
+            <form action="//globalgilson.us2.list-manage.com/subscribe/post?u=8b1545a49ba2424874194a743&amp;id=5941d8426a" method="post" name="mc-embedded-subscribe-form" novalidate="novalidate">
+                <input id="EMAIL" name="EMAIL" type="email" class="newsletter-subscribe-text" data-val="true" data-val-email="Invalid Email." data-val-required="Email is required." placeholder="Enter your email here...">
+                    <input type="submit" name="subscribe" value="Send" id="newsletter-subscribe-button" class="button-1 newsletter-subscribe-button" />
+                    <input type="hidden" name="b_8b1545a49ba2424874194a743_5941d8426a" value="">
+                    <div class="field-validation-valid" data-valmsg-for="EMAIL" data-valmsg-replace="true" style="text-align: left;"></div>
+            </form>
+        </div>
+        <div class="newsletter-validation">
+        </div>
+    </div>
+</div>

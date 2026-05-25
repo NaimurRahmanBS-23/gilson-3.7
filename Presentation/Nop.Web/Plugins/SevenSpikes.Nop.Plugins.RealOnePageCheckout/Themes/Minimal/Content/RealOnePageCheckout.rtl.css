@@ -1,0 +1,120 @@
+* {
+	direction: rtl;
+}
+.ropc .choose-address:before,
+.ropc .choose-address:after {
+	right: auto;
+	left: 0;
+}
+.ropc .choose-address:after {
+	right: 0;
+	left: auto;
+}
+.ropc .choose-address + .form-fields {
+	background: url("images/category-title-decoration.png") repeat-x left top;
+}
+.ropc .payment-method .method-list li input[type='radio'] {
+	right: 50px;
+	left: auto;
+}
+.ropc .cart tr th {
+	background: url("images/category-title-decoration.png") repeat-x left bottom;
+}
+.ropc .cart tr td {
+	background: url("images/category-title-decoration.png") repeat-x left bottom;
+}
+.ropc .cart .remove-product {
+	background: url('images/delete.png') left center no-repeat;
+	padding: 0 0 0 15px;
+}
+.ropc .coupon-box-panel .coupon-code:before,
+.ropc .giftcard-box-panel .coupon-code:before,
+.ropc .coupon-box-panel .coupon-code:after,
+.ropc .giftcard-box-panel .coupon-code:after {
+	left: 0;
+	right: auto;
+}
+.ropc .coupon-box-panel .coupon-code:after,
+.ropc .giftcard-box-panel .coupon-code:after {
+	right: 0;
+	left: auto;
+}
+.ropc .coupon-box-panel input[type="text"],
+.ropc .giftcard-box-panel input[type="text"] {
+	float: left;
+}
+.ropc .coupon-box-panel .coupon-code button,
+.ropc .giftcard-box-panel .coupon-code button {
+	right: 0;
+	left: 0;
+}
+.ropc .cart-total td.cart-total-left {
+	padding: 1% 0 1% 10%;
+}
+.ropc .cart-total td.cart-total-right {
+	padding: 1% 10% 1% 0;
+}
+.ropc .cart-total .cart-total-row td {
+	background: url(images/category-title-decoration.png) repeat-x left top, url(images/category-title-decoration.png) repeat-x left bottom;
+}
+.ropc .total-info .cart-total button {
+	margin-right: -5px;
+	margin-left: 0;
+}
+@media all and (max-width: 768px) {
+	.ropc .section .title:before,
+.ropc .section .title:after {
+		left: 2%;
+		right: auto;
+	}
+	.ropc .section .title:after {
+		left: auto;
+		right: 2%;
+	}
+}
+@media all and (max-width: 1000px) {
+	.ropc .cart tr {
+		float: left;
+	}
+}
+@media all and (min-width: 481px) {
+}
+@media all and (min-width: 769px) {
+.ropc .shipping-method .method-list li, 
+.ropc .payment-method .method-list li {
+		text-align: right;
+	}
+	.ropc .payment-method .method-list li {
+		padding-right: 70px;
+		padding-left: 0;
+	}
+	.ropc .cart-total td.cart-total-left {
+		padding: 1% 0 1% 15%;
+	}
+	.ropc .cart-total td.cart-total-right {
+		padding: 1% 15% 1% 0;
+	}
+}
+@media all and (min-width: 1001px) {
+	.ropc .order-totals-panel {
+		float: right;
+		text-align: right;
+	}
+	.ropc .cart-total td.cart-total-left {
+		padding: 1% 20% 1% 0;
+	}
+	.ropc .cart-total td.cart-total-right {
+		padding: 1% 0 1% 20%;
+	}
+}
+@media all and (min-width: 1281px) {
+	.ropc .payment-info .info {
+		text-align: right;
+	}
+	.ropc .coupon-box-panel {
+		float: left;
+	}
+	.ropc .giftcard-box-panel {
+		float: right;
+	}
+}

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>Seller-id</FeedCaption>
+    <FeedName>Seller-id</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>merchantid</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>gtin</FeedCaption>
+    <FeedName>gtin</FeedName>
+    <DefaultValue />
+    <FieldNameCode>gtin</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>isbn</FeedCaption>
+    <FeedName>isbn</FeedName>
+    <DefaultValue />
+    <FieldNameCode>gtin</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>Manufacturer</FeedCaption>
+    <FeedName>mfg-name</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>Mfr part number</FeedCaption>
+    <FeedName>mfg-part-numbe</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>manufacturerpartnumber</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>asin</FeedCaption>
+    <FeedName>asin</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>Seller-sku</FeedCaption>
+    <FeedName>seller-sku</FeedName>
+    <FieldNameCode>id</FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>title</FeedCaption>
+    <FeedName>title</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>name</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>100</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>description</FeedCaption>
+    <FeedName>description</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>8000</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>main-image</FeedCaption>
+    <FeedName>main-image</FeedName>
+    <FieldNameCode>picture</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>11</Id>
+    <FeedCaption>additional-image</FeedCaption>
+    <FeedName>additional-image</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>12</Id>
+    <FeedCaption>weight</FeedCaption>
+    <FeedName>weight</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>weight</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>13</Id>
+    <FeedCaption>features</FeedCaption>
+    <FeedName>features</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>14</Id>
+    <FeedCaption>listing-price</FeedCaption>
+    <FeedName>listing-price</FeedName>
+    <FieldNameCode>price</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>15</Id>
+    <FeedCaption>msrp</FeedCaption>
+    <FeedName>msrp</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>16</Id>
+    <FeedCaption>category-id</FeedCaption>
+    <FeedName>category-id</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>17</Id>
+    <FeedCaption>keywords</FeedCaption>
+    <FeedName>keywords</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit>250</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>18</Id>
+    <FeedCaption>product-set-id</FeedCaption>
+    <FeedName>product-set-id</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>68</Id>
+    <FeedCaption>License Type</FeedCaption>
+    <FeedName>License Type</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>69</Id>
+    <FeedCaption>Media Format</FeedCaption>
+    <FeedName>Media Format</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>70</Id>
+    <FeedCaption>Operating System Family</FeedCaption>
+    <FeedName>Operating System Family</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>71</Id>
+    <FeedCaption>POS Software Features</FeedCaption>
+    <FeedName>POS Software Features</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

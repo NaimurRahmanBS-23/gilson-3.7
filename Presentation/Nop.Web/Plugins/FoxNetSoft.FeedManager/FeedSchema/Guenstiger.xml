@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>EAN</FeedCaption>
+    <FeedName>EAN</FeedName>
+    <FieldNameCode>gtin</FieldNameCode>
+    <CharsLimit>17</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>Manufacturer part number</FeedCaption>
+    <FeedName>MPN</FeedName>
+    <FieldNameCode>manufacturerpartnumber</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>ISBN</FeedCaption>
+    <FeedName>ISBN</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>name</FeedCaption>
+    <FeedName>Produktname</FeedName>
+    <FieldNameCode>name</FieldNameCode>
+    <CharsLimit>255</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>description</FeedCaption>
+    <FeedName>description</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>5000</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>price</FeedCaption>
+    <FeedName>price</FeedName>
+    <FieldNameCode>priceincludetax</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>link</FeedCaption>
+    <FeedName>Click-out-URL</FeedName>
+    <FieldNameCode>url</FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>Category</FeedCaption>
+    <FeedName>Category</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>Bild-URL</FeedCaption>
+    <FeedName>Bild-URL</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>picture</FieldNameCode>
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>20</Id>
+    <FeedCaption>Stock/delivery time status</FeedCaption>
+    <FeedName>Lager-/Lieferstatus</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>delivery_date</FieldNameCode>
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>21</Id>
+    <FeedCaption>Ground Shipping</FeedCaption>
+    <FeedName>Standard-versand</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>additionalshippingcharge</FieldNameCode>
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

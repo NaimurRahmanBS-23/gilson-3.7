@@ -1,0 +1,8 @@
+﻿Group: Goldencomm
+FriendlyName: AvaTax provider
+SystemName: Tax.AvaTax
+Version: 1.00
+SupportedVersions: 3.70
+Author: Goldencomm Inc.
+DisplayOrder: 1
+FileName: Nop.Plugin.Tax.AvaTax.dll

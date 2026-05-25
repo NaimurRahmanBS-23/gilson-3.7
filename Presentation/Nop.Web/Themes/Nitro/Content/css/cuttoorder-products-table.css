@@ -1,0 +1,108 @@
+﻿.products-table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    empty-cells: show;
+    border: solid 1px #002c58;
+    width: 100%;
+}
+
+    .products-table caption {
+        background-color: #002c58;
+        color: #fff;
+        font-size: 17px;
+        font-weight: bold;
+        padding: 5px 0 2px 0;
+    }
+
+    .products-table th {
+        border-bottom: 1px solid #002c58;
+        height: 25px;
+        text-align: center;
+    }
+
+    .products-table td {
+        border-bottom: 1px solid #002c58;
+        font-family: verdana,arial,helvetica,sans-serif;
+        font-size: 14px;
+        line-height: 1.5em;
+        padding: 10px 0 10px 10px;
+        text-align: left;
+    }
+
+    .products-table td a {
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    .products-table img {
+        max-width: 105px;
+        max-height: 105px;
+    }
+
+
+
+    .products-table .cto {
+        margin: 15px 0 15px 0;
+    }
+
+    .products-table .qty-input {
+        text-align: center;
+        width: 34px;
+        height: 30px;
+    }
+
+    .products-table .sq-ft {
+        text-align: center;
+        border: none;
+        width: 34px;
+    }
+
+    .products-table .label {
+        font-weight: bold;
+    }
+
+    .products-table .price {
+        font-weight: bold;
+        color: #b80709;
+    }
+
+    
+    .products-table-add-to-cart {
+        margin: -10px 0 10px 0;
+        text-align:right;
+    }
+
+        .products-table-add-to-cart .clear-all {
+            display: inline-block;
+            border: 0;
+            padding: 8px 35px;
+            font-size: 13px;
+            min-width: 140px;
+            color: #555;
+            height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 20px;
+            background: url(../img/icon-minus.png) no-repeat left center, url(../img/icon-minus.png) no-repeat right center #eee;
+        }
+
+        .products-table-add-to-cart .add-to-cart {
+            border: 0;
+            padding: 10px 63px 10px 15px;
+            height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 20px;
+            color: #fff;
+            background-color: #fe9900;
+            background-image: url(../img/btn-product-buy.png);
+            background-position: right;
+            background-repeat: no-repeat;
+        }
+
+@media all and (max-width: 352px) {
+    .responsive {
+        display: block;
+    }
+}
+

@@ -1,0 +1,144 @@
+﻿@using Nop.Core
+@using Nop.Core.Domain.Customers
+@using Nop.Core.Infrastructure
+@{
+    int debounceTime = 1000;
+    var isRegisteredCustomer = EngineContext.Current.Resolve<IWorkContext>().CurrentCustomer.IsRegistered();
+}
+
+<div class="section billing-address" ng-controller="BillingAddressController as vm" ng-hide="vm.config['disableBillingAddressCheckoutStep']">
+
+    @Html.Partial("_AjaxLoader", "billing-address-loader")
+
+    <div class="section-title title">
+        <strong id="billing-title">SHIPPING ADDRESS</strong>
+    </div>
+
+    <div class="section-body">
+
+        @Html.Widget("op_checkout_billing_address_top")
+        @Html.Widget("op_checkout_billing_address_middle")
+
+        <div class="form-fields" ng-form="billingForm">
+                
+            <div id="billing-same-as-shipping-panel-1" style="margin-bottom: 20px; text-align:center;display: none"><input type="checkbox" id="billing-same-as-shipping-checkbox-1" class="billing-same-as-shipping-checkbox" checked="checked"><label for="billing-same-as-shipping-checkbox-1" title="Click here if your billing address is the same as your shipping address." style="font-size: 13px; cursor: pointer;"><strong>Same As Shipping Address</strong></label></div>
+
+            @if (isRegisteredCustomer)
+            {
+
+                <div class="choose-address">
+                    <label style="margin-bottom: 5px;"><strong>Saved Addresses <a href="/customer/addresses" title="Click here to update your saved addresses." style="text-decoration: underline;"> ( update )</a></strong></label>
+                    <select id="billing-addresses" ng-model-options="{ updateOn: 'default change' }" ng-model="vm.billingData.selectedBillingAddress" ng-options="address.customProperties.fullAddress for address in vm.billingData.addresses track by address.id">
+                        <option value="" ng-if="false"></option>
+                    </select>
+                </div>
+
+                @*<div class="choose-address">
+                    <div class="inputs">
+                        <label><strong><a href="/customer/addresses" title="Click here to manage your address book.">Saved Addresses:</a></strong></label>
+                        <select ng-model-options="{ updateOn: 'default change' }" ng-model="vm.billingData.selectedBillingAddress" ng-options="address.customAddressAttributes[0].defaultValue | addressName: address for address in vm.billingData.addresses track by address.id">
+                            <option value="" ng-if="false"></option>
+                        </select>
+                    </div>
+                </div>*@
+                <div style="display: none;">
+                    <div class="inputs" ng-repeat="attribute in vm.billingData.selectedBillingAddress.customAddressAttributes">
+                        <div ng-switch="attribute.attributeControlType">
+                            <label for="billing_address_attribute_{{attribute.id}}"><strong>{{attribute.name}}:</strong></label>
+                            <input ng-switch-when="TextBox" name="billing_address_attribute_{{attribute.id}}" type="text" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-model="vm.modelsData[attribute.id].textBoxModel" class="textbox" id="billing_address_attribute_{{attribute.id}}" ng-required="attribute.isRequired" placeholder="Enter a name for this billing address" title="This is used in the above dropdown list for quick selection." data-hj-whitelist />
+                            <span ng-show="attribute.isRequired" class="required">*</span>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div style="margin-top: 25px;">
+                <div class="inputs">
+                    <label for="billingFirstName">@T("Address.Fields.FirstName"):</label>
+                    <input type="text" ng-trim="false" ng-required="vm.requiredFields['firstName']" id="billingFirstName" name="billingFirstName" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : billingForm['billingFirstName'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.billingData.selectedBillingAddress.firstName" value="{{vm.billingData.selectedBillingAddress.firstName}}" data-hj-whitelist/>
+                    <span class="required">*</span>
+                </div>
+
+                <div class="inputs">
+                    <label for="billingLastName">@T("Address.Fields.LastName"):</label>
+                    <input type="text" ng-trim="false" ng-required="vm.requiredFields['lastName']" id="billingLastName" name="billingLastName" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : billingForm['billingLastName'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.billingData.selectedBillingAddress.lastName" value="{{vm.billingData.selectedBillingAddress.lastName}}" data-hj-whitelist/>
+                    <span class="required">*</span>
+                </div>
+
+                <div class="inputs" ng-hide="vm.billingData.settings.companyEnabled === false">
+                    <label for="billingCompany">@T("Address.Fields.Company"):</label>
+                    <input type="text" ng-trim="false" ng-required="vm.requiredFields['company']" id="billingCompany" name="billingCompany" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : billingForm['billingCompany'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.billingData.selectedBillingAddress.company" value="{{vm.billingData.selectedBillingAddress.company}}" data-hj-whitelist/>
+                    <span ng-show="vm.billingData.settings.companyRequired" class="required">*</span>
+                </div>
+                
+                <div class="inputs" ng-hide="vm.billingData.settings.countryEnabled === false">
+                    <label for="billingCountry">@T("Address.Fields.Country"):</label>
+                    <select name="billingCountry" id="billingCountry" ng-required="vm.requiredFields['country']" ng-model-options="{ updateOn: 'default change' }" make-first-value-invalid ng-class="{'has-error' : billingForm['billingCountry'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.billingData.selectedBillingAddress.country" ng-options="country.text for country in vm.billingData.countries track by country.value">
+                        <option value="" ng-if="false"></option>
+                    </select>
+                    <span ng-show="vm.billingData.settings.countryEnabled" class="required">*</span>
+                </div>
+
+                <div class="inputs" ng-hide="vm.billingData.settings.streetAddressEnabled === false">
+                    <label for="billingAddress1">@T("Address.Fields.Address1"):</label>
+                    <input type="text" ng-trim="false" ng-required="vm.requiredFields['address1']" id="billingAddress1" name="billingAddress1" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : billingForm['billingAddress1'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.billingData.selectedBillingAddress.address1" value="{{vm.billingData.selectedBillingAddress.address1}}" data-hj-whitelist/>
+                    <span ng-show="vm.billingData.settings.streetAddressRequired" class="required">*</span>
+                </div>
+
+                <div class="inputs" ng-hide="vm.billingData.settings.streetAddress2Enabled === false">
+                    <label for="billingAddress1">@T("Address.Fields.Address2"):</label>
+                    <input type="text" ng-trim="false" ng-required="vm.requiredFields['address2']" id="billingAddress2" name="billingAddress2" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : billingForm['billingAddress2'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.billingData.selectedBillingAddress.address2" value="{{vm.billingData.selectedBillingAddress.address2}}" data-hj-whitelist/>
+                    <span ng-show="vm.billingData.settings.streetAddress2Required" class="required">*</span>
+                </div>
+
+                <div class="inputs" ng-hide="vm.billingData.settings.cityEnabled === false">
+                    <label for="billingCity">@T("Address.Fields.City"):</label>
+                    <input type="text" ng-trim="false" ng-required="vm.requiredFields['city']" id="billingCity" name="billingCity" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : billingForm['billingCity'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.billingData.selectedBillingAddress.city" value="{{vm.billingData.selectedBillingAddress.city}}" data-hj-whitelist/>
+                    <span ng-show="vm.billingData.settings.cityRequired" class="required">*</span>
+                </div>
+
+                <div class="inputs" ng-hide="vm.billingData.settings.countryEnabled === false || vm.billingData.settings.stateProvinceEnabled === false">
+                    <label for="billingStateProvince">@T("Address.Fields.StateProvince"):</label>
+                    <select ng-model-options="{ updateOn: 'default change' }" name="billingStateProvince" ng-class="{'has-error' : billingForm['billingStateProvince'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-required="vm.requiredFields['stateProvince']" ng-model="vm.billingData.selectedBillingAddress.stateProvince" id="billingStateProvince" ng-options="state.text for state in vm.billingData.states track by state.value">
+                        <option value="" ng-if="false"></option>
+                    </select>
+                    <span ng-show="vm.billingData.settings.stateProvinceEnabled" class="required">*</span>
+                </div>
+
+                <div class="inputs" ng-hide="vm.billingData.settings.zipPostalCodeEnabled === false">
+                    <label for="billingZipPostalCode">@T("Address.Fields.ZipPostalCode"):</label>
+                    <input type="text" ng-trim="false" ng-required="vm.requiredFields['zipPostalCode']" id="billingZipPostalCode" name="billingZipPostalCode" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : billingForm['billingZipPostalCode'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.billingData.selectedBillingAddress.zipPostalCode" value="{{vm.billingData.selectedBillingAddress.zipPostalCode}}" data-hj-whitelist/>
+                    <span ng-show="vm.billingData.settings.zipPostalCodeRequired" class="required">*</span>
+                </div>
+
+            </div>
+            <div style="margin-top: 20px;">
+                <div class="inputs">
+                    <label><strong id="bci">Shipping Contact Information:</strong></label>
+                    <label for="billingEmail">@T("Address.Fields.Email"):</label>
+                    <input ng-required="vm.requiredFields['email']" type="text" id="billingEmail" name="billingEmail" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : billingForm['billingEmail'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.billingData.selectedBillingAddress.email" value="{{vm.billingData.selectedBillingAddress.email}}" data-hj-whitelist/>
+                    <span class="required">*</span>
+                </div>
+
+                <div class="inputs" ng-hide="vm.billingData.settings.phoneEnabled === false">
+                    <label for="billingPhoneNumber">@T("Address.Fields.PhoneNumber"):</label>
+                    <input type="text" id="billingPhoneNumber" ng-required="vm.requiredFields['phoneNumber']" name="billingPhoneNumber" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : billingForm['billingPhoneNumber'].$invalid && billingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.billingData.selectedBillingAddress.phoneNumber" value="{{vm.billingData.selectedBillingAddress.phoneNumber}}" data-hj-whitelist/>
+                    <span ng-show="vm.billingData.settings.phoneRequired" class="required">*</span>
+                </div>
+            </div>
+            <div style="display: none;">
+                <div class="options ship-to-same-address" ng-hide="vm.configData.shipToSameAddressDisabled">
+                    <input type="checkbox" id="shipToSameAddress" name="shipToSameAddress" ng-model="vm.shipToSameAddress" value="{{vm.shipToSameAddress}}"/>
+                    <label for="shipToSameAddress" title="Check this box if your shipping address is the same as your billing address." style="font-size: 13px; cursor: pointer;"><strong>@T("SevenSpikes.RealOnePageCheckout.Public.ShipToSameAddress")</strong></label>
+                </div>
+            </div>
+        </div>
+        @Html.Widget("op_checkout_billing_address_bottom")
+    </div>
+</div>
+
+<div id="billing-same-as-shipping-panel-2" class="section billing-address">
+    <div class="section-title title"><strong>Billing address</strong></div>
+    <div class="section-body" style="text-align: center;">
+        <input type="checkbox" id="billing-same-as-shipping-checkbox-2" class="billing-same-as-shipping-checkbox" checked="checked"><label for="billing-same-as-shipping-checkbox-2" title="Click here if your billing address is the same as your shipping address." style="font-size: 13px; cursor: pointer;"><strong>Same As Shipping Address</strong></label>
+    </div>
+</div>

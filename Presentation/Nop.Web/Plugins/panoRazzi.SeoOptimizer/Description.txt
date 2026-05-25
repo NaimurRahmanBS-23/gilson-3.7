@@ -1,0 +1,8 @@
+﻿Group: Misc
+FriendlyName: SEO Optimizer
+SystemName: panoRazzi.SeoOptimizer
+Version: 1.20
+SupportedVersions: 3.70
+Author: Lam Woon Cherk (http://pronopcommerce.com)
+DisplayOrder: 1
+FileName: panoRazzi.SeoOptimizer.dll

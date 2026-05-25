@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>SKU</FeedCaption>
+    <FeedName>SKU</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>id</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>StandardPrice</FeedCaption>
+    <FeedName>StandardPrice</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>price</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>SalePrice</FeedCaption>
+    <FeedName>SalePrice</FeedName>
+    <XPath>Sale</XPath>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>specialprice</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

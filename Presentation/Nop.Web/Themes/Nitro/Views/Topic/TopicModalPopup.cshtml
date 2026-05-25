@@ -1,0 +1,16 @@
+﻿@model TopicModel
+@using Nop.Core.Domain.Seo
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.Topics;
+<div class="topic-popup">
+    <div class="page topic-page" id="ph-topic">
+        <div class="page-title" id="ph-title">
+            <h1>@Model.Title</h1>
+        </div>
+        <div class="page-body">
+            <div class="topic-desc">
+                @Html.Raw(Model.Body)
+            </div>
+        </div>
+    </div>
+</div>

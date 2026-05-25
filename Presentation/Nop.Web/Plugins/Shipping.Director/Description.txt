@@ -1,0 +1,8 @@
+Group: Shipping rate computation
+FriendlyName: Shipping Director
+SystemName: Shipping.Director
+Version: 1.29
+SupportedVersions: 3.70
+Author: nopTools
+DisplayOrder: 1
+FileName: Nop.Plugin.Shipping.Director.dll

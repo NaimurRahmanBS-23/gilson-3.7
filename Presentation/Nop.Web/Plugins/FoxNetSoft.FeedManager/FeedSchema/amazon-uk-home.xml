@@ -1,0 +1,1013 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>item_sku</FeedCaption>
+    <FeedName>Seller SKU</FeedName>
+    <FieldNameCode>sku</FieldNameCode>
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>external_product_id</FeedCaption>
+    <FeedName>Product ID</FeedName>
+    <FieldNameCode>gtin</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>external_product_id_type</FeedCaption>
+    <FeedName>Product ID Type</FeedName>
+    <DefaultValue>EAN</DefaultValue>
+    <FieldNameCode />
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>1</RowSourceType>
+    <RowSource>UPC,EAN,GCID,GTIN</RowSource>
+    <AttributeControlType>1</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>item_name</FeedCaption>
+    <FeedName>Product Name</FeedName>
+    <DefaultValue />
+    <FieldNameCode>name</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>500</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>product_description</FeedCaption>
+    <FeedName>Product Description</FeedName>
+    <DefaultValue />
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>2000</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>2</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>feed_product_type</FeedCaption>
+    <FeedName>Product Type</FeedName>
+    <DefaultValue>Home</DefaultValue>
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>1</RowSourceType>
+    <RowSource>Art,BedAndBath,FurnitureAndDecor,Home,Kitchen,OutdoorLiving,SeedsAndPlants</RowSource>
+    <AttributeControlType>1</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>brand_name</FeedCaption>
+    <FeedName>Brand Name</FeedName>
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>manufacturer</FeedCaption>
+    <FeedName>Manufacturer</FeedName>
+    <DefaultValue />
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>part_number</FeedCaption>
+    <FeedName>Manufacturer Part Number</FeedName>
+    <DefaultValue />
+    <FieldNameCode>manufacturerpartnumber</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>item_type</FeedCaption>
+    <FeedName>Item Type Keyword</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>11</Id>
+    <FeedCaption>update_delete</FeedCaption>
+    <FeedName>Update Delete</FeedName>
+    <DefaultValue>PartialUpdate</DefaultValue>
+    <FieldNameCode />
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>1</RowSourceType>
+    <RowSource>Update,PartialUpdate,Delete</RowSource>
+    <AttributeControlType>1</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>12</Id>
+    <FeedCaption>model</FeedCaption>
+    <FeedName>model</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>20</Id>
+    <FeedCaption>standard_price</FeedCaption>
+    <FeedName>Standard Price</FeedName>
+    <FieldNameCode>priceincludetax</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>21</Id>
+    <FeedCaption>condition_type</FeedCaption>
+    <FeedName>Item Condition</FeedName>
+    <DefaultValue>New</DefaultValue>
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>22</Id>
+    <FeedCaption>condition_note</FeedCaption>
+    <FeedName>Offer Condition Note</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>23</Id>
+    <FeedCaption>quantity</FeedCaption>
+    <FeedName>Quantity</FeedName>
+    <DefaultValue />
+    <FieldNameCode>stockquantity</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>24</Id>
+    <FeedCaption>product_site_launch_date</FeedCaption>
+    <FeedName>Launch Date</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>25</Id>
+    <FeedCaption>fulfillment_latency</FeedCaption>
+    <FeedName>Fulfillment Latency</FeedName>
+    <FieldNameCode />
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>26</Id>
+    <FeedCaption>product_tax_code</FeedCaption>
+    <FeedName>Product Tax Code</FeedName>
+    <DefaultValue>A_GEN_NOTAX</DefaultValue>
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>27</Id>
+    <FeedCaption>sale_price</FeedCaption>
+    <FeedName>Sale Price</FeedName>
+    <DefaultValue />
+    <FieldNameCode>specialprice</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>28</Id>
+    <FeedCaption>sale_from_date</FeedCaption>
+    <FeedName>Sale Start Date</FeedName>
+    <DefaultValue />
+    <FieldNameCode>specialpricestartdate</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>29</Id>
+    <FeedCaption>sale_end_date</FeedCaption>
+    <FeedName>Sale End Date</FeedName>
+    <DefaultValue />
+    <FieldNameCode>specialpriceenddate</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>30</Id>
+    <FeedCaption>is_discontinued_by_manufacturer</FeedCaption>
+    <FeedName>Is Discontinued By Manufacturer</FeedName>
+    <DefaultValue>FALSE</DefaultValue>
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>31</Id>
+    <FeedCaption>missing_keyset_reason</FeedCaption>
+    <FeedName>Registered Parameter</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>32</Id>
+    <FeedCaption>merchant_shipping_group_name</FeedCaption>
+    <FeedName>Shipping-Template</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>50</Id>
+    <FeedCaption>item_height</FeedCaption>
+    <FeedName>Item Height</FeedName>
+    <DefaultValue />
+    <FieldNameCode>height</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>51</Id>
+    <FeedCaption>item_length</FeedCaption>
+    <FeedName>Item Length</FeedName>
+    <DefaultValue />
+    <FieldNameCode>length</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>52</Id>
+    <FeedCaption>item_length_unit_of_measure</FeedCaption>
+    <FeedName>Item Length Unit Of Measure</FeedName>
+    <DefaultValue />
+    <FieldNameCode>measure_unit_dimension</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>53</Id>
+    <FeedCaption>item_weight</FeedCaption>
+    <FeedName>Item Weight</FeedName>
+    <DefaultValue />
+    <FieldNameCode>weight</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>54</Id>
+    <FeedCaption>item_weight_unit_of_measure</FeedCaption>
+    <FeedName>Item Weight Unit Of Measure</FeedName>
+    <DefaultValue />
+    <FieldNameCode>measure_unit_weight</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>55</Id>
+    <FeedCaption>item_width</FeedCaption>
+    <FeedName>Item Width</FeedName>
+    <DefaultValue />
+    <FieldNameCode>width</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>60</Id>
+    <FeedCaption>bullet_point1</FeedCaption>
+    <FeedName>Key Product Features1</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>61</Id>
+    <FeedCaption>bullet_point2</FeedCaption>
+    <FeedName>Key Product Features2</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>62</Id>
+    <FeedCaption>bullet_point3</FeedCaption>
+    <FeedName>Key Product Features3</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>63</Id>
+    <FeedCaption>bullet_point4</FeedCaption>
+    <FeedName>Key Product Features4</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>64</Id>
+    <FeedCaption>bullet_point5</FeedCaption>
+    <FeedName>Key Product Features5</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>65</Id>
+    <FeedCaption>target_audience_base</FeedCaption>
+    <FeedName>Target Audience</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>68</Id>
+    <FeedCaption>specific_uses_keywords1</FeedCaption>
+    <FeedName>Used For1 - Used For31</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>69</Id>
+    <FeedCaption>specific_uses_keywords2</FeedCaption>
+    <FeedName>Used For1 - Used For32</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>70</Id>
+    <FeedCaption>specific_uses_keywords3</FeedCaption>
+    <FeedName>Used For1 - Used For33</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>71</Id>
+    <FeedCaption>specific_uses_keywords4</FeedCaption>
+    <FeedName>Used For1 - Used For34</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>73</Id>
+    <FeedCaption>specific_uses_keywords5</FeedCaption>
+    <FeedName>Used For1 - Used For35</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>74</Id>
+    <FeedCaption>target_audience_keywords1</FeedCaption>
+    <FeedName>Target Audience1</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>75</Id>
+    <FeedCaption>target_audience_keywords2</FeedCaption>
+    <FeedName>Target Audience2</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>76</Id>
+    <FeedCaption>target_audience_keywords3</FeedCaption>
+    <FeedName>Target Audience3</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>77</Id>
+    <FeedCaption>thesaurus_subject_keywords1</FeedCaption>
+    <FeedName>Subject Matter1</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>78</Id>
+    <FeedCaption>thesaurus_subject_keywords2</FeedCaption>
+    <FeedName>Subject Matter2</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>79</Id>
+    <FeedCaption>thesaurus_subject_keywords3</FeedCaption>
+    <FeedName>Subject Matter3</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>80</Id>
+    <FeedCaption>generic_keywords</FeedCaption>
+    <FeedName>Search Terms</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>100</Id>
+    <FeedCaption>main_image_url</FeedCaption>
+    <FeedName>Main Image URL</FeedName>
+    <FieldNameCode>picture</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>101</Id>
+    <FeedCaption>other_image_url1</FeedCaption>
+    <FeedName>Image URL1</FeedName>
+    <FieldNameCode>picture2</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>102</Id>
+    <FeedCaption>other_image_url2</FeedCaption>
+    <FeedName>Image URL2</FeedName>
+    <FieldNameCode>picture3</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>103</Id>
+    <FeedCaption>other_image_url3</FeedCaption>
+    <FeedName>Image URL3</FeedName>
+    <FieldNameCode>picture4</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>150</Id>
+    <FeedCaption>parent_child</FeedCaption>
+    <FeedName>Parentage</FeedName>
+    <DefaultValue />
+    <FieldNameCode>parentstatus</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>151</Id>
+    <FeedCaption>parent_sku</FeedCaption>
+    <FeedName>Parent SKU</FeedName>
+    <DefaultValue />
+    <FieldNameCode>parentgroupedproductid</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>152</Id>
+    <FeedCaption>relationship_type</FeedCaption>
+    <FeedName>Relationship Type</FeedName>
+    <FieldNameCode>parentstatus</FieldNameCode>
+    <ConvertValues>
+      <ConvertValue>
+        <Id>1</Id>
+        <OldValue>child</OldValue>
+        <NewValue>Variation</NewValue>
+      </ConvertValue>
+      <ConvertValue>
+        <Id>2</Id>
+        <OldValue>parent</OldValue>
+        <NewValue />
+      </ConvertValue>
+    </ConvertValues>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <AdvancedField>false</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>153</Id>
+    <FeedCaption>variation_theme</FeedCaption>
+    <FeedName>Variation Theme</FeedName>
+    <DefaultValue />
+    <FieldNameCode />
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>false</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>200</Id>
+    <FeedCaption>material_type</FeedCaption>
+    <FeedName>Material Type</FeedName>
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>201</Id>
+    <FeedCaption>color_map</FeedCaption>
+    <FeedName>Color Map</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>202</Id>
+    <FeedCaption>size_map</FeedCaption>
+    <FeedName>Size Map</FeedName>
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>203</Id>
+    <FeedCaption>battery_type</FeedCaption>
+    <FeedName>BatteryType</FeedName>
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>204</Id>
+    <FeedCaption>pattern_name</FeedCaption>
+    <FeedName>Pattern</FeedName>
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>205</Id>
+    <FeedCaption>style_name</FeedCaption>
+    <FeedName>Style Name</FeedName>
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>206</Id>
+    <FeedCaption>recommended_browse_nodes</FeedCaption>
+    <FeedName>Recommended Browse Nodes</FeedName>
+    <FieldNameCode />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>false</UseCDATA>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+    <RowSourceType>0</RowSourceType>
+    <AttributeControlType>0</AttributeControlType>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

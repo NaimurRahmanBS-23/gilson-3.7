@@ -1,0 +1,12 @@
+﻿@using SevenSpikes.Nop.Plugins.RichBlog.Models;
+
+@model RichBlogImageModel
+
+@if (!string.IsNullOrEmpty(Model.BlogPostUrl) && !string.IsNullOrEmpty(Model.BlogPostImageUrl))
+{
+    if (Model.IsBlogDetailsPage)
+    {
+        Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"" + Model.BlogPostImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:image\" content=\"" + Model.BlogPostImageUrl + "\" />");
+    }
+}

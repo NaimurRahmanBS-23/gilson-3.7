@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>Produktbezeichnung</FeedCaption>
+    <FeedName>Produktbezeichnung</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>name</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>Herstellername</FeedCaption>
+    <FeedName>Herstellername</FeedName>
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>Preis</FeedCaption>
+    <FeedName>Preis</FeedName>
+    <FieldNameCode>priceincludetax</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>Deeplink</FeedCaption>
+    <FeedName>Deeplink</FeedName>
+    <FieldNameCode>url</FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>Herstellernummer</FeedCaption>
+    <FeedName>Herstellernummer</FeedName>
+    <FieldNameCode>manufacturerpartnumber</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>Beschreibung</FeedCaption>
+    <FeedName>Beschreibung</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>Verfjgbarkeit</FeedCaption>
+    <FeedName>Verfjgbarkeit</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>Versand Vorkasse</FeedCaption>
+    <FeedName>Versand Vorkasse</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>Versand Nachnahme</FeedCaption>
+    <FeedName>Versand Nachnahme</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>ean</FeedCaption>
+    <FeedName>ean</FeedName>
+    <FieldNameCode>gtin</FieldNameCode>
+    <CharsLimit>14</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

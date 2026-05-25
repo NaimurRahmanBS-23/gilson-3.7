@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+    Html.AddTitleParts(T("homepagemetatitle").Text);
+    Html.AddMetaDescriptionParts(T("homepage.metadescription").Text);
+    Html.AddCanonicalUrlParts("https://www.globalgilson.com/");
+}
+<div class="page home-page">
+    <div class="page-body">
+        @Html.Action("HomepageCategories", "Catalog")
+        @Html.Action("HomepageProducts", "Product")
+        @Html.Action("HomepageBestSellers", "Product")
+    </div>
+</div>
+@{@*var customerEmail = !string.IsNullOrEmpty(WorkContext.CurrentCustomer.Email) ? WorkContext.CurrentCustomer.Email : string.Empty;*@}@*<script type="text/javascript" src="//static.criteo.net/js/ld/ld.js" async="true"></script><script type="text/javascript">var deviceType = /iPad/.test(navigator.userAgent) ? "t" : /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Silk/.test(navigator.userAgent) ? "m" : "d";window.criteo_q = window.criteo_q || [];window.criteo_q.push({ event: "setAccount", account: 50375 },{ event: "setEmail", email: "@(customerEmail)" },{ event: "setSiteType", type: deviceType },{ event: "viewHome" });</script>*@

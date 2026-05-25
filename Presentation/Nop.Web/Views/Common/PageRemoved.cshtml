@@ -1,0 +1,15 @@
+﻿@using System.Web.Caching
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+    Html.AddMetaKeywordParts("NOINDEX");
+    //title
+    Html.AddTitleParts("Page Removed");
+}
+<div class="page not-found-page">
+    <div class="page-title">
+        <h1>Page Removed</h1>
+    </div>
+    <div class="page-body">
+        @Html.Action("TopicBlock", "Topic", new { systemName = "PageRemoved" })
+    </div>
+</div>

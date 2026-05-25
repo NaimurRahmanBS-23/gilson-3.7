@@ -1,0 +1,8 @@
+﻿Group: Shipping rate computation
+FriendlyName: FedExFreight
+SystemName: Shipping.FedExFreight
+Version: 1.21
+SupportedVersions: 3.70
+Author: nopCommerce team
+DisplayOrder: 1
+FileName: Nop.Plugin.Shipping.FedexFreight.dll

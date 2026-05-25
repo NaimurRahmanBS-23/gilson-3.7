@@ -1,0 +1,45 @@
+﻿@model Nop.Web.Models.Invoice.CustomerInvoiceListModel
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+
+    //title
+    Html.AddTitleParts("Invoices - My Gilson");
+}
+@using Nop.Web.Models.Customer
+@using Nop.Web.Models.Order;
+@section left
+{
+    @Html.Action("CustomerNavigation", "Customer", new { selectedTabId = CustomerNavigationEnum.Orders })
+}
+<div class="page account-page order-list-page">
+    <div class="page-title">
+        <h1>Invoices</h1>
+    </div>
+    <div class="page-body">
+
+        @if (Model.Invoices.Count > 0)
+        {
+            <div class="order-list">
+                @foreach (var invoice in Model.Invoices)
+                {
+                    <div class="section order-item">
+                        <div class="title">
+                            <strong>Invoice #: @invoice.InvoiceNumber</strong>
+                        </div>
+                        <ul class="info">
+                            <li>Invoice Date: <span class="order-date">@invoice.CreatedOn.ToString("MM/dd/yyyy")</span></li>
+                            <li>Invoice Total: <span class="order-total">@invoice.InvoiceTotal</span></li>
+                        </ul>
+                        <div class="buttons">
+                            <input type="button" value="Details" class="button-2 order-details-button" onclick="setLocation('/invoicedetails/@invoice.InvoiceNumber')" />
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-data"><p><h2>@T("Account.CustomerInvoices.NoInvoices")</h2></p></div>
+        }
+    </div>
+</div>

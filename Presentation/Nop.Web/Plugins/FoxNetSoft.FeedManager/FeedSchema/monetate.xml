@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>Product ID </FeedCaption>
+    <FeedName>product_id</FeedName>
+    <FieldNameCode>id</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>Product Name</FeedCaption>
+    <FeedName>product_name</FeedName>
+    <Prefix />
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>name</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>128</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>Category Name</FeedCaption>
+    <FeedName>category_name</FeedName>
+    <FieldNameCode>categorybreadcrumb</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>128</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>Price</FeedCaption>
+    <FeedName>price</FeedName>
+    <FieldNameCode>priceincludetax</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>Product URL</FeedCaption>
+    <FeedName>url</FeedName>
+    <FieldNameCode>url</FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>Product Image URL</FeedCaption>
+    <FeedName>product_image_url</FeedName>
+    <FieldNameCode>picture</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>Product Description</FeedCaption>
+    <FeedName>product_description</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>1024</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>Brand Name</FeedCaption>
+    <FeedName>brand_name</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>Category ID</FeedCaption>
+    <FeedName>category_id</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>categoryId</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>SKU</FeedCaption>
+    <FeedName>sku</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>sku</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>11</Id>
+    <FeedCaption>Availability</FeedCaption>
+    <FeedName>availability</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>stockstatus</FieldNameCode>
+    <ConvertValues>
+      <ConvertValue>
+        <Id>1</Id>
+        <OldValue>InStock</OldValue>
+        <NewValue>In Stock</NewValue>
+      </ConvertValue>
+      <ConvertValue>
+        <Id>2</Id>
+        <OldValue>OutOfStock</OldValue>
+        <NewValue>Out of Stock</NewValue>
+      </ConvertValue>
+      <ConvertValue>
+        <Id>3</Id>
+        <OldValue>Preorder</OldValue>
+        <NewValue>Presale</NewValue>
+      </ConvertValue>
+    </ConvertValues>    
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

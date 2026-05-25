@@ -1,0 +1,158 @@
+﻿@model Nop.Plugin.Tax.AvaTax.Models.ConfigurationModel
+@using Nop.Web.Framework;
+@{
+    ViewBag.Title = "Avatax";
+    Layout = "";
+}
+
+@Html.Action("StoreScopeConfiguration", "Setting", new { area = "Admin" })
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.check-all').hide();
+            if ($("#store-scope-configuration").prop('selectedIndex') == 0) {
+                $(".adminContent :input").attr("disabled", true);
+            }
+            else {
+                $(".adminContent :input").attr("disabled", false);
+            }
+        });
+    </script>
+
+
+@using (Html.BeginForm("ConfigureAvatax", "Avatax", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.IsSandBoxAccount)
+            </td>
+            <td class="adminData">@Html.CheckBoxFor(model => model.IsSandBoxAccount)
+                                    @Html.ValidationMessageFor(model => model.IsSandBoxAccount)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.AccountNumber)
+            </td>
+            <td class="adminData">@Html.TextBoxFor(model => model.AccountNumber, new { style = "width:300px" })
+                                    @Html.ValidationMessageFor(model => model.AccountNumber)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.LicenseKey)
+            </td>
+            <td class="adminData">@Html.TextBoxFor(model => model.LicenseKey, new { style = "width:300px" })
+                                    @Html.ValidationMessageFor(model => model.LicenseKey)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.CompanyCode)
+            </td>
+            <td class="adminData">@Html.TextBoxFor(model => model.CompanyCode, new { style = "width:300px" })
+                                    @Html.ValidationMessageFor(model => model.CompanyCode)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.OriginAddress)
+            </td>
+            <td class="adminData">@Html.TextBoxFor(model => model.OriginAddress, new { style = "width:300px" })
+                                    @Html.ValidationMessageFor(model => model.OriginAddress)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.OriginCity)
+            </td>
+            <td class="adminData">@Html.TextBoxFor(model => model.OriginCity, new { style = "width:300px" })
+                                    @Html.ValidationMessageFor(model => model.OriginCity)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.OriginState)
+            </td>
+            <td class="adminData">@Html.TextBoxFor(model => model.OriginState, new { style = "width:300px" })
+                                    @Html.ValidationMessageFor(model => model.OriginState)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.OriginZipCode)
+            </td>
+            <td class="adminData">@Html.TextBoxFor(model => model.OriginZipCode, new { style = "width:300px" })
+                                    @Html.ValidationMessageFor(model => model.OriginZipCode)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.OriginCountry)
+            </td>
+            <td class="adminData">@Html.TextBoxFor(model => model.OriginCountry, new { style = "width:300px" })
+                                    @Html.ValidationMessageFor(model => model.OriginCountry)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.SendOrderToAvatax)
+            </td>
+            <td class="adminData">@Html.CheckBoxFor(model => model.SendOrderToAvatax)
+                                    @Html.ValidationMessageFor(model => model.SendOrderToAvatax)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.OrderStatusId)
+            </td>
+            <td class="adminData">@Html.DropDownListFor(model => model.OrderStatusId, new SelectList(ViewBag.AvailableOrderStatuses, "Value", "Text"))
+
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.CommitTransaction)
+            </td>
+            <td class="adminData">@Html.CheckBoxFor(model => model.CommitTransaction)
+                                    @Html.ValidationMessageFor(model => model.CommitTransaction)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.EnableLog)
+            </td>
+            <td class="adminData">@Html.CheckBoxFor(model => model.EnableLog)
+                                    @Html.ValidationMessageFor(model => model.EnableLog)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">@Html.NopLabelFor(model => model.LogDuration)
+            </td>
+            <td class="adminData">@Html.DropDownListFor(model => model.LogDuration, new SelectList(ViewBag.AvailableLogDurations, "Value", "Text"))
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.DecimalRound)
+        </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.DecimalRound, new SelectList(ViewBag.AvailableDecimalRounds, "Value", "Text"))
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+            </td>
+            <td>
+                <input type="submit" name="save" class="btn btn-primary" value="@T("Admin.Common.Save")" />
+            </td>
+        </tr>
+    </table>
+
+
+}
+           
+
+    <table>
+        <tr>
+            @using (Html.BeginForm("TestConnection", "Avatax", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <td class="adminTitle">
+                </td>
+                <td>
+                     <input type="submit" name="TestConnection" class="btn btn-primary" value="@T("Admin.Common.TestConnection")" />
+                </td>
+            }
+        </tr>
+    </table>
+

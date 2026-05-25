@@ -1,0 +1,259 @@
+@{
+    Layout = "";
+}
+@model Nop.Plugin.Shipping.ShipHawk.Models.ConfigurationModel
+@using Nop.Web.Framework;
+@using Nop.Plugin.Shipping.ShipHawk;
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <table class="adminContent">
+        <tr>
+            <td colspan="2">
+                <h2>ShipHawk Configuration</h2>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ApiKey):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.ApiKey)
+                @Html.ValidationMessageFor(model => model.ApiKey)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.UseSandbox):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.UseSandbox)
+                @Html.ValidationMessageFor(model => model.UseSandbox)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ApiUrl):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.ApiUrl)
+                @Html.ValidationMessageFor(model => model.ApiUrl)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.RequestTimeout):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.RequestTimeout)
+                @Html.ValidationMessageFor(model => model.RequestTimeout)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>Warehouse Settings</h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.DefaultWarehouseCode):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.DefaultWarehouseCode)
+                @Html.ValidationMessageFor(model => model.DefaultWarehouseCode)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>Pricing Settings</h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.MarkupPercentage):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.MarkupPercentage)
+                @Html.ValidationMessageFor(model => model.MarkupPercentage)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.MarkupFixedAmount):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.MarkupFixedAmount)
+                @Html.ValidationMessageFor(model => model.MarkupFixedAmount)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>Display Settings</h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ExcludedCarriers):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.ExcludedCarriers)
+                @Html.ValidationMessageFor(model => model.ExcludedCarriers)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.MaxShippingOptions):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.MaxShippingOptions)
+                @Html.ValidationMessageFor(model => model.MaxShippingOptions)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.HideTransitTime):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.HideTransitTime)
+                @Html.ValidationMessageFor(model => model.HideTransitTime)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SortByPrice):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.SortByPrice)
+                @Html.ValidationMessageFor(model => model.SortByPrice)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>Rate Settings</h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ApplyRules):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.ApplyRules)
+                @Html.ValidationMessageFor(model => model.ApplyRules)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.BlendedRateLabel):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.BlendedRateLabel)
+                @Html.ValidationMessageFor(model => model.BlendedRateLabel)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.CacheDurationMinutes):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.CacheDurationMinutes)
+                @Html.ValidationMessageFor(model => model.CacheDurationMinutes)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.EnableCaching):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.EnableCaching)
+                @Html.ValidationMessageFor(model => model.EnableCaching)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>Lift Gate Settings</h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.LiftGateCheckoutAttributeId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.LiftGateCheckoutAttributeId, Model.AvailableLiftGateCheckoutAttributes, "-- None --")
+                @Html.ValidationMessageFor(model => model.LiftGateCheckoutAttributeId)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>Debug Settings</h4>
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Tracing):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Tracing)
+                @Html.ValidationMessageFor(model => model.Tracing)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            </td>
+        </tr>
+    </table>
+}
+<div style="margin-top: 20px;">
+    <h4>Setup Instructions</h4>
+    <ol>
+        <li>Obtain your ShipHawk API key from your TMS account</li>
+        <li>For testing, enable "Use Sandbox" checkbox</li>
+        <li>For production, enter your company's TMS URL</li>
+        <li>Configure warehouse codes matching nopCommerce warehouses</li>
+        <li>Adjust markup/handling fees if needed</li>
+        <li>Save settings and enable the plugin</li>
+        <li>Test by adding products to cart and viewing shipping options at checkout</li>
+    </ol>
+    <h4>Warehouse Setup</h4>
+    <ul>
+        <li>Create warehouses in nopCommerce with names matching ShipHawk warehouse codes</li>
+        <li>Assign addresses to each warehouse</li>
+        <li>Configure products to use specific warehouses via inventory management</li>
+    </ul>
+    <h4>Documentation Links</h4>
+    <ul>
+        <li><a href="https://docs.shiphawk.com/" target="_blank">ShipHawk API Documentation</a></li>
+        <li><a href="https://docs.shiphawk.com/#authentication" target="_blank">Authentication Guide</a></li>
+        <li><a href="https://docs.shiphawk.com/#rates" target="_blank">Rates API Reference</a></li>
+    </ul>
+</div>

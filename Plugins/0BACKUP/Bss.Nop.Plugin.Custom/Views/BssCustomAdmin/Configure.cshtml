@@ -1,0 +1,133 @@
+﻿@model Bss.Nop.Plugin.Custom.Models.ConfigurationModel
+@using Bss.Nop.Plugin.Custom
+@using Bss.Nop.Plugin.Custom.Extensions
+@using Bss.Nop.Plugin.Custom.Models
+@using Kendo.Mvc.UI
+
+@{
+    Layout = "";
+    <script src="@Url.Content("~/Plugins/Bss.Nop.Plugin.Custom/Scripts/kendo/2016.3.1118/kendo.aspnetmvc.min.js")"></script>
+}
+
+<style>
+    #tab1-settings-form table
+    {
+        border-spacing: 25px 10px;
+        border-collapse: separate;
+    }
+</style>
+
+<div id="custom-admin-tabs">
+    <ul>
+        <li @Html.RenderSelectedTabIndex(0, Model.SelectedTabIndex)>
+            Custom Settings
+        </li>
+    </ul>
+    <div>
+        @Tab1Settings()
+    </div>
+</div>
+
+@helper Tab1Settings()
+{
+    using (Html.BeginForm("", "", FormMethod.Post, new {id = "tab1-settings-form"}))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.AuthenticationGuid)
+
+        <div style="padding: 10px;">
+            <h3>Custom Settings</h3>
+
+            @*<div style="margin-left: 25px;">
+                @Html.CheckBoxFor(model => model.Settings.IsCustomIntegrationEnabled) Enable Custom Integration <i>(requires application restart if changed)</i>
+            </div>*@
+            <table class="adminContent">
+                <tr>
+                    <td class="adminTitle">
+                        Additional Handling Charge:
+                    </td>
+                    <td class="adminData">
+                        @Html.EditorFor(model => model.Settings.AdditionalHandlingCharge) @Html.CheckBoxFor(model => model.Settings.IsAdditionalHandlingChargePercent) Is Percentage
+                        @Html.ValidationMessageFor(model => model.Settings.AdditionalHandlingCharge)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="adminTitle">
+                        Fedex Shipping Adjustment:
+                    </td>
+                    <td class="adminData">
+                        @Html.EditorFor(model => model.Settings.FedexShippingAdjustment) @Html.CheckBoxFor(model => model.Settings.IsFedexShippingAdjustmentPercent) Is Percentage
+                        @Html.ValidationMessageFor(model => model.Settings.FedexShippingAdjustment)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="adminTitle">
+                        Fedex Freight Shipping Adjustment:
+                    </td>
+                    <td class="adminData">
+                        @Html.EditorFor(model => model.Settings.FedexFreightShippingAdjustment) @Html.CheckBoxFor(model => model.Settings.IsFedexFreightShippingAdjustmentPercent) Is Percentage
+                        @Html.ValidationMessageFor(model => model.Settings.FedexFreightShippingAdjustment)
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td class="adminTitle"></td>
+                    <td class="adminData">
+                        <input type="button" value="Save Settings" onclick="DoSaveTab1Settings();" id="save-settings" class="btn btn-primary" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="adminTitle"></td>
+                    <td class="adminData">
+                        <div id="tab1-responseText">
+                        </div>
+                    </td>
+                </tr>				
+            </table>
+        </div>
+    }
+}
+
+
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+                $("#custom-admin-tabs")
+                    .kendoTabStrip({
+                        animation: {
+                            open: {
+                                effects: "fadeIn"
+                            }
+                        },
+                        select: tabstrip_on_tab_select
+                    });
+            });
+
+            function tabstrip_on_tab_select(e) {
+                //we use this function to store selected tab index into HML input
+                //this way we can persist selected tab between HTTP requests
+                $("#selected-tab-index").val($(e.item).index());
+            }
+
+            // Post communication settings to server
+            function DoSaveTab1Settings() {
+                // form serialization includes required anti forgery token
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: '@Html.Raw(Url.Action("SaveTab1Settings", "BssCustomAdmin"))',
+                    data: $('#tab1-settings-form').serialize(),
+                    dataType: "JSON",
+                    success: function (result) {
+                        $('#tab1-responseText').html("<span style='color:green'>Your settings have been saved.</span>");
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        var json = $.parseJSON(xhr.responseText);
+                        $('#tab1-responseText').html("<span style='color:red'>" + json.errorMessage + "</span>");
+                    }
+                });
+            }
+
+        </script>

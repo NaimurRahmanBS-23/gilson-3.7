@@ -1,0 +1,17 @@
+﻿@{
+    Layout = null;
+}
+@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedRecModel.FeedConditionPopUpModel
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+@using System.Web.Mvc.Html
+<div id="conditionvalueblock">
+@if (Model.ConditionValueComboBox)
+{
+    @Html.DropDownListFor(model => model.ConditionValueId, Model.AvailableConditionValues)
+}
+else
+{
+   @Html.EditorFor(model => model.ConditionValueId)
+}
+</div>

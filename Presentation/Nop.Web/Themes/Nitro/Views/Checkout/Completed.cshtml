@@ -1,0 +1,99 @@
+﻿@model CheckoutCompletedModel
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.Checkout;
+@{
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+
+    Html.AddScriptParts("~/Themes/Nitro/Content/scripts/CheckoutCompleted.js");
+
+    var storeLocation = EngineContext.Current.Resolve<Nop.Core.IWebHelper>().GetStoreLocation();
+}
+<div class="page checkout-page order-completed">
+    @if (!Model.OnePageCheckoutEnabled)
+    {
+        @Html.Action("CheckoutProgress", "Checkout", new { step = CheckoutProgressStep.Complete })
+    }
+    <div class="page-title">
+        <h1>@T("Checkout.ThankYou")</h1>
+    </div>
+    <div class="page-body checkout-data">
+        @Html.Widget("checkout_completed_top", Model.OrderId)
+        <div class="section order-completed" style="margin-bottom: 10px;">
+            <div class="title">
+                <strong>@T("Checkout.YourOrderHasBeenSuccessfullyProcessed")</strong>
+            </div>
+        </div>
+        @{
+            //HACK: Customization - MSS - Custom checkout completed msg, guest registration, and included order information.
+        }
+        <div>
+            @if (Model.CatalogOnly)
+            {
+                @Html.Action("TopicBlock", "Topic", new { systemName = "CheckoutCompletedCatalogOnlyContent" })
+            }
+            else
+            {
+                if (Model.TrialDownloadOnly)
+                {
+                    @Html.Action("TopicBlock", "Topic", new { systemName = "CheckoutCompleted.TrialDownloadOnly.Content" })
+                }
+                else if (Model.DownloadOnly)
+                {
+                    @Html.Action("TopicBlock", "Topic", new { systemName = "CheckoutCompleted.DownloadOnly.Content" })
+                }
+                else if (Model.ContainsTrialDownload)
+                {
+                    
+                    @Html.Action("TopicBlock", "Topic", new { systemName = "CheckoutCompleted.OrderContainsTrialDownload.Content" })
+                }
+                else if (Model.ContainsDownload)
+                {
+                    @Html.Action("TopicBlock", "Topic", new { systemName = "CheckoutCompleted.OrderContainsDownload.Content" })
+                }
+                else
+                {
+                    @Html.Action("TopicBlock", "Topic", new { systemName = "CheckoutCompletedContent" })
+                }
+            }
+        </div>
+
+        @if (Model.IsGuestCustomer && !Model.CatalogOnly)
+        {
+            <div id="completed-register-load">
+
+                <div class="fieldset">
+                    @Html.Action("TopicBlock", "Topic", new { systemName = "CheckoutCompletedMyGilsonContent" })
+                    <div style="margin: 20px 0 25px 0;">
+                        <div>
+                            <label style="display: inline-block; width: 125px; font-weight: 700;" for="GuestEmail">Email Address:</label>
+                            <span id="GuestEmail">@Model.Email</span>
+                        </div>
+                        <div id="completed-register-panel" style="margin-top: 10px;">
+                            <form id="completed-register-form" action="@(storeLocation)checkout/completed/register/">
+                                @Html.AntiForgeryToken()
+                                <div>
+                                    <label style="display: inline-block; width: 125px; font-weight: 700;" for="Password">Password:</label>
+                                    <input class="password" data-val="true" data-val-length="The password should have at least 6 characters." data-val-length-max="999" data-val-length-min="6" data-val-required="Password is required." id="Password" name="Password" type="password" value="" />
+                                    <span class="required">*</span>
+                                    <span id="completed-register-please-wait" class="please-wait" style="display: none;">Saving...</span>
+                                    <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true" style="display: inline;margin-left: 10px;"></span>
+                                    <span class="register-error-msg" style="font-size: 11px;color: #c00;"></span>
+                                </div>
+                                <div style="margin-top: 25px;">
+                                    <input type="submit" id="completed-register-button" class="button-1" value="Create Account" name="register-button" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @Html.Widget("checkout_completed_bottom", Model.OrderId)
+    </div>
+</div>
+
+@Html.Action("Details", "Order", new { orderId = Model.OrderId, isPartial = true, catalogOnly = Model.CatalogOnly })

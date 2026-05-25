@@ -1,0 +1,78 @@
+﻿@** Copyright 2015 Seven Spikes Ltd. All rights reserved. (http://www.nop-templates.com)
+    * http://www.nop-templates.com/t/licensinginfo
+*@
+
+@model SevenSpikes.Nop.Plugins.AjaxFilters.Models.ProductsModel
+@using Nop.Web.Models.Catalog;
+@using Nop.Web.Extensions;
+
+<div id="nopAjaxFiltersNoProductsDialog" title="@T("SevenSpikes.NopAjaxFilters.Client.Common.NoResultsFoundTitle")">
+    <p>@T("SevenSpikes.NopAjaxFilters.Client.Common.NoResultsFoundMessage")</p>
+</div>
+@if (Model.Products.Any())
+{
+    @*grid mode*@
+    <div class="@Model.NopAjaxFiltersSettingsModel.ProductsGridPanelSelector.TrimStart(new [] {'.'}) nop7SpikesAjaxFiltersGrid">
+        <table class="products-table">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <th colspan="2">Sieves</th>
+                    <th>Qty</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.Products){
+                    <tr class="sieveRow">
+                        <td>
+                            <a href="@Url.RouteUrl("Product", new {product.SeName})" title="@product.DefaultPictureModel.Title">
+                                <img alt="@product.DefaultPictureModel.AlternateText" src="@product.DefaultPictureModel.ImageUrl" title="@product.DefaultPictureModel.Title" />
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.RouteUrl("Product", new {product.SeName})">@product.Name</a>
+                            <div><span class="label">Model: </span>@product.Sku</div>
+                            <div class="prices">
+                                @if (!string.IsNullOrWhiteSpace(product.ProductPrice.OldPrice))
+                                {
+                                    <div><span class="label">List Price: </span><span class="list-price">@product.ProductPrice.OldPrice</span></div>
+                                            <span class="label">Dealer Price: </span><span class="price">@product.ProductPrice.Price</span>
+                                }
+                                else
+                                {
+                                    <div><span class="label">Price: </span><span class="price">@product.ProductPrice.Price</span></div>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <input class="qty-input" id="qty@(product.Id)" name="qty@(product.Id)" type="number" min="1" max="99" value="" title="Sieve Quantity">
+                        </td>
+                    </tr>}
+            </tbody>
+        </table>
+    </div>
+
+    var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+
+    if (!pager.IsEmpty())
+    {
+        <div class="@Model.NopAjaxFiltersSettingsModel.PagerPanelSelector.TrimStart(new [] {'.'})">
+            @pager
+        </div>
+    }
+}
+
+@Html.Hidden("specificationFilterModel7SpikesJson", Model.SpecificationFilterModel7SpikesJson)
+@Html.Hidden("attributeFilterModel7SpikesJson", Model.AttributeFilterModel7SpikesJson)
+@Html.Hidden("manufacturerFilterModel7SpikesJson", Model.ManufacturerFilterModel7SpikesJson)
+@Html.Hidden("vendorFilterModel7SpikesJson", Model.VendorFilterModel7SpikesJson)
+@Html.Hidden("onSaleFilterModel7SpikesJson", Model.OnSaleFilterModel7SpikesJson)
+
+@Html.Hidden("urlHashQuery", Model.HashQuery)
+@Html.Hidden("currentPageSizeJson", Model.CurrentPageSizeJson)
+@Html.Hidden("currentViewModeJson", Model.CurrentViewModeJson)
+@Html.Hidden("currentOrderByJson", Model.CurrentOrderByJson)
+@Html.Hidden("currentPageNumberJson", Model.CurrentPageNumberJson)
+@Html.Hidden("priceRangeFromJson", Model.PriceRangeFromJson)
+@Html.Hidden("priceRangeToJson", Model.PriceRangeToJson)
+@Html.Hidden("totalCount", Model.TotalCount)

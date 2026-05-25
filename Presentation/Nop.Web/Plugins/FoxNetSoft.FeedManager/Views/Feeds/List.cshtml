@@ -1,0 +1,170 @@
+@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedListModel
+@using Nop.Core.Infrastructure
+@using Nop.Web.Framework.Kendoui
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+@{
+    Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+    //page title
+    ViewBag.Title = @T("Admin.FoxNetSoft.Plugin.Feed.Manager.List.Manage").Text;
+}
+@Html.AntiForgeryToken()
+<div class="section-header">
+    <div class="title">
+        <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+        @T("Admin.FoxNetSoft.Plugin.Feed.Manager.List.Manage")
+    </div>
+    <div class="options">
+        <a href="@Url.Action("Create")" class="k-button">@T("Admin.Common.AddNew")</a>
+    </div>
+</div>
+@if (Model.IsRegisted == false)
+{
+  @T("Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.IsNoRegisted")        
+}
+<table width="100%">
+    <tr>
+        <td class="adminTitle">
+             @Html.NopLabelFor(model => model.TypeFeedId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownList("TypeFeedId", Model.AvailableTypeFeeds)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+             @Html.NopLabelFor(model => model.StoreId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownList("StoreId", Model.AvailableStores)
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <input type="button" id="btnSearch" class="k-button" value="@T("Admin.Common.Search")" />
+        </td>
+    </tr>
+</table>
+<p></p>
+<table class="adminContent">
+    <tr>
+        <td>
+            <div id="feeds-grid"></div>
+
+            <script>
+                $(document).ready(function () {
+                    $("#feeds-grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("List", "Feeds", new RouteValueDictionary { { "area", "Admin" } }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: additionalData
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function(e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            pageSize: @(defaultGridPageSize),
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [@(gridPageSizes)]
+                        },
+                        editable: {
+                            confirmation: false,
+                            mode: "inline"
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "Id",
+                            headerAttributes: { style: "text-align:center" },
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Id")",
+                            attributes: { style: "text-align:center" },
+                            width: 50
+                        },{
+                            field: "IsActive",
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.IsActive")",
+                            width: 70,
+                            headerAttributes: { style: "text-align:center" },
+                            attributes: { style: "text-align:center" },
+                            template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=IsActive#.gif" />'
+                        },{
+                            field: "PictureUrl",
+                            headerAttributes: { style: "text-align:center" },
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.PictureUrl")",
+                            template: '<img style="max-width: 100px" src="#=PictureUrl#" /> ',
+                            width: 110
+                        },{
+                            field: "Name",
+                            headerAttributes: { style: "text-align:center" },
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Name")",
+                            width: 150
+                        },{
+                            field: "StoreName",
+                            headerAttributes: { style: "text-align:center" },
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Store")",
+                            width: 150
+                        },{
+                            field: "LanguageName",
+                            headerAttributes: { style: "text-align:center" },
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Language")",
+                            width: 80
+                        },{
+                            field: "FeedFilesHTML",
+                            headerAttributes: { style: "text-align:center" },
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Files")",
+                            encoded: false
+                        },{
+                            field: "GenerateHTML",
+                            headerAttributes: { style: "text-align:center" },
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Generate")",
+                            width: 100,
+                            encoded: false
+                        },{
+                            field: "Id",
+                            title: "@T("Admin.Common.Edit")",
+                            width: 100,
+                            template: '<a href="Edit/#=Id#">@T("Admin.Common.Edit")</a>'
+                        }]
+                    });
+                });
+            </script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //search button
+        $('#btnSearch').click(function () {
+            //search
+            var grid = $('#feeds-grid').data('kendoGrid');
+            grid.dataSource.page(1); //new search. Set page size to 1
+            grid.dataSource.read();
+            return false;
+        });
+    });
+    function additionalData() {
+        var data = {
+            StoreId: $('#@Html.FieldIdFor(model => model.StoreId)').val(),
+            TypeFeedId: $('#@Html.FieldIdFor(model => model.TypeFeedId)').val()
+        };
+        addAntiForgeryToken(data);
+        return data;
+    }
+</script>
+        </td>
+    </tr>
+</table>

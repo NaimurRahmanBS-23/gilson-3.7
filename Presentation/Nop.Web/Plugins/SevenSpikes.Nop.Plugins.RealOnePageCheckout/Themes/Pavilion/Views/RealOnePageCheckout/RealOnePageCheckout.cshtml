@@ -1,0 +1,242 @@
+﻿@using Nop.Core;
+@using Nop.Core.Infrastructure;
+@using SevenSpikes.Nop.Framework.Theme;
+@using SevenSpikes.Nop.Plugins.RealOnePageCheckout.MVC;
+@using SevenSpikes.Nop.Plugins.RealOnePageCheckout.Models.Public;
+@using SevenSpikes.Nop.Plugins.RealOnePageCheckout.Domain.Settings
+
+@model RealOnePageCheckoutModel
+
+@{
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+
+    var storeLocation = EngineContext.Current.Resolve<IWebHelper>().GetStoreLocation();
+    var themeName = ThemeHelper.GetPluginTheme(PluginNames.PluginFolderName);
+
+    var totalItems = Model.TotalProducts;
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Core/Scripts/SevenSpikesExtensions.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Core/Scripts/jquery.livequery.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/ie8-fixes.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/angular/angular.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/app.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shared/address.service.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shared/api.service.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shared/stateHolder.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/utils/object.utility.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/utils/namedQueue.utility.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/utils/nativeEvents.utility.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/filters/countrySubjectToVat.filter.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/filters/prepareName.filter.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/filters/textPrompt.filter.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/filters/priceAdjustment.filter.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/billingAddress/billingAddress.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/billingAddress/billingAddress.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/billingAddress/billingAddress.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingAddress/shippingAddress.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingAddress/shippingAddress.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingAddress/shippingAddress.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/paymentMethods/paymentMethods.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/paymentMethods/paymentMethods.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/paymentMethods/paymentMethods.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingMethods/shippingMethods.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingMethods/shippingMethods.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingMethods/shippingMethods.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderSummary/orderSummary.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderSummary/orderSummary.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderSummary/orderSummary.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderTotal/orderTotal.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderTotal/orderTotal.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderTotal/orderTotal.service.min.js");
+
+    if (Model.OnePageCheckoutSettings.ShowDiscountBox)
+    {
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/discountBox/discountBox.controller.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/discountBox/discountBox.context.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/discountBox/discountBox.service.min.js");
+    }
+
+    if (Model.OnePageCheckoutSettings.ShowGiftCardBox)
+    {
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/giftCardBox/giftCardBox.controller.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/giftCardBox/giftCardBox.context.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/giftCardBox/giftCardBox.service.min.js");
+    }
+
+    if (Model.OnePageCheckoutSettings.ShowEstimateShipping)
+    {
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/estimateShipping/estimateShipping.controller.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/estimateShipping/estimateShipping.context.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/estimateShipping/estimateShipping.service.min.js");
+    }
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/checkoutAttributes/checkoutAttributes.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/checkoutAttributes/checkoutAttributes.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/checkoutAttributes/checkoutAttributes.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderConfirm/orderConfirm.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderConfirm/orderConfirm.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderConfirm/orderConfirm.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/pickupInStore/pickupInStore.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/pickupInStore/pickupInStore.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/pickupInStore/pickupInStore.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/configuration/data.config.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/dispatchers/data.dispatcher.min.js");
+
+    var supportRtl = this.ShouldUseRtlTheme();
+
+    Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Styles/RealOnePageCheckout.common.css");
+
+    if (supportRtl)
+    {
+        Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Styles/RealOnePageCheckout.common.rtl.css");
+    }
+
+    Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Themes/" + themeName + "/Content/RealOnePageCheckout.css");
+
+    if (supportRtl)
+    {
+        Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Themes/" + themeName + "/Content/RealOnePageCheckout.rtl.css");
+    }
+
+}
+
+@Html.Hidden("storeLocation", storeLocation)
+
+
+<div class="page checkout-page" ng-app="realOnePageCheckout">
+    <div class="page-title">
+        <h1>@T("SevenSpikes.RealOnePageCheckout.Public.CheckoutTitle")</h1>
+    </div>
+    <div class="page-body">
+        <div class="ropc">
+            @if (totalItems > 0)
+            {
+                <form id="checkoutForm" name="checkoutForm" ng-controller="OrderConfirmController as vm" valid-submit="vm.validateForm(checkoutForm)">
+
+                    @Html.Partial("_AjaxLoader", "confirm-order-loader")
+
+                    <div class="panel-group panel-group-left">
+                        <panel class="panel billing-address-panel" title="@T("Checkout.BillingAddress")" src="RealOnePageCheckout/BillingAddressForm"></panel>
+                        <panel class="panel shipping-address-panel" title="@T("Checkout.ShippingAddress")" src="RealOnePageCheckout/ShippingAddressForm"></panel>
+                        @if (Model.OnePageCheckoutSettings.ShowEstimateShipping)
+                        {
+                            <panel class="panel estimate-shipping-panel" title="@T("ShoppingCart.EstimateShipping")" src="RealOnePageCheckout/EstimateShippingForm"></panel>
+                        }
+                    </div>
+
+                    <div class="panel-group panel-group-right-top">
+                        <panel class="panel shipping-method-panel" title="@T("Checkout.ShippingMethod")" src="RealOnePageCheckout/ShippingMethodForm"></panel>
+                        <panel class="panel payment-method-panel" title="@T("Checkout.PaymentMethod")" src="RealOnePageCheckout/PaymentMethodForm"></panel>
+                    </div>
+
+                    <div class="panel-group panel-group-right-middle">
+                        <panel class="panel order-summary-panel" title="@T("Checkout.OrderSummary")" src="RealOnePageCheckout/OrderSummaryForm"></panel>
+                    </div>
+
+                    <div class="panel-group panel-group-right-bottom">
+                        <panel class="panel attributes-panel" title="@T("SevenSpikes.RealOnePageCheckout.Public.CheckoutAttributes")" src="RealOnePageCheckout/CheckoutAttributesForm"></panel>
+                        @if (Model.OnePageCheckoutSettings.ShowDiscountBox)
+                        {
+                            <panel class="panel coupon-box-panel" title="@T("ShoppingCart.DiscountCouponCode")" src="RealOnePageCheckout/DiscountBox"></panel>
+                        }
+                        @if (Model.OnePageCheckoutSettings.ShowGiftCardBox)
+                        {
+                            <panel class="panel giftcard-box-panel" title="@T("ShoppingCart.GiftCardCouponCode")" src="RealOnePageCheckout/GiftCardBox"></panel>
+                        }
+                        <panel class="panel order-totals-panel" src="RealOnePageCheckout/OrderTotalsForm"></panel>
+
+                        <div class="panel complete-order-panel">
+                            <div class="order-confirm" ng-show="vm.orderConfirmData.errors.length > 0">
+                                <ul class="error-list">
+                                    <li class="error-item" ng-repeat="error in vm.orderConfirmData.errors track by $index">
+                                        <span class="error-text">{{error}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="terms-of-service" ng-show="vm.config['termsOfServiceOnOrderConfirmPage']">
+                                <div>
+                                    <input type="checkbox" id="terms-of-service" name="termsOfService" ng-model="termsOfService" ng-required="vm.config['termsOfServiceOnOrderConfirmPage']" />
+                                    <label for="terms-of-service">@T("Checkout.TermsOfService.PleaseAccept")<a class="read" onclick="javascript:OpenWindow('@Url.RouteUrl("TopicPopup", new { SystemName = "conditionsofuse" })', 450, 500, true)">@T("Checkout.TermsOfService.Read")</a></label>
+                                </div>
+                            </div>
+
+                            <div class="buttons complete-button">
+                                <button type="submit" data-processing="@T("SevenSpikes.RealOnePageCheckout.Public.ProcessingButton")" data-complete="@T("SevenSpikes.RealOnePageCheckout.Public.CompleteButton")">@T("SevenSpikes.RealOnePageCheckout.Public.CompleteButton")</button>
+                            </div>
+                            <div class="addon-buttons">
+                                @*Payment method buttons (e.g. GoogleCheckoutButton, Paypal Express)*@
+                                @Html.Partial("_ButtonPaymentMethod", Model)
+                            </div>
+                        </div>
+
+                        @*<div class="cross-sells">
+                            @Html.Action("CrossSellProducts", "Product")
+                        </div>*@
+                    </div>
+                </form>
+            }
+            else
+            {
+                <span>@T("SevenSpikes.RealOnePageCheckout.Public.EmptyShoppingCart")</span>
+            }
+        </div>
+    </div>
+</div>
+
+<span style="display: none" id="invalidFormMessage">@T("SevenSpikes.RealOnePageCheckout.Public.InvalidForm")</span>
+<span style="display: none" id="invalidFormMessageForTermsOfService">@T("SevenSpikes.RealOnePageCheckout.Public.TermsOfServiceNotChecked")</span>
+
+@{
+    RealOnePageCheckoutSettings settings = EngineContext.Current.Resolve<RealOnePageCheckoutSettings>();
+}
+
+@Html.Hidden("flyoutShoppingCartUrlROPC", Url.RouteUrl("NopROPCFlyoutShoppingCart"))
+@Html.Hidden("flyoutShoppingCartPanelSelectorROPC", Html.Encode(settings.FlyoutCartPanelSelector))
+@Html.Hidden("shoppingCartMenuLinkSelectorROPC", Html.Encode(settings.ShoppingCartMenuLinkSelector))
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.page-body').on('click', '.ropc .section-title', function () {
+            var e = window, a = 'inner';
+            if (!('innerWidth' in window)) {
+                a = 'client';
+                e = document.documentElement || document.body;
+            }
+
+            var result = { width: e[a + 'Width'], height: e[a + 'Height'] };
+
+            if (result.width < 769) {
+                $(this).toggleClass('active');
+                $(this).siblings('.section-body').slideToggle('slow');
+            }
+        });
+    });
+
+    $(document).on('nopOnePageCheckoutPanelsLoadedEvent', function () {
+        var nameMaxWidth = 0;
+        $('.payment-details label').each(function () {
+            nameMaxWidth = Math.max(nameMaxWidth, $(this).outerWidth());
+        });
+
+        $('.payment-details label').css('width', nameMaxWidth + 'px');
+    });
+</script>

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>Unique ID</FeedCaption>
+    <FeedName>Unique ID</FeedName>
+    <FieldNameCode>id</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>Title</FeedCaption>
+    <FeedName>Title</FeedName>
+    <Prefix />
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>name</FieldNameCode>
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>Description</FeedCaption>
+    <FeedName>Description</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>Category ID</FeedCaption>
+    <FeedName>Category ID</FeedName>
+    <FieldNameCode>taxonomy_categoryid</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>Product URL</FeedCaption>
+    <FeedName>Product URL</FeedName>
+    <FieldNameCode>url</FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>Image URL</FeedCaption>
+    <FeedName>Image URL</FeedName>
+    <FieldNameCode>picture</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>Additional Image URL</FeedCaption>
+    <FeedName>Additional Image URL</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>Condition</FeedCaption>
+    <FeedName>Condition</FeedName>
+    <DefaultValue>New</DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>Availability</FeedCaption>
+    <FeedName>Availability</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>stockstatus</FieldNameCode>
+    <ConvertValues>
+      <ConvertValue>
+        <Id>1</Id>
+        <OldValue>InStock</OldValue>
+        <NewValue>In Stock</NewValue>
+      </ConvertValue>
+      <ConvertValue>
+        <Id>2</Id>
+        <OldValue>OutOfStock</OldValue>
+        <NewValue>Out of Stock</NewValue>
+      </ConvertValue>
+      <ConvertValue>
+        <Id>3</Id>
+        <OldValue>Preorder</OldValue>
+        <NewValue>PreOrder</NewValue>
+      </ConvertValue>
+    </ConvertValues>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>Current price</FeedCaption>
+    <FeedName>Current price</FeedName>
+    <FieldNameCode>priceincludetax</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>11</Id>
+    <FeedCaption>Original Price</FeedCaption>
+    <FeedName>Original Price</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>12</Id>
+    <FeedCaption>Brand</FeedCaption>
+    <FeedName>Brand</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>13</Id>
+    <FeedCaption>GTIN</FeedCaption>
+    <FeedName>GTIN</FeedName>
+    <FieldNameCode>gtin</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>14</Id>
+    <FeedCaption>MPN</FeedCaption>
+    <FeedName>MPN</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>manufacturerpartnumber</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>15</Id>
+    <FeedCaption>ASIN</FeedCaption>
+    <FeedName>ASIN</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>16</Id>
+    <FeedCaption>Ship Cost</FeedCaption>
+    <FeedName>Ship Cost</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>17</Id>
+    <FeedCaption>Ship Weight</FeedCaption>
+    <FeedName>Ship Weight</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>18</Id>
+    <FeedCaption>Gender</FeedCaption>
+    <FeedName>Gender</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>19</Id>
+    <FeedCaption>Age Group</FeedCaption>
+    <FeedName>Age Group</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>20</Id>
+    <FeedCaption>Size</FeedCaption>
+    <FeedName>Size</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>21</Id>
+    <FeedCaption>Color</FeedCaption>
+    <FeedName>Color</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>22</Id>
+    <FeedCaption>Material</FeedCaption>
+    <FeedName>Material</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>23</Id>
+    <FeedCaption>Pattern</FeedCaption>
+    <FeedName>Pattern</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>24</Id>
+    <FeedCaption>Item Group ID</FeedCaption>
+    <FeedName>Item Group ID</FeedName>
+    <FieldNameCode>parentgroupedproductid</FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>25</Id>
+    <FeedCaption>Bid</FeedCaption>
+    <FeedName>Bid</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>26</Id>
+    <FeedCaption>Promo Text</FeedCaption>
+    <FeedName>Promo Text</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

@@ -1,0 +1,5 @@
+﻿@model ProductDetailsModel.ProductBreadcrumbModel
+@using Nop.Core.Domain.Common;
+@using Nop.Core.Infrastructure;
+@using Nop.Web.Models.Catalog;
+@if (Model.Enabled){<div class="breadcrumb"><ul itemscope itemtype="http://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="@Url.RouteUrl("HomePage")" itemprop="item" data-sj-field="breadcrumbURL" data-sj-value="/"><span itemprop="name" data-sj-field="breadcrumbTitle">Home</span></a><meta itemprop="position" content="1" /></li>@{short bc = 2;foreach (var category in Model.CategoryBreadcrumb){<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="@Url.RouteUrl("Category", new {category.SeName})" itemprop="item" data-sj-field="breadcrumbURL" data-sj-value="@Url.RouteUrl("Category", new {category.SeName})"><span itemprop="name" data-sj-field="breadcrumbTitle">@category.Name</span></a><meta itemprop="position" content="@bc" /></li>}<li><span class="current-item"><strong>@Model.ProductName</strong></span></li>}</ul></div>}

@@ -1,0 +1,74 @@
+﻿@** Copyright 2015 Seven Spikes Ltd. All rights reserved. (http://www.nop-templates.com)
+    * http://www.nop-templates.com/t/licensinginfo
+*@
+
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Models.ManufacturerFilter
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Common
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Domain
+
+@model ManufacturerFilterModel7Spikes
+
+@{
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.AjaxFilters/Scripts/ManufacturerFilter.min.js");
+
+    string toggleStateClass = "toggleControl";
+    string toggleStateStyles = "";
+    if (Model.NopAjaxFiltersSettings.CloseManufacturersFilterBox == true)
+    {
+        toggleStateClass = "toggleControl closed";
+        toggleStateStyles = "display: none;";
+    }
+
+    Func<int, HelperResult> manufacturerOptionsHtml =
+        @<text>
+            @foreach (ManufacturerFilterItem manufacturerFilterItem in Model.ManufacturerFilterItems)
+            {
+                string filterItemCssClass = "filterItemUnselected";
+
+                if (manufacturerFilterItem.FilterItemState == FilterItemState.Checked)
+                {
+                    filterItemCssClass = "filterItemSelected";
+                }
+
+                <li>
+                    <a class="@filterItemCssClass" data-option-id="@manufacturerFilterItem.Id">@manufacturerFilterItem.Name</a>
+                </li>
+            }
+        </text>;
+}
+
+<div class="block filter-block manufacturerFilterPanel7Spikes">
+    <div class="title">
+        <a class="@toggleStateClass">@T("Manufacturers")</a>
+        <a class="clearFilterOptions">@T("SevenSpikes.NopAjaxFilters.Client.Common.Clear")</a>
+    </div>
+    @if (Model.NopAjaxFiltersSettings.FiltersUIMode == FiltersUIMode.UseCheckboxes)
+    {
+        <div class="filtersGroupPanel" style="@toggleStateStyles">
+            <ul class="checkbox-list">
+                @manufacturerOptionsHtml(0)
+            </ul>
+        </div>
+    }
+    else if (Model.NopAjaxFiltersSettings.FiltersUIMode == FiltersUIMode.UseDropdowns)
+    {
+        <div class="filtersGroupPanel filtersDropDownPanel" style="@toggleStateStyles">
+            <div id="manufacturerFiltersDropDown" class="filtersDropDown">
+                <div class="filters-select-wrap">
+                    <p class="filters-select-text"></p>
+                </div>
+                <ul class="filters-select-dropdown">
+                    <li class="selected">
+                        <a class="allFilterDropDownOptions">@T("SevenSpikes.NopAjaxFilters.Client.Common.All")</a>
+                    </li>
+                    @manufacturerOptionsHtml(0)
+                </ul>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#manufacturerFiltersDropDown").jDropDown();
+            });
+        </script>
+    }
+</div>

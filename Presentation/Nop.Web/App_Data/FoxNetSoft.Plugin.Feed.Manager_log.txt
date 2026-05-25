@@ -1,0 +1,9 @@
+2018.12.27 15:51:55:9546*******
+VerifySheduleSetting. feed.Id=1, enabled=False
+    current dayweek=4
+         current hour=20, minute=51
+
+2018.12.27 15:51:55:9566*******
+ExportAllFeeds.
+       Ignored. feed.Id=1, Name=Google
+

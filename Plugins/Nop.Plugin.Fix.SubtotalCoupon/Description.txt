@@ -1,0 +1,9 @@
+Group: Fix
+FriendlyName: Subtotal Coupon Fix
+SystemName: Fix.SubtotalCoupon
+Version: 1.0
+SupportedVersions: 3.70
+Author: Custom
+DisplayOrder: 1
+FileName: Nop.Plugin.Fix.SubtotalCoupon.dll
+Description: Fixes the coupon code being dropped from the shopping cart subtotal calculation in nopCommerce 3.7.

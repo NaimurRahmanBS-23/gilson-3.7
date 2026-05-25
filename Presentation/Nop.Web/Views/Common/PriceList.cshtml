@@ -1,0 +1,49 @@
+﻿@model PriceListModel
+@using Nop.Web.Models.Common;
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+    Html.AddTitleParts("Civil Engineering Lab Equipment Price List");
+    Html.AddMetaDescriptionParts("We offer a large selection of civil engineering field and lab equipment. Our constantly updated price list is available in a PDF format to download or print.");
+    //Html.AddMetaKeywordParts("NOINDEX");
+}
+<div class="page topic-page" id="ph-topic">
+    <div class="page-title" id="ph-title">
+        <h1>Civil Engineering Lab Equipment Price List</h1>
+    </div>
+    <div class="breadcrumb"><ul itemscope itemtype="http://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="@Url.RouteUrl("HomePage")" itemprop="item" data-sj-field="breadcrumbURL" data-sj-value="/"><span itemprop="name" data-sj-field="breadcrumbTitle">Home</span></a><meta itemprop="position" content="1" /></li><li><span class="current-item"><strong>Price List</strong></span></li></ul></div>
+    @{
+        var ts = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+    }
+    <div class="page-body">
+
+        <p>Our civil engineering field and lab equipment price list is available in PDF format (xlsx format is also available for dealers) to download or print. Prices are subject to change without notice, please visit individual product web pages for up-to-date pricing.</p>
+
+        <div>
+            <a href="/docs/pricelist/@(Model.PriceListPdf)?v=@ts" target="_blank">
+                Price List<br>
+                <img src="/Content/Images/uploaded/icons/pdf.png" alt="PDF" />
+            </a>
+        </div>
+        @if (!String.IsNullOrWhiteSpace(Model.DealerPriceListPdf))
+        {
+            <div><a href="/docs/dealer-pricelist/@(Model.DealerPriceListPdf)?v=@ts" target="_blank"><img src="/Content/Images/uploaded/icons/dealerpricelistacrobat.gif" alt="Gilson dealer pricelist in PDF format" /></a></div>
+            <div><a href="/docs/dealer-pricelist/DealerPriceListExcel.xlsx?v=@ts" target="_blank"><img src="/Content/Images/uploaded/icons/dealerpricelistexcel.gif" alt="Gilson dealer pricelist in EXCEL format" /></a></div>
+            <div><a href="/docs/dealer-pricelist/new-pricing/dealer price change sheet.xlsx?v=@ts" target="_blank"><img src="/Content/Images/uploaded/icons/priceupdates.gif" alt="Gilson dealer price change sheet" /></a></div>
+        }
+        @if (String.IsNullOrWhiteSpace(Model.DealerPriceListPdf))
+        {
+            <div style="margin-top: 60px;">
+                <div>Download Adobe Acrobat Reader (FREE)</div>
+                <a href="http://get.adobe.com/reader" target="_blank"><img src="/Content/Images/uploaded/icons/get-adobe-reader.png" alt="Get Adobe Reader" /></a>
+            </div>
+            <div style="margin-top: 25px;">
+                <a href="/clearance-list">Click here to view items on our Clearance List.</a>
+            </div>
+        }
+        @if (!String.IsNullOrWhiteSpace(Model.DealerPriceListPdf))
+        {
+            @*<div style="margin-top: 25px;"><a href="/docs/dealer-pricelist/added-removed-products-dealers.xlsx?v=@ts" target="_blank">Dealer Report:  Added / Removed Products</a></div>*@
+            <div style="margin-top: 25px;"><a href="/docs/dealers/Dealers Proposition 65 Master List.xlsx?v=@ts" target="_blank">Dealer Report: Proposition 65 Master List.xlsx</a></div>
+        }
+    </div>
+</div>

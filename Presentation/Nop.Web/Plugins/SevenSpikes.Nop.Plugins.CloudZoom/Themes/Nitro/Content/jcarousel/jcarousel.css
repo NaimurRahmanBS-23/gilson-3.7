@@ -1,0 +1,41 @@
+.jcarousel-skin-thumbs .jcarousel-direction-rtl {
+	direction: rtl;
+}
+.jcarousel-skin-thumbs .jcarousel-clip {
+    overflow: hidden;
+    margin: 0 25px;
+}
+.jcarousel-skin-thumbs .jcarousel-item {
+    margin: 0 5px;
+}
+    .gallery .picture-thumbs .jcarousel-item a {
+        margin: 0 !important;
+        width: 73px;
+        height: 73px;
+    }
+
+.jcarousel-skin-thumbs .jcarousel-item-vertical {
+    margin-bottom: 10px;
+}
+
+/**
+ *  Vertical Buttons
+ */
+
+.jcarousel-skin-thumbs .jcarousel-prev-horizontal, .jcarousel-skin-thumbs .jcarousel-next-horizontal {
+    position: absolute;
+    top: 50%;
+    width: 15px;
+    height: 22px;
+    margin-top: -11px;
+    cursor: pointer;
+}
+.jcarousel-skin-thumbs .jcarousel-prev-horizontal {
+    left: 3px;
+    background: #fff url(images/prev-horizontal.png) no-repeat center 0;
+}
+
+.jcarousel-skin-thumbs .jcarousel-next-horizontal {
+    right: 3px;
+    background: #fff url(images/next-horizontal.png) no-repeat center 0;
+}

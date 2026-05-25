@@ -1,0 +1,8 @@
+﻿@using Nop.Core.Infrastructure;
+@using Nop.Web.Framework.Themes;
+@{
+    var currentThemeName = EngineContext.Current.Resolve<IThemeContext>().WorkingThemeName;
+    var logoPath = "~/Themes/" + currentThemeName + "/Content/img/ie_warning.jpg";
+    var updateBrowser = "~/Themes/" + currentThemeName + "/Content/img/update-browser.png";
+}
+<!--[if lte IE 8]><div style="clear: both; height: 1000px; text-align: center; position: relative;"><img alt="Gilson Company, Inc." src="/Themes/Nitro/Content/img/logo.gif"/><p><br/><a href="https://support.microsoft.com/en-us/help/17621/internet-explorer-downloads" target="_blank"><img src="@Url.Content(logoPath)" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."/></a></p><br/><p><img src="@Url.Content(updateBrowser)" usemap="#update-browser" alt="Update Browser"><map name="update-browser"><area target="_blank" alt="Firefox" title="Firefox" href="https://www.mozilla.org/en-US/firefox/new" coords="181,184,48,341" shape="rect"><area target="_blank" alt="Chrome" title="Chrome" href="https://www.google.com/chrome/browser/desktop" coords="321,337,193,184" shape="rect"><area target="_blank" alt="Opera" title="Opera" href="http://www.opera.com" coords="465,183,333,337" shape="rect"><area target="_blank" alt="Safari" title="Safari" href="http://www.apple.com/safari" coords="602,183,475,337" shape="rect"></map></p></div><![endif]-->

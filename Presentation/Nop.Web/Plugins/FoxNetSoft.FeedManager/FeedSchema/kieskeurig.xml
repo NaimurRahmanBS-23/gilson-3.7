@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>Product ID</FeedCaption>
+    <FeedName>id</FeedName>
+    <FieldNameCode>id</FieldNameCode>
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>Category</FeedCaption>
+    <FeedName>productgroep</FeedName>
+    <FieldNameCode>categorybreadcrumb</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>  
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>merk</FeedCaption>
+    <FeedName>merk</FeedName>
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>type</FeedCaption>
+    <FeedName>type</FeedName>
+    <Prefix />
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>name</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute> 
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>toevoeging-type</FeedCaption>
+    <FeedName>toevoeging-type</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>extra-productbeschrijving</FeedCaption>
+    <FeedName>extra-productbeschrijving</FeedName>
+    <Prefix />
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>Manufacturer Part Number (MPN)</FeedCaption>
+    <FeedName>partnumber</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>manufacturerpartnumber</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>EAN code</FeedCaption>
+    <FeedName>ean-code</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>gtin</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit>13</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>Price</FeedCaption>
+    <FeedName>prijs</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>priceincludetax</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>verzendkosten</FeedCaption>
+    <FeedName>verzendkosten</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode></FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>11</Id>
+    <FeedCaption>afhaalkosten</FeedCaption>
+    <FeedName>afhaalkosten</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode></FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>12</Id>
+    <FeedCaption>levertijd</FeedCaption>
+    <FeedName>levertijd</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode></FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>13</Id>
+    <FeedCaption>Offer page URL</FeedCaption>
+    <FeedName>deeplink</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>url</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>14</Id>
+    <FeedCaption>Image URL</FeedCaption>
+    <FeedName>imagelink</FeedName>
+    <FieldNameCode>picture</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>15</Id>
+    <FeedCaption>voorraad</FeedCaption>
+    <FeedName>voorraad</FeedName>
+    <FieldNameCode>stockstatus</FieldNameCode>
+    <ConvertValues>
+      <ConvertValue>
+        <Id>1</Id>
+        <OldValue>InStock</OldValue>
+        <NewValue>1</NewValue>
+      </ConvertValue>
+      <ConvertValue>
+        <Id>2</Id>
+        <OldValue>OutOfStock</OldValue>
+        <NewValue>0</NewValue>
+      </ConvertValue>
+      <ConvertValue>
+        <Id>3</Id>
+        <OldValue>Preorder</OldValue>
+        <NewValue>1</NewValue>
+      </ConvertValue>
+    </ConvertValues>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

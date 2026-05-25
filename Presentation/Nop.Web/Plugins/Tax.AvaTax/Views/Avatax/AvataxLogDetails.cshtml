@@ -1,0 +1,89 @@
+﻿@model Nop.Plugin.Tax.AvaTax.Models.AvataxLogModel
+@using Nop.Web.Framework;
+@{
+    Layout = "~/_AdminLayout.cshtml";
+    ViewBag.Title = "Avatax Log Details";
+}
+
+  <style type="text/css">
+    .panel-body {
+      word-wrap: break-word;
+    }
+    .avatax-wrapper{
+        margin-top: 20px;
+    }
+    .avatax-wrapper td{
+        vertical-align: top;
+        padding: 10px 15px !important;
+        border: 1px solid #f0f0f0;
+    }
+    .avatax-wrapper .adminContent td.adminTitle{
+        font-weight: bold;
+    }
+    .avatax-request,
+    .avatax-response{
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: normal;
+        font-family: monospace;
+    }
+    .content-header small{
+        font-size: 14px;
+        vertical-align: middle;
+    }
+    .content-header small:before{
+        content: '<<';
+        font-size: 12px;
+        margin: 0px 5px;
+    }
+  </style>
+
+    <div class="content-header clearfix">
+        <h1 class="pull-left"> 
+            @T("Nop.Plugin.Tax.AvaTax.ViewLogDetails")           
+            <small><i class="fa fa-arrow-circle-left"></i>@Html.ActionLink(T("Nop.Plugin.Tax.AvaTax.AvataxLogList.BackToList").Text, "AvataxLogList","AvataxLog")</small>
+        </h1>        
+    </div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="panel-group">
+            <div class="panel panel-default">
+                @using (Html.BeginForm("ConfigureAvatax", "Avatax", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="avatax-wrapper">
+                    <table class="adminContent">
+                        <tbody>
+                            <tr>
+                                <td class="adminTitle"><img alt="Log Id" src="/Administration/Content/images/ico-help.gif" title="Log Id"> Log Id</td>
+                                <td class="adminData">@Html.Raw(Model.Id)</td>
+                            </tr>
+                            <tr>
+                                <td class="adminTitle">@Html.NopLabelFor(model => model.TransactionId)</td>
+                                <td class="adminData">@Html.Raw(Model.TransactionId)</td>
+                            </tr>
+                            <tr>
+                                <td class="adminTitle">@Html.NopLabelFor(model => model.CreatedOn)</td>
+                                <td class="adminData">@Html.Raw(Model.CreatedOn)</td>
+                            </tr>
+                            @*<tr>
+                                <td class="adminTitle">@Html.NopLabelFor(model => model.Customer.Email)</td>
+                                <td class="adminData">@Html.Raw(Model.Customer.Email)</td>
+                            </tr>*@
+                            <tr>
+                                <td class="adminTitle">@Html.NopLabelFor(model => model.Request)</td>
+                                <td class="adminData"><div class="avatax-request">@Html.Raw(Model.Request)</div></td>
+                            </tr>
+                            <tr>
+                                <td class="adminTitle">@Html.NopLabelFor(model => model.Response)</td>
+                                <td class="adminData"><div class="avatax-response">@Html.Raw(Model.Response)</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                }
+            </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,8 @@
+﻿Group: 7Spikes
+FriendlyName: Nop Rich Blog
+SystemName: SevenSpikes.Nop.Plugins.RichBlog
+Version: 3.70
+SupportedVersions: 3.70
+Author: Seven Spikes
+DisplayOrder: 1
+FileName: SevenSpikes.Nop.Plugins.RichBlog.dll

@@ -1,0 +1,207 @@
+﻿@model ProductDetailsModel
+@using Nop.Core
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Services.Localization;
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+
+    //title, meta
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    //Attachments
+    var productdetailsAttachements = Html.Widget("productdetails_attachments").ToHtmlString();
+
+    //Attachments CSS
+    if (productdetailsAttachements.Contains("attachment"))
+    {
+        Html.AddCssFileParts("~/Themes/Nitro/Content/css/Attachments.css");
+    }
+
+    var seoSettings = EngineContext.Current.Resolve<SeoSettings>();
+    //canonical URL
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var productUrl = Url.RouteUrl("Product", new { SeName = Model.SeName }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(productUrl);
+    }
+
+    //Sajari data fields
+    Html.AddHeadCustomParts("<meta property=\"Products\" data-sj-field=\"category\" content=\"Products\" />");
+
+    if (Model.AssociatedProducts.Count > 0)
+    {
+        if (Model.AssociatedProducts.Count > 1)
+        {
+            var productModels = Model.AssociatedProducts.Aggregate("", (current, ap) => current + ", " + ap.Sku);
+            if (productModels.StartsWith(", "))
+            {
+                Html.AddHeadCustomParts("<meta property=\"productmodel\" data-sj-field=\"productmodel\" content=\"" + productModels.Substring(2) + "\" />");
+            }
+        }
+        else
+        {
+            //THIS SHOULD NEVER HAPPEN
+            Html.AddHeadCustomParts("<meta property=\"productmodel\" data-sj-field=\"productmodel\" content=\"" + Model.AssociatedProducts[0].Sku + "\" />");
+        }
+        Html.AddHeadCustomParts("<meta property=\"productprice\" data-sj-field=\"productprice\" content=\"Starting at " + Model.AssociatedProducts[0].ProductPrice.Price + "\" />");
+    }
+
+
+    //open graph META tags
+    if (seoSettings.OpenGraphMetaTags)
+    {
+        var storeName = EngineContext.Current.Resolve<IStoreContext>().CurrentStore.GetLocalized(x => x.Name);
+        Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"product\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + Html.Encode(Model.MetaDescription) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:site_name\" content=\"" + Html.Encode(storeName) + "\" />");
+    }
+
+    //Twitter META tags
+    if (seoSettings.TwitterMetaTags)
+    {
+        var storeName = EngineContext.Current.Resolve<IStoreContext>().CurrentStore.GetLocalized(x => x.Name);
+        Html.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"summary\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"" + Html.Encode(storeName) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:description\" content=\"" + Html.Encode(Model.MetaDescription) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+    }
+}
+<div itemscope itemtype="http://schema.org/Product" data-productid="@Model.Id">
+    <div class="page-title"><h1 itemprop="name">@Model.Name</h1></div>
+    
+    @Html.Partial("_ProductBreadcrumb", Model.Breadcrumb)
+    @Html.Widget("productdetails_after_breadcrumb", Model.Id)
+    @Html.Partial("_ShareButton", Model)
+    <div class="page product-details-page">
+        <div class="page-body">
+            @Html.Widget("productdetails_top", Model.Id)
+            @using (Html.BeginRouteForm("Product", new { SeName = Model.SeName }, FormMethod.Post, new { id = "product-details-form" }))
+            {
+                <div class="overview">
+                    @Html.Partial("_Discontinued", Model)
+
+                    @Html.Widget("productdetails_overview_top", Model.Id)
+
+                    @*@Html.Partial("_ProductReviewOverview", Model.ProductReviewOverview)*@
+
+                    @if (!Model.DisplayDiscontinuedMessage)
+                    {
+                        <div class="add-to-cart">
+                            <div class="add-to-cart-panel">
+                                <input type="button" id="select-option" class="button-1 add-to-cart-button" value="Select Option">
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            @Html.Widget("productdetails_inside_overview_buttons_before", Model.Id)
+                            @Html.Partial("_CompareProductsButton", Model)
+                            @Html.Partial("_ProductEmailAFriendButton", Model)
+                            @Html.Widget("productdetails_inside_overview_buttons_after", Model.Id)
+                        </div>
+                    }
+                    @if (!String.IsNullOrEmpty(Model.ShortDescription))
+                    {
+                        <div class="short-description">
+                            @Html.Raw(Model.ShortDescription)
+                        </div>
+                    }
+                    
+                    @if (productdetailsAttachements.Contains("attachment"))
+                    {
+                        <div class="file-attachments">
+                            <div class="title">Product Files</div>
+                            <div class="attachments-content">
+                                <div class="attachment-category">
+                                    @Html.Raw(productdetailsAttachements.Replace(".pdf", ".pdf?v=" + DateTime.Now.ToString("yyyyMMddHHmmssfff")))
+                                </div>
+                            </div>
+                        </div>
+                    }                    
+
+                    @Html.Widget("productdetails_overview_bottom", Model.Id)
+                </div>
+
+                <div class="product-essential">
+                    @Html.Widget("productdetails_before_pictures", Model.Id)
+
+                    @{
+                        var cloudZoom = Html.Widget("sevenspikes_cloud_zoom");
+                    }
+                    @if (!MvcHtmlString.IsNullOrEmpty(cloudZoom))
+                    {
+                        @cloudZoom
+                    }
+                    else
+                    {
+                        @Html.Partial("_ProductDetailsPictures", Model)
+                    }
+
+                    @Html.Widget("productdetails_after_pictures", Model.Id)
+                    
+                </div>
+                <div class="product-variant-list">
+                    @foreach (var variant in Model.AssociatedProducts)
+                    {
+                        <div class="product-variant-line" data-productid="@variant.Id">
+                            @if (!String.IsNullOrWhiteSpace(variant.DefaultPictureModel.ImageUrl))
+                            {
+                                <div class="variant-picture"><img loading="lazy" src="@variant.DefaultPictureModel.ImageUrl" id="main-product-img-@variant.Id" alt="@variant.Name" /></div>
+                            }
+                            <div class="variant-overview">
+                                @if (!String.IsNullOrWhiteSpace(variant.Name))
+                                {
+                                    <h2 class="variant-name read-desc">@variant.Name</h2>
+                                }
+                                @Html.Partial("_SKU_Man_GTIN_Ven", variant)
+                                @if (!String.IsNullOrWhiteSpace(variant.ShortDescription))
+                                {
+                                    <div class="variant-description">
+                                        @Html.Raw(variant.ShortDescription)
+                                    </div>
+                                }
+                                
+                                @if (!Model.AddToCart.DisableWishlistButton && !Model.DisplayDiscontinuedMessage)
+                                {
+                                    @Html.Partial("_ProductTierPrices", variant.TierPrices)
+
+                                    var dataDictAttributes = new ViewDataDictionary();
+                                    dataDictAttributes.TemplateInfo.HtmlFieldPrefix = string.Format("attributes_{0}", variant.Id);
+                                    @Html.Partial("_ProductAttributes", variant.ProductAttributes, dataDictAttributes)
+
+                                    var dataDictPrice = new ViewDataDictionary();
+                                    dataDictPrice.TemplateInfo.HtmlFieldPrefix = string.Format("price_{0}", variant.Id);
+                                    @Html.Partial("_ProductPrice", variant.ProductPrice, dataDictPrice)
+
+                                    var dataDictAddToCart = new ViewDataDictionary();
+                                    dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = string.Format("addtocart_{0}", variant.Id);
+                                    @Html.Partial("_AddToCart", variant.AddToCart, dataDictAddToCart)
+                                    var dataDictAddToWishlist = new ViewDataDictionary();
+                                    dataDictAddToWishlist.TemplateInfo.HtmlFieldPrefix = string.Format("addtocart_{0}", variant.Id);
+                                    @Html.Partial("_AddToWishlist", variant.AddToCart, dataDictAddToWishlist)
+                                }
+                            </div>
+                        </div>}
+                </div>
+                @Html.Widget("productdetails_before_collateral", Model.Id)
+                <div class="product-collateral">
+                    @Html.Partial("_ProductSpecifications", Model.ProductSpecifications)
+                    @Html.Partial("_ProductTags", Model.ProductTags)
+                    @Html.Action("RelatedProducts", "Product", new { productId = Model.Id })
+                    @Html.Action("ProductsAlsoPurchased", "Product", new { productId = Model.Id })
+                </div>
+            }
+            @Html.Widget("productdetails_bottom", Model.Id)
+        </div>
+    </div>
+</div>
+@{var customerEmail = !string.IsNullOrEmpty(WorkContext.CurrentCustomer.Email) ? WorkContext.CurrentCustomer.Email : string.Empty;}
+<script type="text/javascript" src="//static.criteo.net/js/ld/ld.js" async="true"></script><script type="text/javascript">var deviceType = /iPad/.test(navigator.userAgent) ? "t" : /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Silk/.test(navigator.userAgent) ? "m" : "d";window.criteo_q = window.criteo_q || [];window.criteo_q.push({ event: "setAccount", account: 50375 }, { event: "setEmail", email: "@customerEmail" }, { event: "setSiteType", type: deviceType }, { event: "viewItem", item: "@Model.Id" });</script>
+<script type="text/javascript">$(function () {$("#select-option").click(function () { $("html, body").animate({ scrollTop: $(".product-variant-line").offset().top - 50 }, 0); $('.product-variant-line').effect("highlight", {}, 2000); return false; });});</script>

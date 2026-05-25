@@ -1,0 +1,15 @@
+﻿@using Nop.Web.Models.Checkout;
+
+@model CheckoutPaymentInfoModel
+
+@Html.Widget("op_checkout_payment_info_top")
+
+@if (Model.PaymentInfoControllerName == "PaymentPurchaseOrder")
+{
+    <div class="info" style="display: none;">@Html.Action(Model.PaymentInfoActionName, Model.PaymentInfoControllerName, Model.PaymentInfoRouteValues)</div>
+}
+else
+{
+    <div class="info">@Html.Action(Model.PaymentInfoActionName, Model.PaymentInfoControllerName, Model.PaymentInfoRouteValues)</div>
+}
+@Html.Widget("op_checkout_payment_info_bottom")

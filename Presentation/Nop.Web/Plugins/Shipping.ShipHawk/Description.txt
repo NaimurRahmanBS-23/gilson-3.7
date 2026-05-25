@@ -1,0 +1,9 @@
+Group: Shipping rate computation
+FriendlyName: ShipHawk
+SystemName: Shipping.ShipHawk
+Version: 1.00
+SupportedVersions: 3.70
+Author: Gilson Company
+DisplayOrder: 1
+FileName: Nop.Plugin.Shipping.ShipHawk.dll
+Description: This plugin provides real-time shipping rates from ShipHawk TMS

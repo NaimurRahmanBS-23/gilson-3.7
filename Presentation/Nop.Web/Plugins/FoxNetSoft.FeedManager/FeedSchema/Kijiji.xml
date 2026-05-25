@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FeedAttribute>
+    <Id>100</Id>
+    <FeedCaption>PartnerID</FeedCaption>
+    <FeedName>ID</FeedName>
+    <FieldNameCode>id</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>50</CharsLimit>
+    <Required>true</Required>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>Azione</FeedCaption>
+    <FeedName>Azione</FeedName>
+    <DefaultValue>inserisci</DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>Titolo</FeedCaption>
+    <FeedName>Name</FeedName>
+    <FieldNameCode>name</FieldNameCode>
+    <Required>true</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>Descrizione</FeedCaption>
+    <FeedName>LongDescription</FeedName>
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <Required>false</Required>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>email</FeedCaption>
+    <FeedName>email</FeedName>
+    <DefaultValue></DefaultValue>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>URL</FeedCaption>
+    <FeedName>URL</FeedName>
+    <FieldNameCode>url</FieldNameCode>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>telefono</FeedCaption>
+    <FeedName>telefono</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>companyphonenumber</FieldNameCode>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>Prezzo</FeedCaption>
+    <FeedName>Price</FeedName>
+    <FieldNameCode>priceincludetax</FieldNameCode>
+    <Required>true</Required>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>Istat Comune</FeedCaption>
+    <FeedName>Istat Comune</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>storezippostalcode</FieldNameCode>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>Categoria</FeedCaption>
+    <FeedName>Categoria</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <DefaultValue></DefaultValue>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>updatedonutc</FeedCaption>
+    <FeedName>updatedonutc</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>updatedonutc</FieldNameCode>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>11</Id>
+    <FeedCaption>Immagine 1</FeedCaption>
+    <FeedName>Immagine 1</FeedName>
+    <FieldNameCode>picture</FieldNameCode>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>12</Id>
+    <FeedCaption>Immagine 2</FeedCaption>
+    <FeedName>Immagine 2</FeedName>
+    <FieldNameCode>picture2</FieldNameCode>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>13</Id>
+    <FeedCaption>Immagine 3</FeedCaption>
+    <FeedName>Immagine 3</FeedName>
+    <FieldNameCode>picture3</FieldNameCode>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>14</Id>
+    <FeedCaption>Immagine 4</FeedCaption>
+    <FeedName>Immagine 4</FeedName>
+    <FieldNameCode>picture4</FieldNameCode>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>15</Id>
+    <FeedCaption>Immagine 5</FeedCaption>
+    <FeedName>Immagine 5</FeedName>
+    <FieldNameCode>picture5</FieldNameCode>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>16</Id>
+    <FeedCaption>Immagine 6</FeedCaption>
+    <FeedName>Immagine 6</FeedName>
+    <FieldNameCode>picture6</FieldNameCode>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>17</Id>
+    <FeedCaption>Immagine 7</FeedCaption>
+    <FeedName>Immagine 7</FeedName>
+    <FieldNameCode>picture7</FieldNameCode>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>18</Id>
+    <FeedCaption>Immagine 8</FeedCaption>
+    <FeedName>Immagine 8</FeedName>
+    <FieldNameCode>picture8</FieldNameCode>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

@@ -1,0 +1,523 @@
+Appliances>Air Conditioners
+Appliances>Appliance Spare Parts
+Appliances>Cooktops
+Appliances>Dishwashers
+Appliances>Dryers
+Appliances>Fans
+Appliances>Fridges & Freezers
+Appliances>Hair Dryers
+Appliances>Heaters
+Appliances>Microwave Ovens
+Appliances>Ovens
+Appliances>Rangehoods
+Books>Books
+Books>E-Readers
+Books>Electronic Dictionaries & Translators
+Books>Feng Shui & Astrology
+Books>Maps
+Books>Stationery
+Books, Movies, Music>Books
+Books, Movies, Music>DJ Equipment
+Books, Movies, Music>E-Readers
+Books, Movies, Music>Maps
+Books, Movies, Music>Movies
+Books, Movies, Music>MP3 & Portable Media Players
+Books, Movies, Music>Music
+Books, Movies, Music>Musical Instruments
+Books, Movies, Music>Record Players
+Cameras & Photography>Batteries
+Cameras & Photography>Battery Chargers
+Cameras & Photography>Camcorders
+Cameras & Photography>Camcorders Accessories
+Cameras & Photography>Camera Lens Filters
+Cameras & Photography>Darkroom Supplies
+Cameras & Photography>Digital Camera Accessories
+Cameras & Photography>Digital Camera Lenses
+Cameras & Photography>Digital Cameras
+Cameras & Photography>Digital Photo Frames
+Cameras & Photography>Film Cameras
+Cameras & Photography>Flash Memory
+Cameras & Photography>Hard Cases
+Computer Accessories>3D Printers and Materials
+Computer Accessories>Case Accessories
+Computer Accessories>Computer Accessories
+Computer Accessories>Computer Cables & Connectors
+Computer Accessories>HDD Accessories
+Computer Accessories>Laptop Accessories
+Computer Accessories>Laptop Bags
+Computer Accessories>Monitor Accessories
+Computer Accessories>Power Supplies
+Computer Accessories>Printer Accessories
+Computer Accessories>Projector Accessories
+Computer Accessories>Storage Media Accessories
+Computer Accessories>UPS
+Computer Networking>Computer Cables & Connectors
+Computer Networking>Desktop Computers
+Computer Networking>Docking Stations
+Computer Networking>IP Telephony
+Computer Networking>Modems & Routers
+Computer Networking>Network Adapters
+Computer Networking>Network Products
+Computer Networking>Print Servers
+Computer Networking>Solid State Drive (SSD)
+Computer Networking>Web Cameras
+Computer Networking>Wireless Access Points
+Computer Networking>Wireless Network Adapters
+Computer Parts>Case Accessories
+Computer Parts>Computer Cables & Connectors
+Computer Parts>Computer Cases
+Computer Parts>Flash Memory
+Computer Parts>Graphics Cards
+Computer Parts>Hard Drives
+Computer Parts>HDD Accessories
+Computer Parts>Industrial Supplies
+Computer Parts>Memory Readers
+Computer Parts>Modem Accessories
+Computer Parts>Motherboards
+Computer Parts>Optical Disc Drives
+Computer Parts>Processors
+Computer Parts>Random Access Memory (RAM)
+Computer Parts>Solid State Drive (SSD)
+Computer Parts>Sound Cards
+Computer Parts>Stands and Mounts
+Computer Parts>System Cooling
+Computer Parts>TV Tuner Cards
+Computer Parts>Video Editing/Capture
+Computer Parts>Wireless Network Adapters
+Computers>3D Printers and Materials
+Computers>Computer Cases
+Computers>Desktop Computers
+Computers>Flash Memory
+Computers>Graphics Cards
+Computers>Hard Drives
+Computers>Ink, Toner & Cartridges
+Computers>Laptops
+Computers>Modems & Routers
+Computers>Monitor Accessories
+Computers>Monitors
+Computers>Network Adapters
+Computers>Network Products
+Computers>Printers
+Computers>Random Access Memory (RAM)
+Computers>Software
+Computers>Software Licenses
+Computers>Solid State Drive (SSD)
+Digital Photography>Batteries
+Digital Photography>Battery Chargers
+Digital Photography>Camcorders
+Digital Photography>Camcorders Accessories
+Digital Photography>Camera Lens Filters
+Digital Photography>Digital Camera Accessories
+Digital Photography>Digital Camera Lenses
+Digital Photography>Digital Cameras
+Digital Photography>Digital Photo Frames
+Digital Photography>Docking Stations
+Digital Photography>Hard Cases
+Digital Photography>Printers
+Digital Photography>Tripods & Monopods
+Electronic Accessories>Audio & Video Accessories
+Electronic Accessories>Batteries
+Electronic Accessories>Camcorders Accessories
+Electronic Accessories>Case Accessories
+Electronic Accessories>Digital Camera Accessories
+Electronic Accessories>GPS Accessories
+Electronic Accessories>Mobile Accessories
+Electronic Accessories>Portable Media Player Accessories
+Electronic Accessories>Power Adapters
+Electronic Accessories>Power Banks
+Electronic Accessories>Printer Accessories
+Electronic Accessories>Projector Accessories
+Electronic Accessories>Remote Controls
+Electronic Accessories>Telephone Accessories
+Electronic Accessories>Video Game Accessories
+Electronics>3D Glasses
+Electronics>Amplifiers & Receivers
+Electronics>Barcode Scanners
+Electronics>Camcorders
+Electronics>Camcorders Accessories
+Electronics>CD Players
+Electronics>Digital Camera Accessories
+Electronics>Digital Camera Lenses
+Electronics>Digital Cameras
+Electronics>Digital Photo Frames
+Electronics>DVD Players & Recorders
+Electronics>E-Readers
+Electronics>Electronic Dictionaries & Translators
+Electronics>GPS Accessories
+Electronics>GPS Systems
+Electronics>Handsfree and Headsets
+Electronics>Hard Cases
+Electronics>Headphones
+Electronics>Home Theatre Systems
+Electronics>Irons
+Electronics>Marine Electronics
+Electronics>Mobile Phones
+Electronics>MP3 & Portable Media Players
+Electronics>Music Accessories
+Electronics>Phones
+Electronics>Power Banks
+Electronics>Projectors
+Electronics>Remote Controls
+Electronics>Set Top Box
+Electronics>Speakers and Subwoofers
+Electronics>Television (TV)
+Electronics>Two Way Radios
+Electronics>Video Game Consoles
+Electronics>Video Games
+Fashion>Baby & Kid's Clothes
+Fashion>Clothing
+Fashion>Cufflinks
+Fashion>Dancewear
+Fashion>Fashion Accessories
+Fashion>Handbags & Luggage
+Fashion>Hats
+Fashion>Hosiery
+Fashion>Lingerie
+Fashion>Maternity Clothing
+Fashion>Mens Underwear
+Fashion>Shoe Care
+Fashion>Shoes
+Fashion>Socks
+Fashion>Sportswear
+Fashion>Sunglasses
+Fashion>Swimwear
+Fashion>Watches
+Fashion>Wedding
+Fashion>Workwear and Uniforms
+Food & Wine>BBQ and Grill
+Food & Wine>Beer
+Food & Wine>Gift Hampers
+Food & Wine>Groceries
+Food & Wine>Liquor and Spirits
+Food & Wine>Tea
+Food & Wine>Wine
+Food & Wine>Wine Accessories
+Gifts & Flowers>Aromatherapy Products
+Gifts & Flowers>Artwork & Posters
+Gifts & Flowers>Books
+Gifts & Flowers>Cufflinks
+Gifts & Flowers>Experiences
+Gifts & Flowers>Flowers
+Gifts & Flowers>Gift Certificates
+Gifts & Flowers>Gift Hampers
+Gifts & Flowers>Gifts & Gadgets
+Gifts & Flowers>Greeting Cards
+Gifts & Flowers>Handbags & Luggage
+Gifts & Flowers>Home Accents
+Gifts & Flowers>Necklaces
+Gifts & Flowers>Pendants
+Gifts & Flowers>Perfume Gift Packs
+Gifts & Flowers>Tea
+Gifts & Flowers>Toys & Games
+Gifts & Flowers>Watches
+Gifts For Boys>Artwork & Posters
+Gifts For Boys>Baby & Kid's Clothes
+Gifts For Boys>Bicycles
+Gifts For Boys>Binoculars & Telescopes
+Gifts For Boys>Digital Cameras
+Gifts For Boys>Docking Stations
+Gifts For Boys>E-Readers
+Gifts For Boys>Gifts & Gadgets
+Gifts For Boys>Laptop Bags
+Gifts For Boys>Laptops
+Gifts For Boys>Mobile Phones
+Gifts For Boys>Motorbikes & Quads
+Gifts For Boys>MP3 & Portable Media Players
+Gifts For Boys>RC Models
+Gifts For Boys>Sportswear
+Gifts For Girls>Artwork & Posters
+Gifts For Girls>Baby & Kid's Clothes
+Gifts For Girls>Bracelets
+Gifts For Girls>Brooches and Pins
+Gifts For Girls>Flowers
+Gifts For Girls>Fragrance & Perfume
+Gifts For Girls>Gemstones
+Gifts For Girls>Gift Hampers
+Gifts For Girls>Handbags & Luggage
+Gifts For Girls>Jewellery Boxes
+Gifts For Girls>Jewellery Sets
+Gifts For Girls>Makeup & Cosmetics
+Hardware & Car Parts>Auto Parts
+Hardware & Car Parts>Car Accessories
+Hardware & Car Parts>Generators
+Hardware & Car Parts>Industrial Supplies
+Hardware & Car Parts>Motorbike Parts
+Hardware & Car Parts>Tools and Hardware
+Health & Beauty>Aromatherapy Products
+Health & Beauty>Bath and Body
+Health & Beauty>Children's healthcare
+Health & Beauty>Dental Supplies
+Health & Beauty>Eye and Ear Care
+Health & Beauty>Fragrance & Perfume
+Health & Beauty>Hair Care
+Health & Beauty>Hair Dryers
+Health & Beauty>Hair Removal Products
+Health & Beauty>Health Aids
+Health & Beauty>Makeup & Cosmetics
+Health & Beauty>Massagers
+Health & Beauty>Nail Care
+Health & Beauty>Online Chemist & Pharmacy
+Health & Beauty>Oral Care
+Health & Beauty>Personal Products
+Health & Beauty>Prescription Eyeglasses
+Health & Beauty>Shavers
+Health & Beauty>Skin Care
+Health & Beauty>Sunglasses
+Health & Beauty>Vitamins and Nutrition
+Home & Garden>Arts & Crafts Supplies
+Home & Garden>Artwork & Posters
+Home & Garden>Bathroom Supplies
+Home & Garden>BBQ and Grill
+Home & Garden>Bedding & Mattresses
+Home & Garden>Building Supplies
+Home & Garden>Clocks
+Home & Garden>Dining Room
+Home & Garden>Feng Shui & Astrology
+Home & Garden>Furniture
+Home & Garden>Garden
+Home & Garden>Home Accents
+Home & Garden>Home Automation & Electrics
+Home & Garden>Housekeeping & Cleaning
+Home & Garden>Infants & Kids Room
+Home & Garden>Kitchen
+Home & Garden>Laundry & Ironing Accessories
+Home & Garden>Lawn Mower Spare Parts
+Home & Garden>Lawn Mowers
+Home & Garden>Lighting
+Home & Garden>Living Room
+Home & Garden>Locks & Safety
+Home & Garden>Massagers
+Home & Garden>Organisation and Storage
+Home & Garden>Pet Supplies
+Home & Garden>Plumbing Supplies
+Home & Garden>Rugs
+Home & Garden>Sewing Accessories
+Home & Garden>Sewing Machines
+Home & Garden>Solar Power
+Home & Garden>Tools and Hardware
+Home & Garden>Vacuum Accessories
+Home & Garden>Vacuum Cleaners
+Home & Garden>Water Filters & Ionisers
+Home Audio>Amplifiers & Receivers
+Home Audio>Audio & Video Accessories
+Home Audio>CD Players
+Home Audio>Headphones
+Home Audio>Home Theatre Systems
+Home Audio>Microphones
+Home Audio>MP3 & Portable Media Players
+Home Audio>Radios
+Home Audio>Sound Cards
+Home Audio>Sound Systems
+Home Audio>Speakers and Subwoof
+Home Furnishings>Arts & Crafts Supplies
+Home Furnishings>Bedding & Mattresses
+Home Furnishings>Collectibles & Memorabilia
+Home Furnishings>Digital Photo Frames
+Home Furnishings>Dining Room
+Home Furnishings>Furniture
+Home Furnishings>Home Accents
+Home Furnishings>Infants & Kids Room
+Home Furnishings>Living Room
+Housewares>Air Cleaners & Ionisers
+Housewares>Air Conditioner Accessories
+Housewares>Air Conditioners
+Housewares>Dishwashers
+Housewares>Food Waste Disposers
+Housewares>Housekeeping & Cleaning
+Housewares>Laundry & Ironing Accessories
+Housewares>Locks & Safety
+Housewares>Vacuum Cleaners
+Input Devices>Graphic Tablets
+Input Devices>Keyboards & Mice
+Input Devices>Pointing Device
+Input Devices>Speakers and Subwoofers
+Input Devices>Video Game Accessories
+Input Devices>Video Game Consoles
+Jewellery & Watches>Baby Jewellery
+Jewellery & Watches>Body Jewellery
+Jewellery & Watches>Bracelets
+Jewellery & Watches>Brooches and Pins
+Jewellery & Watches>Cufflinks
+Jewellery & Watches>Earrings
+Jewellery & Watches>Jewellery Accessories
+Jewellery & Watches>Jewellery Boxes
+Jewellery & Watches>Jewellery Sets
+Jewellery & Watches>Necklaces
+Jewellery & Watches>Pendants
+Jewellery & Watches>Rings
+Jewellery & Watches>Tattoo & Body Piercing
+Jewellery & Watches>Watch Bands
+Jewellery & Watches>Watches
+Kids & Family>Arts & Crafts Supplies
+Kids & Family>Baby & Kid's Clothes
+Kids & Family>Baby Car Seats
+Kids & Family>Baby Gear
+Kids & Family>Baby Jewellery
+Kids & Family>Gifts & Gadgets
+Kids & Family>Infants & Kids Room
+Kids & Family>Nappies
+Kids & Family>RC Models
+Kids & Family>Strollers and Prams
+Kids & Family>Toys & Games
+Kids & Family>Video Game Accessories
+Kids & Family>Video Game Consoles
+Kids & Family>Video Games
+Laptops>Docking Stations
+Laptops>Flash Memory
+Laptops>Hard Drives
+Laptops>Laptop Accessories
+Laptops>Laptop Bags
+Laptops>Laptops
+Laptops>Modems & Routers
+Laptops>Software
+Laptops>Solid State Drive (SSD)
+Laptops>Speakers and Subwoofers
+Laptops>Web Cameras
+Laptops>Wireless Network Adapters
+Office Equipment>3D Printers and Materials
+Office Equipment>Blank Storage Media
+Office Equipment>Calculators
+Office Equipment>Cash Registers & POS Terminals
+Office Equipment>Copiers & Fax Machines
+Office Equipment>Desktop Computers
+Office Equipment>Electrical Supplies
+Office Equipment>Graphic Tablets
+Office Equipment>Ink, Toner & Cartridges
+Office Equipment>Laptops
+Office Equipment>Office Supplies
+Office Equipment>Organisation and Storage
+Office Equipment>Paper and Cardstock
+Office Equipment>Phones
+Office Equipment>Postal Packaging
+Office Equipment>Printer Accessories
+Office Equipment>Printers
+Office Equipment>Projector Accessories
+Office Equipment>Projectors
+Office Equipment>Scanner Accessories
+Office Equipment>Scanners
+Office Equipment>Security Systems and Surveillance
+Office Equipment>Shop Equipment
+Office Equipment>Software
+Office Equipment>Stationery
+Office Equipment>Surge Protection
+Office Equipment>Telephone Accessories
+Office Equipment>UPS
+PC & Video Games>Graphics Cards
+PC & Video Games>Headphones
+PC & Video Games>Keyboards & Mice
+PC & Video Games>Speakers and Subwoofers
+PC & Video Games>Video Game Accessories
+PC & Video Games>Video Game Consoles
+PC & Video Games>Video Games
+Pharmaceuticals>Aromatherapy Products
+Pharmaceuticals>Children's healthcare
+Pharmaceuticals>Eye and Ear Care
+Pharmaceuticals>Health Aids
+Pharmaceuticals>Online Chemist & Pharmacy
+Pharmaceuticals>Vitamins and Nutrition
+Phones & Communications>Docking Stations
+Phones & Communications>IP Telephony
+Phones & Communications>Mobile Accessories
+Phones & Communications>Mobile Phones
+Phones & Communications>Modem Accessories
+Phones & Communications>Modems & Routers
+Phones & Communications>Network Products
+Phones & Communications>Phone Cards
+Phones & Communications>Phones
+Phones & Communications>Power Banks
+Phones & Communications>Telephone Accessories
+Phones & Communications>Web Cameras
+Portable Electronics>Batteries
+Portable Electronics>DVD Players & Recorders
+Portable Electronics>E-Readers
+Portable Electronics>Electronic Dictionaries & Translators
+Portable Electronics>GPS Accessories
+Portable Electronics>GPS Systems
+Portable Electronics>Laptop Accessories
+Portable Electronics>Laptop Bags
+Portable Electronics>Laptops
+Portable Electronics>Mobile Phones
+Portable Electronics>MP3 & Portable Media Players
+Portable Electronics>Portable Media Player Accessories
+Portable Electronics>Voice Recorders
+Sports & Outdoors>Beacons
+Sports & Outdoors>Bicycle Accessories
+Sports & Outdoors>Bicycles
+Sports & Outdoors>Boating & Sailing
+Sports & Outdoors>Camping and Outdoor
+Sports & Outdoors>Climbing & Hiking
+Sports & Outdoors>Fishing Gear
+Sports & Outdoors>Fitness Trackers
+Sports & Outdoors>Goggles
+Sports & Outdoors>Golf
+Sports & Outdoors>Maps
+Sports & Outdoors>Marine Electronics
+Sports & Outdoors>Motorbikes & Quads
+Sports & Outdoors>Sports and Fitness
+Sports & Outdoors>Sportswear
+Sports & Outdoors>Surf Shop
+Sports & Outdoors>Swimming Pool and Spa Supplies
+Sports & Outdoors>Swimwear
+Sports & Outdoors>Two Way Radios
+Sports & Outdoors>Water Sports
+Storage & Media>Blank Storage Media
+Storage & Media>Flash Memory
+Storage & Media>Hard Drives
+Storage & Media>HDD Accessories
+Storage & Media>Memory Readers
+Storage & Media>Optical Disc Drives
+Storage & Media>Solid State Drive (SSD)
+Storage & Media>Storage Media Accessories
+Storage & Media>Tape Drives & Tape Storage
+Telephones & Communication>Batteries
+Telephones & Communication>Battery Chargers
+Telephones & Communication>Docking Stations
+Telephones & Communication>Headphones
+Telephones & Communication>IP Telephony
+Telephones & Communication>Mobile Accessories
+Telephones & Communication>Mobile Phones
+Telephones & Communication>Modems & Routers
+Telephones & Communication>Network Products
+Telephones & Communication>Phone Cards
+Telephones & Communication>Phones
+Toys & Games>Arts & Crafts Supplies
+Toys & Games>Balloons
+Toys & Games>Headphones
+Toys & Games>Infants & Kids Room
+Toys & Games>Party Supplies
+Toys & Games>RC Models
+Toys & Games>Set Top Box
+Toys & Games>Speakers and Subwoofers
+Toys & Games>Toys & Games
+Toys & Games>Video Game Accessories
+Toys & Games>Video Game Consoles
+Toys & Games>Video Games
+Travel>Electronic Dictionaries & Translators
+Travel>Handbags & Luggage
+Travel>Maps
+Travel>Travel Accessories
+Travel>Travel Sets
+TVs & Video>Audio & Video Accessories
+TVs & Video>DVD Players & Recorders
+TVs & Video>Projector Accessories
+TVs & Video>Projectors
+TVs & Video>Speakers and Subwoofers
+TVs & Video>Television (TV)
+Video Games & Consoles>Television (TV)
+Video Games & Consoles>Toys & Games
+Video Games & Consoles>Video Game Accessories
+Video Games & Consoles>Video Game Consoles
+Video Games & Consoles>Video Games
+Wedding>Gift Hampers
+Wedding>Gifts & Gadgets
+Wedding>Lingerie
+Wedding>Rings
+Wedding>Travel Sets
+Wedding>Wedding
+Other>Funeral Products
+Other>Miscellaneous
+Other>Religious Products
+Other>Warranty & Maintenance
+Other>Wholesale Bulk Lots
+Adult Content>Adult Movies
+Adult Content>Adult Products & Sex Toys

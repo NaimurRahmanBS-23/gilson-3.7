@@ -1,0 +1,182 @@
+﻿@model CategoryModel
+@using Nop.Core
+@using Nop.Core.Domain.Common;
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Services.Localization
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    var storeName = EngineContext.Current.Resolve<IStoreContext>().CurrentStore.GetLocalized(x => x.Name);
+
+    Html.AddHeadCustomParts("<meta property=\"Categories\" data-sj-field=\"category\" content=\"Categories\" />");
+
+    //open graph META tags
+    Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"category\" />");
+    if (!string.IsNullOrWhiteSpace(Model.OverrideName))
+    {
+        Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.OverrideName) + "\" />");
+    }
+    else
+    {
+        Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+    }
+    Html.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + Html.Encode(Model.MetaDescription) + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"" + Model.PictureModel.ImageUrl + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:site_name\" content=\"" + Html.Encode(storeName) + "\" />");
+
+    //Twitter META tags
+    Html.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"summary\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"" + Html.Encode(storeName) + "\" />");
+    if (!string.IsNullOrWhiteSpace(Model.OverrideName))
+    {
+        Html.AddHeadCustomParts("<meta property=\"twitter:title\" content=\"" + Html.Encode(Model.OverrideName) + "\" />");
+    }
+    else
+    {
+        Html.AddHeadCustomParts("<meta property=\"twitter:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+    }
+    Html.AddHeadCustomParts("<meta property=\"twitter:description\" content=\"" + Html.Encode(Model.MetaDescription) + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:image\" content=\"" + Model.PictureModel.ImageUrl + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+
+    Html.AppendCssFileParts("~/Themes/Nitro/Content/CSS/products-table.css");
+    Html.AddScriptParts(ResourceLocation.Foot, "~/Themes/Nitro/Content/scripts/ProductsTable.js");
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var categoryUrl = Url.RouteUrl("Category", new { Model.SeName }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(categoryUrl);
+    }
+
+    var breadcrumbDelimiter = EngineContext.Current.Resolve<CommonSettings>().BreadcrumbDelimiter;
+
+    if (Model.ShowFilters)
+    {
+        @section CategoryFilters{@Html.Widget("NopAjaxFilters")}
+    }
+}
+@using Nop.Core.Domain.Common;
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Web.Models.Catalog;
+
+<div class="page category-page">
+    <div class="page-title">
+        @if (!string.IsNullOrWhiteSpace(Model.OverrideName))
+        {
+            <h1>@Model.OverrideName</h1>
+        }
+        else
+        {
+            <h1>@Model.Name</h1>
+        }
+    </div>
+    @* ReSharper disable once Mvc.PartialViewNotResolved *@
+    @if (Model.DisplayCategoryBreadcrumb)
+    {
+        @Html.Partial("_CategoryBreadcrumb", Model.CategoryBreadcrumb, new ViewDataDictionary { { "CurrentCategory", Model.Name } })
+        @Html.Widget("categorydetails_after_breadcrumb", Model.Id)
+    }
+    @Html.Partial("_ShareButtons", Model.PageShareCode)
+    <div class="page-body">
+        @Html.Widget("categorydetails_top", Model.Id)
+        @*description*@
+        @if (!String.IsNullOrWhiteSpace(Model.Description))
+        {
+            <div class="category-description">
+                @Html.Raw(Model.Description)
+            </div>
+        }
+        @Html.Widget("categorydetails_before_filters", Model.Id)
+        @Html.Widget("categorydetails_before_product_list", Model.Id)
+
+        @*product list*@
+        @if (Model.Products.Count > 0)
+        {
+            <div class="products-table-add-to-cart">
+                <input type="button" value="Clear All" class="button clear-all" />
+                <input type="button" value="@T("ShoppingCart.AddToCart")" class="button add-to-cart" />
+            </div>
+            <form id="products-table-form" action="/@Model.SeName" method="post">
+                <div class="product-grid">
+                    <table class="products-table">
+                        <caption>@Model.Name</caption>
+                        <thead>
+                            <tr>
+                                <th colspan="2">Trays</th>
+                                <th>Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var product in Model.Products){
+                            <tr class="trayRow">
+                                <td><a href="@Url.RouteUrl("Product", new {product.SeName})"><img loading="lazy" src="@product.DefaultPictureModel.ImageUrl" alt="@product.Name" /></a></td>
+                                <td>
+                                    <a href="@Url.RouteUrl("Product", new {product.SeName})">@product.Name</a>
+                                    <div><span class="label">Model: </span>@product.Sku</div>
+                                    <div class="prices">
+                                        @if (!string.IsNullOrWhiteSpace(product.ProductPrice.OldPrice))
+                                        {
+                                            <div><span class="label">List Price: </span><span class="list-price">@product.ProductPrice.OldPrice</span></div>
+                                            <span class="label">Dealer Price: </span><span class="price">@product.ProductPrice.Price</span>
+                                        }
+                                        else
+                                        {
+                                            <div><span class="label">Price: </span><span class="price">@product.ProductPrice.Price</span></div>
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <input class="qty-input" id="qty@(product.Id)" name="qty@(product.Id)" type="number" min="1" max="99" value="" title="Tray Quantity">
+                                </td>
+                            </tr>}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            <div class="products-table-add-to-cart">
+                <input type="button" value="Clear All" class="button clear-all" />
+                <input type="button" value="@T("ShoppingCart.AddToCart")" class="button add-to-cart" />
+            </div>
+                                        }
+        @{
+            var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+        }
+        @if (!pager.IsEmpty())
+        {
+            <div class="pager">
+                @pager
+            </div>
+            if (Model.Products.Count > 0)
+            {
+                Model.PagingFilteringContext.AllowProductViewModeChanging = false;
+                @Html.Partial("_CatalogSelectors", Model.PagingFilteringContext, new ViewDataDictionary())
+            }
+        }
+        @*description2*@
+        @if (!string.IsNullOrWhiteSpace(Model.Description2))
+        {
+            <div id="description2" class="category-description">
+                @Html.Raw(Model.Description2)
+                @if (Model.Description2.Contains("common-questions"))
+                {
+                    <script>$(function () { $(".question").click(function () { $(this).find(".answer").slideToggle(200, 'swing'); $(this).toggleClass("up"); }); });</script>
+                }
+            </div>
+        }
+        @Html.Widget("categorydetails_bottom", Model.Id)
+    </div>
+</div>
+@{
+    var customerEmail = !string.IsNullOrEmpty(WorkContext.CurrentCustomer.Email) ? WorkContext.CurrentCustomer.Email : string.Empty;
+    var top3 = Model.Products.Select(p => p.Id).Take(3).ToArray();
+    var strTop3 = "\"" + string.Join("\",\"", top3) + "\"";
+}
+@*<script type="text/javascript" src="//static.criteo.net/js/ld/ld.js" async></script><script type="text/javascript">var deviceType = /iPad/.test(navigator.userAgent) ? "t" : /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Silk/.test(navigator.userAgent) ? "m" : "d";window.criteo_q = window.criteo_q || [];window.criteo_q.push({ event: "setAccount", account: 50375 },{ event: "setEmail", email: "@(customerEmail)" },{ event: "setSiteType", type: deviceType },{ event: "viewList", item: [ @Html.Raw(strTop3) ] });</script>*@

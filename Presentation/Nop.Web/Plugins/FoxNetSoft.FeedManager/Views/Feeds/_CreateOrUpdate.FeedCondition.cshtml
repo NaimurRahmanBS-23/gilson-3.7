@@ -1,0 +1,115 @@
+﻿@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedRecModel
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+@using Nop.Web.Framework.Kendoui
+@using Nop.Core.Events
+@using Nop.Web.Framework.Events
+@using Nop.Core.Infrastructure
+@using FoxNetSoft.Plugin.Feed.Manager.Services
+
+@if (Model.Id > 0)
+{
+    <div id="feedconditions-grid"></div>
+
+    <script>
+        $(document).ready(function () {
+            $("#feedconditions-grid").kendoGrid({
+                dataSource: {
+                    type: "json",
+                    transport: {
+                        read: {
+                            url: "@Html.Raw(Url.Action("FeedConditionList", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"feedId" , Model.Id} }))",
+                            type: "POST",
+                            dataType: "json",
+                            data: addAntiForgeryToken
+                        },
+                        destroy: {
+                            url: "@Html.Raw(Url.Action("FeedConditionDelete", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" } }))",
+                            type: "POST",
+                            dataType: "json",
+                            data: addAntiForgeryToken
+                        }
+                    },
+                    schema: {
+                        data: "Data",
+                        total: "Total",
+                        errors: "Errors",
+                        model: {
+                            id: "Id"
+                        }
+                    },
+                    requestEnd: function (e) {
+                        if (e.type == "destroy") {
+                            this.read();
+                        }
+                    },
+                    error: function (e) {
+                        display_kendoui_grid_error(e);
+                        // Cancel the changes
+                        this.cancelChanges();
+                    },
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true
+                },
+                pageable: {
+                    refresh: true,
+                    numeric: false,
+                    previousNext: false,
+                    info: false
+                },
+                editable: {
+                    confirmation: false,
+                    mode: "inline"
+                },
+                scrollable: false,
+                columns: [
+                    {
+                        field: "ConditionType",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionType")",
+                        width: 150
+                    }, {
+                        field: "ConditionProperty",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionProperty")",
+                        width: 150
+                    }, {
+                        field: "ConditionOperator",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionOperator")",
+                        width: 150
+                    }, {
+                        field: "ConditionValue",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionValueId")",
+                        width: 150
+                    }, {
+                        field: "Id",
+                        title: "@T("Admin.Common.Edit")",
+                        width: 100,
+                        template: "<input type='submit' value='@T("Admin.Common.Edit")' onclick=\"javascript:OpenWindow('@Url.Content("~/Admin/Feeds/ConditionEditPopup")?feedConditionId=#=Id#&feedId=#=FeedId#&btnId=btnRefreshFeedCondition&formId=feed-form', 800, 450, true); return false;\" class='k-button' />"
+                    }, {
+                        command: { name: "destroy", text: "@T("Admin.Common.Delete")" },
+                        title: "@T("Admin.Common.Delete")",
+                        width: 110
+                    }]
+            });
+        });
+
+    </script>
+    <div>
+        <input type="submit" id="btnAddNewFeedCondition" name="btnAddNewFeedCondition" value="@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.AddNew")" onclick="javascript:OpenWindow('@(Url.Action("ConditionEditPopup", "Feeds", new { feedConditionId=0, feedId = Model.Id, btnId = "btnRefreshFeedCondition", formId = "feed-form", area = "Admin" }))    ', 800, 800, true); return false;" class="k-button" />
+        <input type="submit" id="btnRefreshFeedCondition" name="btnRefreshFeedCondition" style="display: none" />
+        <script type="text/javascript">
+             $(document).ready(function () {
+                  $('#btnRefreshFeedCondition').click(function () {
+                  //refresh grid
+                  $("#feedconditions-grid").data('kendoGrid').dataSource.read();
+                  //return false to don't reload a page
+                  return false;
+                  });
+             });
+         </script>
+    </div>
+}
+else
+{
+    @T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.SaveBeforeEdit")
+}

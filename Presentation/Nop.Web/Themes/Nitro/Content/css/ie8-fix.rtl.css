@@ -1,0 +1,74 @@
+.header-links li > a {
+    behavior:url(border-radius.htc);
+}
+
+.page-title {
+    min-height: 20px !important;
+}
+
+.item-box {
+    width: 33% !important;
+    float: right !important;
+    margin: 0 .5% 1.5% 0 !important;
+}
+    .item-box:nth-child(3n+1) {
+	    clear: both;
+        margin-right: 0 !important;
+    }
+
+    .item-box .hover-content {
+        filter: alpha(opacity=0);
+    }
+        .item-box:hover .hover-content {
+            filter: alpha(opacity=100);
+        }
+
+.pager li a,
+.pager li span {
+    min-width: 16px !important;
+}
+
+    /* cross sell */
+
+        .order-summary-content form > .cross-sells .item-box {
+	        width: 24.25% !important;
+	        margin: 0 1% 1% 0 !important;
+	        clear: none !important;
+        }
+        .order-summary-content form > .cross-sells .item-box:nth-child(4n+1) {
+	        clear: both !important;
+	        margin-right: 0 !important;
+        }
+
+.block.filter-block.priceRangeFilterPanel7Spikes .ui-slider-handle:nth-child(2) {
+    background-image: url(../img/ie8-arrow-filters-left.png) !important;
+}
+.block.filter-block.priceRangeFilterPanel7Spikes .ui-slider-handle:nth-child(3) {
+    background-image: url(../img/ie8-arrow-filters-right.png) !important;
+}
+
+#wrap {
+    width: 100%;
+}
+
+/* my account */
+
+    .account-page .address-item,
+    .account-page .order-item,
+    .account-page .request-item {
+        float: right;
+        width: 32%;
+        margin: 0 2% 2% 0;
+    }
+    .account-page .address-item:nth-child(3n+1),
+    .account-page .order-item:nth-child(3n+1),
+    .account-page .request-item:nth-child(3n+1) {
+	    margin-right: 0;
+	    clear: both;
+    }
+
+/* contact us / email a friend */
+
+.input-box {
+    width: 300px;
+}

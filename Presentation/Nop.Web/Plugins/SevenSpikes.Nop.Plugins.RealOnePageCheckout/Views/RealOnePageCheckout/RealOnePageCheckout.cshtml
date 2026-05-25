@@ -1,0 +1,375 @@
+﻿@using Nop.Core;
+@using Nop.Core.Infrastructure;
+@using SevenSpikes.Nop.Framework.Theme;
+@using SevenSpikes.Nop.Plugins.RealOnePageCheckout.MVC;
+@using SevenSpikes.Nop.Plugins.RealOnePageCheckout.Models.Public;
+@using SevenSpikes.Nop.Plugins.RealOnePageCheckout.Domain.Settings
+
+@model RealOnePageCheckoutModel
+
+@{
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+    Html.AddMetaKeywordParts("NOINDEX");
+
+    var storeLocation = EngineContext.Current.Resolve<IWebHelper>().GetStoreLocation();
+    var themeName = ThemeHelper.GetPluginTheme(PluginNames.PluginFolderName);
+
+    var totalItems = Model.TotalProducts;
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Core/Scripts/SevenSpikesExtensions.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Core/Scripts/jquery.livequery.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/ie8-fixes.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/angular/angular.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/app.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shared/address.service.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shared/api.service.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shared/stateHolder.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/utils/object.utility.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/utils/namedQueue.utility.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/utils/nativeEvents.utility.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/filters/countrySubjectToVat.filter.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/filters/prepareName.filter.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/filters/textPrompt.filter.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/filters/priceAdjustment.filter.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/billingAddress/billingAddress.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/billingAddress/billingAddress.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/billingAddress/billingAddress.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingAddress/shippingAddress.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingAddress/shippingAddress.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingAddress/shippingAddress.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/paymentMethods/paymentMethods.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/paymentMethods/paymentMethods.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/paymentMethods/paymentMethods.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingMethods/shippingMethods.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingMethods/shippingMethods.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/shippingMethods/shippingMethods.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderSummary/orderSummary.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderSummary/orderSummary.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderSummary/orderSummary.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderTotal/orderTotal.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderTotal/orderTotal.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderTotal/orderTotal.service.min.js");
+
+    if (Model.OnePageCheckoutSettings.ShowDiscountBox)
+    {
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/discountBox/discountBox.controller.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/discountBox/discountBox.context.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/discountBox/discountBox.service.min.js");
+    }
+
+    if (Model.OnePageCheckoutSettings.ShowGiftCardBox)
+    {
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/giftCardBox/giftCardBox.controller.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/giftCardBox/giftCardBox.context.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/giftCardBox/giftCardBox.service.min.js");
+    }
+
+    if (Model.OnePageCheckoutSettings.ShowEstimateShipping)
+    {
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/estimateShipping/estimateShipping.controller.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/estimateShipping/estimateShipping.context.min.js");
+        Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/estimateShipping/estimateShipping.service.min.js");
+    }
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/checkoutAttributes/checkoutAttributes.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/checkoutAttributes/checkoutAttributes.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/checkoutAttributes/checkoutAttributes.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderConfirm/orderConfirm.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderConfirm/orderConfirm.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/orderConfirm/orderConfirm.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/pickupInStore/pickupInStore.controller.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/pickupInStore/pickupInStore.context.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/pickupInStore/pickupInStore.service.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/configuration/data.config.min.js");
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/dispatchers/data.dispatcher.min.js");
+
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Scripts/app/external/external.controller.min.js");
+
+    var supportRtl = this.ShouldUseRtlTheme();
+
+    Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Styles/RealOnePageCheckout.common.css");
+
+    if (supportRtl)
+    {
+        Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Styles/RealOnePageCheckout.common.rtl.css");
+    }
+
+    Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Themes/" + themeName + "/Content/RealOnePageCheckout.css");
+
+    if (supportRtl)
+    {
+        Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.RealOnePageCheckout/Themes/" + themeName + "/Content/RealOnePageCheckout.rtl.css");
+    }
+
+}
+
+@Html.Hidden("storeLocation", storeLocation)
+
+@*//HACK: Customization - MSS - Handle catalog requests*@
+<script>
+    $(document).ready(function() {
+        $(".cart-item-row").livequery(function() {
+            if ($(".cart-item-row").length === 1) {
+                if ($("td.sku").text() === "GILSON CATALOG") {
+                    $(".page-title H1").text("Request Catalog");
+                    if (!$("#shipToSameAddress").is(":checked")) {
+                        $("#shipToSameAddress").click();
+                    }
+                    $(".ship-to-same-address").hide();
+                    $(".billing-address .title strong").text("Shipping Address");
+                    $(".payment-method-panel").hide();
+                    $(".coupon-box-panel").hide();
+                    $("#shipping-costs-block").hide();
+                    $("#additional-information").hide();
+                    $("#billing-same-as-shipping-panel-2").hide();
+                }
+                else if ($("td.sku").text().indexOf("-Trial") > -1) {
+                        $("#billing-same-as-shipping-panel-2").hide();
+                        $("#billing-title").text("CUSTOMER INFORMATION");
+                        $("#bci").text("Contact Information:");
+                        $(".payment-method-panel").hide();
+                        $("#additional-information").hide();
+                        $("#shipping-costs-block").hide();
+                }
+            } 
+        });
+    });
+</script>
+
+<div class="page checkout-page" ng-app="realOnePageCheckout">
+    <div class="page-title">
+        <h1>@T("SevenSpikes.RealOnePageCheckout.Public.CheckoutTitle")</h1>
+    </div>
+    <div class="page-body">
+        <div class="ropc">
+            @if (totalItems > 0)
+            {
+                <form id="checkoutForm" name="checkoutForm" ng-controller="OrderConfirmController as vm" valid-submit="vm.validateForm(checkoutForm)">
+
+                    @Html.Partial("_AjaxLoader", "confirm-order-loader")
+
+                    <div class="panel complete-order-panel">
+                        <div class="order-confirm" ng-show="vm.orderConfirmData.errors.length > 0">
+                            <ul class="error-list" style="text-align: center;">
+                                <li class="error-item" ng-repeat="error in vm.orderConfirmData.errors track by $index">
+                                    <span class="error-text">{{error}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-group panel-group-left">
+                        <panel class="panel shipping-address-panel" title="@T("Checkout.ShippingAddress")" src="RealOnePageCheckout/ShippingAddressForm"></panel>                        
+                        <panel class="panel billing-address-panel" title="@T("Checkout.BillingAddress")" src="RealOnePageCheckout/BillingAddressForm"></panel>
+
+                        @if (Model.OnePageCheckoutSettings.ShowEstimateShipping)
+                        {
+                            <panel class="panel estimate-shipping-panel" title="@T("ShoppingCart.EstimateShipping")" src="RealOnePageCheckout/EstimateShippingForm"></panel>
+                        }
+                    </div>
+
+                    <div class="panel-group panel-group-right-top">
+                        <panel class="panel shipping-method-panel" title="@T("Checkout.ShippingMethod")" src="RealOnePageCheckout/ShippingMethodForm"></panel>
+                        @*<panel class="panel attributes-panel" title="@T("SevenSpikes.RealOnePageCheckout.Public.CheckoutAttributes")" src="RealOnePageCheckout/CheckoutAttributesForm"></panel>*@
+
+                        <div id="lift-gate" class="section checkout-attributes ng-hide" ng-controller="CheckoutAttributesController as vm" ng-show="vm.checkoutAttributesData.length > 0">
+                            <div class="section-title title"><strong>Lift Gate</strong></div>
+                            <div class="section-body">
+                                <ul class="attribute-list">
+                                    <li ng-repeat="attribute in vm.checkoutAttributesData | limitTo: 1">
+                                        <div class="attribute-name">
+                                            <label class="text-prompt">{{attribute | textPrompt }}</label>
+                                        </div>
+                                        <div class="attribute-values" ng-switch="attribute.attributeControlType">
+                                            <select ng-switch-when="DropdownList" ng-change="attribute.updated = true;" ng-model="vm.modelsData[attribute.id].dropdownListModel" name="checkout_attribute_{{attribute.id}}" id="checkout_attribute_{{attribute.id}}" ng-required="attribute.isRequired" ng-options="attributeValue as (attributeValue | priceAdjustment) for attributeValue in attribute.values track by attributeValue.id"></select>
+                                        </div>
+                                        <p style="margin-top: 10px;">Freight carriers deliver over-sized, heavy items on trucks with liftgates to homes or companies with no loading dock or forklift. A liftgate lowers those items too heavy for the driver to lift directly to the ground. Selecting “Liftgate” at checkout ensures easy delivery and avoids a carrier redelivery fee to the customer because the item could not be removed from the truck. This charge comes from the carrier, not the shipper.</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="collect-shipping" class="section checkout-attributes ng-hide" ng-controller="CheckoutAttributesController as vm" ng-show="vm.checkoutAttributesData.length > 0">
+                            <div class="section-title title"><strong>Collect Shipping</strong></div>
+                            <div class="section-body">
+                                <ul class="attribute-list">
+                                    <li ng-repeat="attribute in vm.checkoutAttributesData | limitTo: 3">
+                                        <div class="attribute-name">
+                                            <label ng-if="attribute.id==2||attribute.id==1" class="text-prompt">{{attribute | textPrompt }}</label>
+                                        </div>
+                                        <div class="attribute-values" ng-switch="attribute.attributeControlType">
+                                            <select ng-if="attribute.id==2" ng-switch-when="DropdownList" ng-change="attribute.updated = true;" ng-model="vm.modelsData[attribute.id].dropdownListModel" name="checkout_attribute_{{attribute.id}}" id="checkout_attribute_{{attribute.id}}" ng-required="attribute.isRequired" ng-options="attributeValue as (attributeValue | priceAdjustment) for attributeValue in attribute.values track by attributeValue.id"></select>
+                                            <input ng-if="attribute.id==1" ng-switch-when="TextBox" ng-blur="attribute.updated = true;" ng-model="attribute.defaultValue" name="checkout_attribute_{{attribute.id}}" type="text" class="textbox" id="checkout_attribute_{{attribute.id}}" value="{{attribute.defaultValue}}" ng-required="attribute.isRequired" data-hj-whitelist />
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <panel class="panel payment-method-panel" title="@T("Checkout.PaymentMethod")" src="RealOnePageCheckout/PaymentMethodForm"></panel>
+                    </div>
+
+                    <div class="panel-group panel-group-right-middle">
+                        <div id="additional-information" class="section checkout-attributes" ng-controller="CheckoutAttributesController as vm" ng-show="vm.checkoutAttributesData.length > 0">
+                            <div class="section-title title"><strong>Additional Information</strong></div>
+                            <div class="section-body">
+                                <ul class="attribute-list">
+                                    <li ng-repeat="attribute in vm.checkoutAttributesData | limitTo: -2">
+                                        <div class="attribute-name">
+                                            <label class="text-prompt">{{attribute | textPrompt }}</label>
+                                            <span ng-show="attribute.isRequired" class="required">*</span>
+                                        </div>
+                                        <div class="attribute-values" ng-switch="attribute.attributeControlType">
+                                            <input ng-switch-when="TextBox" ng-blur="attribute.updated = true;" ng-model="attribute.defaultValue" name="checkout_attribute_{{attribute.id}}" type="text" class="textbox" id="checkout_attribute_{{attribute.id}}" value="{{attribute.defaultValue}}" ng-required="attribute.isRequired"/>
+                                            <div><textarea  ng-switch-when="MultilineTextbox" data-placeholder-attr="{{attribute.defaultValue}}" ng-blur="attribute.updated = true;" ng-model="attribute.defaultValue" id="checkout_attribute_{{attribute.id}}" name="checkout_attribute_{{attribute.id}}" ng-required="attribute.isRequired" style="width: 100%;" data-hj-whitelist ></textarea></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <panel class="panel order-summary-panel" title="@T("Checkout.OrderSummary")" src="RealOnePageCheckout/OrderSummaryForm"></panel>
+                    </div>
+
+                    <div class="panel-group panel-group-right-bottom">
+                        @if (Model.OnePageCheckoutSettings.ShowDiscountBox)
+                        {
+                            <panel class="panel coupon-box-panel" title="@T("ShoppingCart.DiscountCouponCode")" src="RealOnePageCheckout/DiscountBox"></panel>
+                        }
+
+                        @if (Model.OnePageCheckoutSettings.ShowGiftCardBox)
+                        {
+                            <panel class="panel giftcard-box-panel" title="@T("ShoppingCart.GiftCardCouponCode")" src="RealOnePageCheckout/GiftCardBox"></panel>
+                        }
+
+                        <panel class="panel order-totals-panel" src="RealOnePageCheckout/OrderTotalsForm"></panel>
+
+                        <div class="panel complete-order-panel">
+                            <div class="order-confirm" ng-show="vm.orderConfirmData.errors.length > 0">
+                                <ul class="error-list">
+                                    <li class="error-item" ng-repeat="error in vm.orderConfirmData.errors track by $index">
+                                        <span class="error-text">{{error}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="terms-of-service" ng-show="vm.config['termsOfServiceOnOrderConfirmPage']" style="margin: 15px 0; font-family: verdana, arial, helvetica, sans-serif;color: #555;font-size: 16px;line-height: 1.5em; display: none;">
+                                <input type="checkbox" id="terms-of-service" name="termsOfService" ng-model="checked" ng-init="checked=true" ng-required="vm.config['termsOfServiceOnOrderConfirmPage']"/>
+                                <label for="terms-of-service">I have read and acknowledge the Proposition 65 notice below</label>
+                                <div style="margin-top: 10px;"><strong><a href="/Content/Images/uploaded/pdf/california-proposition-65.pdf" target="_blank">Please read our notice regarding California Proposition 65</a></strong></div>
+                            </div>
+
+                            <div class="buttons complete-button">
+                                <button type="submit" data-processing="@T("SevenSpikes.RealOnePageCheckout.Public.ProcessingButton")" data-complete="@T("SevenSpikes.RealOnePageCheckout.Public.CompleteButton")">@T("SevenSpikes.RealOnePageCheckout.Public.CompleteButton")</button>
+                            </div>
+                            <div class="addon-buttons">
+                                @*Payment method buttons (e.g. GoogleCheckoutButton, Paypal Express)*@
+                                @Html.Partial("_ButtonPaymentMethod", Model)
+                            </div>
+                        </div>
+                        <div id="shipping-costs-block" style="margin-top: 50px;">
+                            @Html.Action("TopicBlock", "Topic", new { systemName = "ShippingCostsBlock" })
+                        </div>
+                        @*<div class="real-onepage-checkout cross-sells">
+                            @Html.Action("CrossSellProducts", "Product")
+                        </div>*@
+                    </div>
+                </form>
+            }
+            else
+            {
+                <span>@T("SevenSpikes.RealOnePageCheckout.Public.EmptyShoppingCart")</span>
+            }
+        </div>
+    </div>
+
+    <div ng-controller="ExternalController as vm" ng-hide="true"></div>
+</div>
+
+<span style="display: none" id="invalidFormMessage">@T("SevenSpikes.RealOnePageCheckout.Public.InvalidForm")</span>
+<span style="display: none" id="invalidFormMessageForTermsOfService">@T("SevenSpikes.RealOnePageCheckout.Public.TermsOfServiceNotChecked")</span>
+
+@{
+    RealOnePageCheckoutSettings settings = EngineContext.Current.Resolve<RealOnePageCheckoutSettings>();
+}
+
+@Html.Hidden("flyoutShoppingCartUrlROPC", Url.RouteUrl("NopROPCFlyoutShoppingCart"))
+@Html.Hidden("flyoutShoppingCartPanelSelectorROPC", Html.Encode(settings.FlyoutCartPanelSelector))
+@Html.Hidden("shoppingCartMenuLinkSelectorROPC", Html.Encode(settings.ShoppingCartMenuLinkSelector))
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.page-body').on('click', '.ropc .section-title', function () {
+            var e = window, a = 'inner';
+            if (!('innerWidth' in window)) {
+                a = 'client';
+                e = document.documentElement || document.body;
+            }
+
+            var result = { width: e[a + 'Width'], height: e[a + 'Height'] };
+
+            if (result.width < 769) {
+                $(this).siblings('.section-body').slideToggle('slow');
+            }
+        });
+    });
+
+    var plc = 0;
+    $(document).on('nopOnePageCheckoutPanelsLoadedEvent', function () {
+        if (plc === 0){
+            //console.log("nopOnePageCheckoutPanelsLoadedEvent");
+
+            $("#billing-same-as-shipping-checkbox-1").click(function () {
+                $("#billing-same-as-shipping-checkbox-2").prop('checked', this.checked);
+                $("#billing-same-as-shipping-panel-1").toggle(!this.checked);
+                $("#billing-same-as-shipping-panel-2").toggle(this.checked);
+                shipToBillingAddress();
+            });
+
+            $("#billing-same-as-shipping-checkbox-2").click(function () {
+                $("#billing-same-as-shipping-checkbox-1").prop('checked', this.checked);
+                $("#billing-same-as-shipping-panel-1").toggle(!this.checked);
+                $("#billing-same-as-shipping-panel-2").toggle(this.checked);
+                shipToBillingAddress();
+                $('html, body').animate({ scrollTop: $("#billing-title").offset().top - 40 }, 1000);
+            });
+
+            plc++;
+        }
+
+    });
+
+    function shipToBillingAddress() {
+        var shippingaddressid = $("#shipping-addresses").val();
+        var billingaddressid = $("#billing-addresses").val();
+        $("#shipToSameAddress").click();
+        if (document.getElementById("billing-same-as-shipping-checkbox-1").checked) {
+            if (shippingaddressid !== billingaddressid) {
+                $("#billing-addresses").val(shippingaddressid).change();
+                var scope = angular.element($("#billing-addresses")).scope();
+                scope.$apply(function () { scope.selectValue = shippingaddressid; });
+            }
+            $("#billing-title").text("SHIPPING ADDRESS");
+            $("#bci").text("Shipping Contact Information:");
+        } else {
+            $("#billing-title").text("BILLING ADDRESS");
+            $("#bci").text("Billing Contact Information:");
+        }
+    }
+</script>
+

@@ -1,0 +1,139 @@
+﻿@** Copyright 2015 Seven Spikes Ltd. All rights reserved. (http://www.nop-templates.com)
+    * http://www.nop-templates.com/t/licensinginfo
+*@
+
+@using Nop.Web.Framework.UI
+@using System.Text
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Common
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Domain
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Models.SpecificationFilter
+
+@model SpecificationFilterModel7Spikes
+
+@{
+    int optionsGroupIndex = 0;
+
+    string toggleStateClass = "toggleControl";
+    string toggleStateStyles = "";
+    if (Model.NopAjaxFiltersSettings.CloseSpecificationsFilterBox == true)
+    {
+        toggleStateClass = "toggleControl closed";
+        toggleStateStyles = "display: none;";
+    }
+}
+
+@foreach (SpecificationFilterGroup specificationFilterGroup in Model.SpecificationFilterGroups)
+{
+    if (specificationFilterGroup.FilterItems.Count == 1) { continue;}
+
+    if (Model.CategoryId == 672 &&  //Direct Shear Accessories
+        (specificationFilterGroup.Name != "Specimen Size" &&
+         specificationFilterGroup.Name != "Shape"))
+    {
+        continue;
+    }
+
+    if (Model.CategoryId == 654 &&  //Consolidometer Accessories
+(specificationFilterGroup.Name == "Size" ||
+specificationFilterGroup.Name == "Test Cell Accessory"))
+    {
+        continue;
+    }
+
+    if ((Model.CategoryId == 655 || Model.CategoryId == 656) &&  //Flexible-Wall Permeability Test Cell Accessories || Triaxial Test Cell Accessories
+        specificationFilterGroup.Name != "Specimen Size" &&
+        specificationFilterGroup.Name != "Test Cell Accessory")
+    {
+        continue;
+    }
+
+    if (Model.CategoryId == 687 && //Porous Stones
+        (specificationFilterGroup.Name == "Specimen Size" ||
+        specificationFilterGroup.Name == "Consolidometer Type" ||
+        specificationFilterGroup.Name == "Consolidometer Accessory"))
+    {
+        continue;
+    }
+
+
+    Func<int, HelperResult> specificationOptionsHtml =
+        @<text>
+            @foreach (SpecificationFilterItem specificationFilterItem in specificationFilterGroup.FilterItems)
+            {
+                var filterItemCssClass = "filterItemUnselected";
+
+                if (specificationFilterItem.FilterItemState == FilterItemState.Checked)
+                {
+                    filterItemCssClass = "filterItemSelected";
+                }
+                if (Model.CategoryId == 12 && specificationFilterGroup.Name == "Frame Diameter" && specificationFilterItem.Name.StartsWith("3in"))
+                {
+                    <li><span>Popular Sizes</span></li>
+                }
+                else if (Model.CategoryId == 12 && specificationFilterGroup.Name == "Frame Diameter" && specificationFilterItem.Name.StartsWith("6in"))
+                {
+                    <li><span>Additional Sizes</span></li>
+                }
+                <li>
+                    <a class="@filterItemCssClass" data-option-id="@specificationFilterItem.Id">@specificationFilterItem.Name</a>
+                </li>
+            }
+        </text>;
+
+    <div class="block filter-block specificationFilterPanel7Spikes">
+        <div class="title">
+            <a class="@toggleStateClass">@specificationFilterGroup.Name</a>
+            <a class="clearFilterOptions" title="Clear selected [@(specificationFilterGroup.Name)]">@T("SevenSpikes.NopAjaxFilters.Client.Common.Clear")</a>
+        </div>
+
+        @if (Model.NopAjaxFiltersSettings.FiltersUIMode == FiltersUIMode.UseCheckboxes)
+        {
+            var cols = "";
+            if (specificationFilterGroup.Name.Contains("Frame Diameter") ||
+                specificationFilterGroup.Name.Contains("Opening Size") ||
+                (specificationFilterGroup.Name == "Range"))
+            {
+                cols = " filter-columns";
+            }
+            else if (specificationFilterGroup.Name == "ASTM Number")
+            {
+                cols = " filter-columns-4";
+            }
+            <div @if (specificationFilterGroup.Name.ToLower().Contains("opening size")){<text>id="opening-size"</text>}
+            class="filtersGroupPanel" data-optionsgroupid="@specificationFilterGroup.Id" style="@toggleStateStyles">
+                <ul class="checkbox-list@(cols)">
+                    @specificationOptionsHtml(0)
+                </ul>
+                @if (Model.CategoryId == 12 && specificationFilterGroup.Name.Contains("Opening Size"))
+                {
+                    <div style="margin-top: 15px;text-align: center;"><a href="/astm-test-sieves-supplemental-sizes" style="font-size: 14px; font-weight:700;">View Supplemental Sizes</a></div>
+                }
+            </div>
+        }
+        else if (Model.NopAjaxFiltersSettings.FiltersUIMode == FiltersUIMode.UseDropdowns)
+        {
+            var specificationFilterDropDownId = String.Concat("specificationFiltersDropDown", specificationFilterGroup.Id);
+
+            <div class="filtersGroupPanel filtersDropDownPanel" data-optionsgroupid="@specificationFilterGroup.Id" style="@toggleStateStyles">
+                <div id="@specificationFilterDropDownId" class="filtersDropDown">
+                    <div class="filters-select-wrap">
+                        <p class="filters-select-text"></p>
+                    </div>
+                    <ul class="filters-select-dropdown">
+                        <li class="selected">
+                            <a class="allFilterDropDownOptions">@T("SevenSpikes.NopAjaxFilters.Client.Common.All")</a>
+                        </li>
+                        @specificationOptionsHtml(0)
+                    </ul>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#@specificationFilterDropDownId").jDropDown();
+                });
+            </script>
+        }
+    </div>
+
+        optionsGroupIndex++;
+}

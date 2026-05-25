@@ -1,0 +1,33 @@
+Cell Phones & Accessories/Accessories;cell-phone-accessories
+Cell Phones & Accessories/Accessories/Accessory Kits;cell-phone-combination-packs
+Cell Phones & Accessories/Accessories/Audio Adapters;cell-phone-headset-adapters
+Cell Phones & Accessories/Accessories/Batteries;cell-phone-batteries
+Cell Phones & Accessories/Accessories/Car Accessories/Bluetooth Car Kits;vehicle-wireless-audio-cell-phone-car-kits
+Cell Phones & Accessories/Accessories/Car Accessories/Car Cradles;cell-phone-car-mounts
+Cell Phones & Accessories/Accessories/Car Accessories/Car Kits;cell-phone-car-kits
+Cell Phones & Accessories/Accessories/Cases & Covers/Belt Holsters & Clips;cell-phone-belt-clips
+Cell Phones & Accessories/Accessories/Cases & Covers/Cases;cell-phone-carrying-cases
+Cell Phones & Accessories/Accessories/Cases & Covers/Covers & Skins;cell-phone-protective-skins
+Cell Phones & Accessories/Accessories/Cases & Covers/Faceplates;cell-phone-faceplates
+Cell Phones & Accessories/Accessories/Cases & Covers/Phone Socks;cell-phone-sock-covers
+Cell Phones & Accessories/Accessories/Chargers;cell-phone-chargers
+Cell Phones & Accessories/Accessories/Chargers/Car Chargers;cell-phone-car-chargers
+Cell Phones & Accessories/Accessories/Chargers/Desktop Chargers;cell-phone-desktop-charging-cradles
+Cell Phones & Accessories/Accessories/Chargers/International Chargers;international-cell-phone-chargers
+Cell Phones & Accessories/Accessories/Chargers/Wall Chargers;standard-cell-phone-chargers
+Cell Phones & Accessories/Accessories/Data Cables;cell-phone-data-cables
+Cell Phones & Accessories/Accessories/Decals;cell-phone-decals
+Cell Phones & Accessories/Accessories/Headsets;cell-phone-headsets
+Cell Phones & Accessories/Accessories/Headsets/Bluetooth Headsets;wireless-cell-phone-headsets
+Cell Phones & Accessories/Accessories/Headsets/Wired Headsets;wired-cell-phone-headsets
+Cell Phones & Accessories/Accessories/Mounts;cell-phone-mounts
+Cell Phones & Accessories/Accessories/Phone Charms;cell-phone-charms
+Cell Phones & Accessories/Accessories/Replacement Parts;replacement-cell-phone-parts
+Cell Phones & Accessories/Accessories/Screen Protectors;cell-phone-screen-protectors
+Cell Phones & Accessories/Accessories/Signal Boosters;cell-phone-antenna-boosters
+Cell Phones & Accessories/Accessories/Styli;cell-phone-styli
+Cell Phones & Accessories/No-Contract Phones/Broadband;prepaid-broadband-data-packages
+Cell Phones & Accessories/No-Contract Phones/Minutes;prepaid-cell-phone-minutes
+Cell Phones & Accessories/No-Contract Phones/Phones;prepaid-cell-phones
+Cell Phones & Accessories/Sim Cards;cell-phone-sim-cards
+Cell Phones & Accessories/Unlocked Phones;unlocked-cell-phones

@@ -1,0 +1,45 @@
+﻿@model SevenSpikes.Nop.Plugins.NopQuickTabs.Models.TabUIModel
+@{var additionalClass = ""; if (Model.Tabs.Any(x => x.TabKey == "picture")) { additionalClass = "withPicture"; }}
+<div id="quickTabs" class="productTabs @additionalClass">
+    <div class="productTabs-header">
+        <ul>
+            @foreach (var tabInfo in Model.Tabs)
+            {
+                if (tabInfo.Title == "Video")
+                {
+                    <li>
+                        <a href="#quickTab-@tabInfo.TabKey">@tabInfo.Title</a>
+                    </li>
+                }
+                else
+                {
+
+                            <li>
+                                <a href="#quickTab-@tabInfo.TabKey">@tabInfo.Title</a>
+                            </li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="productTabs-body">
+        @{foreach (var tabInfo in Model.Tabs)
+            {
+                if (tabInfo.Title == "Video")
+                {
+                    <div id="quickTab-@tabInfo.TabKey">
+                        @if (tabInfo.Content.Contains("{{VIDEOPLAYLIST:"))
+                        {
+                            var ytid = tabInfo.Content.Replace("{{VIDEOPLAYLIST:", "").Replace("}}", ""); Html.AddHeadCustomParts("<meta property=\"ContainsVideo\" data-sj-field=\"ContainsVideo\" content=\"" + ytid + "\" />");@Html.Raw(string.Format(T("product.tab.video.playlist.code").ToString(), ytid))}
+                        else if (tabInfo.Content.Contains("{{VIDEO:"))
+                        {
+                            var ytid = tabInfo.Content.Replace("{{VIDEO:", "").Replace("}}", ""); Html.AddHeadCustomParts("<meta property=\"ContainsVideo\" data-sj-field=\"ContainsVideo\" content=\"" + ytid + "\" />");@Html.Raw(string.Format(T("product.tab.video.code").ToString(), ytid))}
+                        else
+                        {@Html.Raw(tabInfo.Content)}
+                    </div>}
+                else
+                {
+                    <div id="quickTab-@tabInfo.TabKey">@Html.Raw(tabInfo.Content)</div>
+                }
+            }}
+        </div>
+    </div>

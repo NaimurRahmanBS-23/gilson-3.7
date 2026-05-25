@@ -1,0 +1,710 @@
+﻿<Language Name="English" IsRightToLeft="false">
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.IsRegisted">
+    <Value>Registered version.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.IsNoRegisted">
+    <Value>Unregistered version is fully operational. Only 50 products will be exported.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.IsExpired">
+    <Value>Your license has expired, you should renew the license with a 50% discount.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.StoreUrl">
+    <Value>Website address (for registration)</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.StoreUrl.Hint">
+    <Value>Website address (for registration).</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.showDebugInfo">
+    <Value>Enable Debugging</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.showDebugInfo.Hint">
+    <Value>Write debugging information into file. In ~/App_Data/ folder.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.Enabled">
+    <Value>Enable plugin</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.Enabled.Hint">
+    <Value>Enable plugin.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.SerialNumber">
+    <Value>Serial number</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.SerialNumber.Hint">
+    <Value>Serial number.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.ProductsPerRequest">
+    <Value>Products per one request</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.ProductsPerRequest.Hint">
+    <Value>How many products plugin will try to read from MS SQL Server per one request.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.ProductsBeforePause">
+    <Value>Products before pause</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.ProductsBeforePause.Hint">
+    <Value>How many products plugin will save to file before making pause.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.PauseMilliSecond">
+    <Value>Pause (milliseconds)</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.PauseMilliSecond.Hint">
+    <Value>Plugin will do pause between saving data to file.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.UseExternalPictureService">
+    <Value>Use external picture service</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.UseExternalPictureService.Hint">
+    <Value>Use external picture service for extremal plugin for creation pictures (ex. you want to use CDN URL for pictures, etc.).</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ClearLogFile">
+    <Value>Clear the log-file</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.GetLogFile">
+    <Value>Download the log-file</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Name">
+    <Value>Feed Manager</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Added">
+    <Value>The new feed has been added successfully.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Updated">
+    <Value>The feed has been updated successfully.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Deleted">
+    <Value>The feed has been deleted successfully.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.ActivityLog.Add">
+    <Value>Added feed ('{0}')</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.ActivityLog.Edit">
+    <Value>Edited feed ('{0}')</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.ActivityLog.Delete">
+    <Value>Deleted feed ('{0}')</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.List.Manage">
+    <Value>Manage feeds</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.UnExportedProductList.Manage">
+    <Value>Unexported product list</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Generate">
+    <Value>Generate</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Running">
+    <Value>Running...</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.BackToList">
+    <Value>Back to list</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.AddNew">
+    <Value>Add a new feed</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Edit">
+    <Value>Edit the feed</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Tab.Info">
+    <Value>Info</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Tab.FeedSettings">
+    <Value>Feed Settings</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Tab.ProductFilter">
+    <Value>Product Filter</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Tab.FeedCondition">
+    <Value>Conditions</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Tab.Shedule">
+    <Value>Schedule Settings</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Tab.FTPSettings">
+    <Value>FTP Settings</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.Enabled">
+    <Value>Enabled</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.Enabled.Hint">
+    <Value>Enabled.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.Protocol">
+    <Value>Protocol</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.Protocol.Hint">
+    <Value>Protocol FTP/FTPS/SFTP</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.HostName">
+    <Value>Host Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.HostName.Hint">
+    <Value>Host Name. e.g. ftp.domain.com.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.Port">
+    <Value>Port</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.Port.Hint">
+    <Value>Port.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.UserName">
+    <Value>User Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.UserName.Hint">
+    <Value>User Name.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.Password">
+    <Value>Password</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.Password.Hint">
+    <Value>Password.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.PassiveMode">
+    <Value>Passive Mode</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.PassiveMode.Hint">
+    <Value>Passive Mode.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.UploadFileMaually">
+    <Value>Manually upload files</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.UploadFTPfile.Success">
+    <Value>The file has been successfully uploaded.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.UploadFTPfile.Error">
+    <Value>The file hasn't been uploaded.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedFile.Fields.Type">
+    <Value>Type</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedFile.Fields.FileUrl">
+    <Value>Url for feed file</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedFile.Fields.CreatedOn">
+    <Value>Created</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Id">
+    <Value>Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Id.Hint">
+    <Value>Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Files">
+    <Value>Files</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Id">
+    <Value>Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Id.Hint">
+    <Value>The feed Id.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Name">
+    <Value>Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Name.Hint">
+    <Value>Feed name.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Name.Required">
+    <Value>Name is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.PictureUrl">
+    <Value>Picture</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Encoding">
+    <Value>Encoding</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Encoding.Hint">
+    <Value>Encoding.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.AdminComment">
+    <Value>Admin Comment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.AdminComment.Hint">
+    <Value>Admin Comment.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.DefaultMapCategory">
+    <Value>Default category (Google, Amazon, etc.)</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.DefaultMapCategory.Hint">
+    <Value>The default Google, Amazon, etc. category to use if one is not specified.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Store">
+    <Value>Store</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Store.Hint">
+    <Value>Select the specific store.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Language">
+    <Value>Language</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Language.Hint">
+    <Value>Select the specific language.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.TypeFeed">
+    <Value>Type</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.TypeFeed.Hint">
+    <Value>Select the specific type.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.TypeFeed.Required">
+    <Value>TypeFeed is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ExportFileName">
+    <Value>Export file name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ExportFileName.Hint">
+    <Value>File Name without suffix - . xml or .csv will be added according to selected feed type.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ExportFileName.Required">
+    <Value>Export file name is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.MerchantId">
+    <Value>MerchantId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.MerchantId.Hint">
+    <Value>MerchantId for Amazon.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.IsActive">
+    <Value>Is Active</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.IsActive.Hint">
+    <Value>Is Active.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ProductPictureSize">
+    <Value>Product image size</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ProductPictureSize.Hint">
+    <Value>Default size (pixels) for product images.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.CategoryPathDelimiter">
+    <Value>Category path delimiter</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.CategoryPathDelimiter.Hint">
+    <Value>Category path delimiter.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.DecimalDelimiter">
+    <Value>Decimal Delimiter</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.DecimalDelimiter.Hint">
+    <Value>Decimal Delimiter.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.PriceFormat">
+    <Value>Price format</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.PriceFormat.Hint">
+    <Value>Price format.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.DatetimeFormat">
+    <Value>Datetime format</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.DatetimeFormat.Hint">
+    <Value>Datetime format.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.PriceMarkup">
+    <Value>Price Markup</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.PriceMarkup.Hint">
+    <Value>Price Markup percentage. Ex. 20% per Amazon.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Compression">
+    <Value>Compress File</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Compression.Hint">
+    <Value>Compress File.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.UseStaticFileName">
+    <Value>Use static file name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.UseStaticFileName.Hint">
+    <Value>Use static file name. By default plugin generates name like filename_language-currency_storeid.xml.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.DoNotExportNewProducts">
+    <Value>Don't export new products</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.DoNotExportNewProducts.Hint">
+    <Value>Don't export new products.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ExportGrouped">
+    <Value>Export Grouped products</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ExportGrouped.Hint">
+    <Value>Export Grouped products. By default plugin only exports only simple products.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ExportProductCombinations">
+    <Value>Export product combinations</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ExportProductCombinations.Hint">
+    <Value>Export product combinations. By default plugin only exports only simple products. With this parameters plugin will create new virtual products with new ID.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.SkipMainProduct">
+    <Value>Skip main product</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.SkipMainProduct.Hint">
+    <Value>Don't export main product if you use 'Export product combinations' or 'Export Grouped products'. Plugin will export only subproducts.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Currency">
+    <Value>Currency</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Currency.Hint">
+    <Value>Select the default currency that will be used to generate the price.</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.none">
+    <Value>None</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.cdata">
+    <Value>Character data</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.decode_html_entity">
+    <Value>Decode html entities</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.decode_special_chars">
+    <Value>Decode html special chars</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.delete_spaces">
+    <Value>Delete spaces</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.encode_html_entity">
+    <Value>Encode html entities</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.encode_special_chars">
+    <Value>Encode html special chars</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.remove_eol">
+    <Value>Remove end of lines</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.strip_tags">
+    <Value>Strip tags</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.None">
+    <Value>Select property</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.Category">
+    <Value>Category</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.Manufacturer">
+    <Value>Manufacturer</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.Price">
+    <Value>Price</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.Quantity">
+    <Value>Quantity</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.PreOrder">
+    <Value>Pre Order</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.FreeShipping">
+    <Value>Free Shipping</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.HasSpecialPrice">
+    <Value>Has Special Price</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.HasSpecialPrice">
+    <Value>Has Special Price</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.ProductAgeDays">
+    <Value>Product Age Days</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.HasGtin">
+    <Value>Product has Gtin</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionProductAdjustment.Weight">
+    <Value>Weight</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionTypeAdjustment.None">
+    <Value>Select type</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionTypeAdjustment.Product">
+    <Value>Product</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionTypeAdjustment.ProductSpecification">
+    <Value>Product Specification</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.TypeActiveAdjustment.Inherited">
+    <Value>Inherited</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.TypeActiveAdjustment.Yes">
+    <Value>Yes</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.TypeActiveAdjustment.No">
+    <Value>No</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionOperatorAdjustment.EqualTo">
+    <Value>Equal To</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionOperatorAdjustment.NotEqualTo">
+    <Value>Not Equal To</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionOperatorAdjustment.LessThan">
+    <Value>Less Than</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionOperatorAdjustment.GreaterThan">
+    <Value>Greater Than</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionOperatorAdjustment.LessThanOrEqualTo">
+    <Value>Less Than Or Equal To</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ConditionOperatorAdjustment.GreaterThanOrEqualTo">
+    <Value>Greater Than Or Equal To</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportFileTypeAdjustment.XML">
+    <Value>xml         </Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportFileTypeAdjustment.TXT">
+    <Value>TXT         </Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportFileTypeAdjustment.CSV">
+    <Value>CSV         </Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportFileTypeAdjustment.XLSX">
+    <Value>XLSX        </Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.EncodingAdjustment.UTF8">
+    <Value>utf-8       </Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.EncodingAdjustment.Windows1251">
+    <Value>windows-1251</Value>
+  </LocaleResource>
+  <LocaleResource Name="enums.FoxNetSoft.Plugin.Feed.Manager.Domain.EncodingAdjustment.ISO88597">
+    <Value>ISO-8859-7</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.SaveBeforeEdit">
+    <Value>You need to save the feed before you can add conditions for this feed page.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.SaveBeforeEdit">
+    <Value>You need to save the feed before you can add feed attributes for this feed page.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.SaveBeforeEdit">
+    <Value>You need to save the feed before you can add product filters for this feed page.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionType">
+    <Value>Type</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionType.Hint">
+    <Value>Type</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionProperty">
+    <Value>Property</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionProperty.Hint">
+    <Value>Property</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionOperator">
+    <Value>Operator</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionOperator.Hint">
+    <Value>Operator</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionValueId">
+    <Value>Value</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.Fields.ConditionValueId.Hint">
+    <Value>Value</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.OpenFeedFile">
+    <Value>Open Feed File</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.None">
+    <Value>None</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Id">
+    <Value>Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Id.Hint">
+    <Value>Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.FeedCaption">
+    <Value>Caption</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.FeedCaption.Hint">
+    <Value>Caption</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.FeedName">
+    <Value>Feed Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.FeedName.Hint">
+    <Value>Feed Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Prefix">
+    <Value>Prefix</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Prefix.Hint">
+    <Value>Prefix</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.XPath">
+    <Value>XPath</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.XPath.Hint">
+    <Value>XPath</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Suffix">
+    <Value>Suffix</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Suffix.Hint">
+    <Value>Suffix</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.DefaultValue">
+    <Value>Default value</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.DefaultValue.Hint">
+    <Value>Default value</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.CharsLimit">
+    <Value>Chars limit</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.CharsLimit.Hint">
+    <Value>Chars limit</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Required">
+    <Value>Required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Required.Hint">
+    <Value>Required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.IgnoreNullOrEmpty">
+    <Value>Ignore Null Or Empty</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.IgnoreNullOrEmpty.Hint">
+    <Value>Ignore Null Or Empty</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.FieldName">
+    <Value>Field name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.FieldName.Hint">
+    <Value>Field name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.UseCDATA">
+    <Value>Use CDATA</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.UseCDATA.Hint">
+    <Value>Use CDATA</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.AdvancedField">
+    <Value>Advanced</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.AdvancedField.Hint">
+    <Value>Advanced</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.RowSourceType">
+    <Value>RowSourceType</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.RowSourceType.Hint">
+    <Value>RowSourceType</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.RowSource">
+    <Value>RowSource</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.RowSource.Hint">
+    <Value>RowSource</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.AttributeControlType">
+    <Value>Control</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.AttributeControlType.Hint">
+    <Value>Control (TextBox or DropdownList).</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.ActionName">
+    <Value>Post-process action</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.ActionName.Hint">
+    <Value>Post-process action</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.TypeActive">
+    <Value>Exported</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.TypeActive.Hint">
+    <Value>Exported.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.showAdvancedFileds">
+    <Value>Show advanced fields</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.showAdvancedFileds.Hint">
+    <Value>Show advanced fields.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.DefaulValues">
+    <Value>Default values</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.ASIN">
+    <Value>ASIN</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.ASIN.Hint">
+    <Value>ASIN (Amazon Standard Identification Number).</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.EPID">
+    <Value>EPID</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.EPID.Hint">
+    <Value>EPID (eBay Product ID).</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.CategoryMap">
+    <Value>CategoryMap</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.CategoryMap.Hint">
+    <Value>Default category (Google, Amazon, etc.)</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.EditValueDetails">
+    <Value>Edit default values details</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.ShowAdvancedFields">
+    <Value>Show advanced fields</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.ShowAdvancedFields.Hint">
+    <Value>Show advanced fields</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.EditValueDetails">
+    <Value>Edit condition</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.AddNew">
+    <Value>Add a new condition</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.List.Store">
+    <Value>Store</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.List.Store.Hint">
+    <Value>Search by a specific store.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.List.TypeFeed">
+    <Value>Type</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.List.TypeFeed.Hint">
+    <Value>Search by a specific type of the feed.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.SheduleSettings.Fields.Enabled">
+    <Value>Enabled</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.SheduleSettings.Fields.Enabled.Hint">
+    <Value>Enabled</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.CopyFromFroogle">
+    <Value>Copy data from Froogle</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.CopyFromFroogle.Success">
+    <Value>The data has been successfully copied.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.CopyFromFroogle.Error">
+    <Value>The data hasn't been copied.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.FeedFile">
+    <Value>Feed file</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.FeedFile.Hint">
+    <Value>Feed file.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ZipFile">
+    <Value>Zip file</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ZipFile.Hint">
+    <Value>Zip file.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ReportFile">
+    <Value>Report file</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.ReportFile.Hint">
+    <Value>Report file.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttributes.EditAttributeDetails">
+    <Value>Edit values for [{0}] attribute. Feed: {1}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttributes.BackToFeed">
+    <Value>back to feed details</Value>
+  </LocaleResource>
+</Language>

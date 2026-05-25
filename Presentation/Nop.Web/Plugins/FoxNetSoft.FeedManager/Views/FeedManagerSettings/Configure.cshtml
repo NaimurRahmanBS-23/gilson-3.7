@@ -1,0 +1,121 @@
+﻿@{
+    Layout = null;
+}
+@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedManagerSettingsModel
+@using System.Web.Mvc.Html
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#@Html.FieldIdFor(model => model.showDebugInfo)").click(toggleshowDebugInfo);
+                toggleshowDebugInfo();
+            });
+
+            function toggleshowDebugInfo() {
+                if ($('#@Html.FieldIdFor(model => model.showDebugInfo)').is(':checked')) {
+                    $('#pnlclearlogfile').show();
+                    $('#pnlgetlogfile').show();
+                }
+                else {
+                    $('#pnlclearlogfile').hide();
+                    $('#pnlgetlogfile').hide();
+                }
+            }
+        </script>    
+@Html.HiddenFor(model => model.ProductsPerRequest)
+@Html.HiddenFor(model => model.ProductsBeforePause)
+@Html.HiddenFor(model => model.PauseMilliSecond)    
+        <table class="adminContent">
+           @if (Model.IsArsUa == false)
+           {
+           <tr>
+                <td colspan="2">
+                     @if (Model.IsRegisted == true)
+                     {
+                        @T("Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.IsRegisted")
+                     }
+                     else
+                     {
+                        @T("Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.IsNoRegisted")
+                        <br />
+                        <a href="http://www.foxnetsoft.com/feedmanager" target="blank" >Buy It Now</a>
+                     }
+                 </td>
+            </tr>
+           }
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.Enabled):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.Enabled)
+                    @Html.ValidationMessageFor(model => model.Enabled)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.UseExternalPictureService):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.UseExternalPictureService)
+                    @Html.ValidationMessageFor(model => model.UseExternalPictureService)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.showDebugInfo):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.showDebugInfo)
+                    @Html.ValidationMessageFor(model => model.showDebugInfo)
+                    <div id="pnlclearlogfile">
+                        <a href="@Url.Action("ClearLogFile")" class="k-button">@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ClearLogFile")</a>
+                    </div>
+                    <div id="pnlgetlogfile">
+                        <a href="@Url.Action("GetLogFile")" class="k-button">@T("Admin.FoxNetSoft.Plugin.Feed.Manager.GetLogFile")</a>
+                    </div>
+                </td>
+            </tr>
+
+        @if (Model.IsArsUa == false)
+        {
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model=> model.StoreUrl):
+                </td>
+                <td class="adminData">
+                    <b>@Model.StoreUrl</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(m => m.SerialNumber):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(m => m.SerialNumber)
+                    @Html.ValidationMessageFor(m => m.SerialNumber)
+                </td>
+            </tr>
+        }
+            <tr>
+                <td colspan="2" width="100%">
+                    <button type="submit" name="save" value="save" class="k-button">
+                        @T("Admin.Common.Save")</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    You can see how this plugin works at Youtube <a href="http://www.youtube.com/foxnetsoft" target="blank" >www.youtube.com/foxnetsoft</a>
+                     <br />
+                    Installation and configuring plug-in at our site <a href="http://www.foxnetsoft.com/t/nopfeedmanager" target="blank" >http://www.foxnetsoft.com/t/nopfeedmanager</a>
+                     <br />
+                     <a href="http://www.foxnetsoft.com" target="blank" >www.foxnetsoft.com</a>
+                </td>
+            </tr>
+        </table>
+    }
+</div>

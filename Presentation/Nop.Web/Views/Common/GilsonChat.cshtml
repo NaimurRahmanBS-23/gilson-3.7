@@ -1,0 +1,29 @@
+﻿@model PriceListModel
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.Common;
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+    Html.AddTitleParts("Gilson Chat");
+    Html.AddMetaKeywordParts("NOINDEX");
+    var storeLocation = EngineContext.Current.Resolve<Nop.Core.IWebHelper>().GetStoreLocation();
+}
+<div class="page topic-page" id="ph-topic">
+    <div class="page-title" id="ph-title">
+        <h1>Gilson Chat</h1>
+    </div>
+    <div class="breadcrumb">
+        <ul>
+            <li>
+                <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <a href="@Url.RouteUrl("HomePage")" itemprop="url"><span itemprop="title">@T("Products.Breadcrumb.Top")</span></a>
+                </span>
+            </li>
+        </ul>
+    </div>
+    <div class="page-body">
+        <!-- BEGIN ProvideSupport.com Graphics Chat Button Code -->
+        <div id="ciCZoi" style="z-index:100;position:absolute"></div><div id="scCZoi" style="display:inline"></div><div id="sdCZoi" style="display:none"></div>
+        <script type="text/javascript">var seCZoi=document.createElement("script");seCZoi.type="text/javascript";var seCZois=(location.protocol.indexOf("https")==0?"https":"http")+"://image.providesupport.com/js/03o9atjoi61y502hojd6w2g3g4/safe-standard.js?ps_h=CZoi&ps_t="+new Date().getTime();setTimeout("seCZoi.src=seCZois;document.getElementById('sdCZoi').appendChild(seCZoi)",1)</script><noscript><div style="display:inline"><a href="http://www.providesupport.com?messenger=03o9atjoi61y502hojd6w2g3g4">Chat Support</a></div></noscript>
+        <!-- END ProvideSupport.com Graphics Chat Button Code -->
+    </div>
+</div>

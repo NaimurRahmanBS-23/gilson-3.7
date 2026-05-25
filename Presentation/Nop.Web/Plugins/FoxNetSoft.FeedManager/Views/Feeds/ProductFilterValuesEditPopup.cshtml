@@ -1,0 +1,155 @@
+﻿@{
+    Layout = "~/Administration/Views/Shared/_AdminPopupLayout.cshtml";
+}
+@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedRecModel.FeedDefaulValuesPopUpModel
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using FoxNetSoft.Plugin.Feed.Manager.Domain
+@using Nop.Web.Framework
+@{
+    //page title
+    ViewBag.Title = T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.EditValueDetails").Text;
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#@Html.FieldIdFor(model => model.showAdvancedFileds)").click(toggleshowAdvancedFileds);
+                toggleshowAdvancedFileds();
+            });
+
+            function toggleshowAdvancedFileds() {
+                if ($('#@Html.FieldIdFor(model => model.showAdvancedFileds)').is(':checked')) {
+                    $('.advancedfiled').show();
+                }
+                else {
+                    $('.advancedfiled').hide();
+                }
+            }
+        </script>        
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+            @T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.EditValueDetails")
+        </div>
+        <div class="options">
+            <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+        </div>
+    </div>
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.FeedId)
+    @Html.HiddenFor(model => model.CategoryId)
+    @Html.HiddenFor(model => model.FeedCategoryId)
+    @Html.HiddenFor(model => model.ProductId)
+    @Html.HiddenFor(model => model.FeedProductId)
+
+    if (ViewBag.RefreshPage == true)
+    {
+        <script type="text/javascript">
+            try {window.opener.document.forms['@(ViewBag.formId)'].@(ViewBag.btnId).click();}
+            catch (e){} 
+            window.close();
+        </script>
+    }
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.TypeActiveId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.TypeActiveId, Model.AvailableTypeActive)
+                @Html.ValidationMessageFor(model => model.TypeActiveId)
+            </td>
+        </tr>
+        @if (Model.EnableASIN)
+        {
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.ASIN):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.ASIN)
+                    @Html.ValidationMessageFor(model => model.ASIN)
+                </td>
+            </tr>
+        }
+        @if (Model.EnableEPID)
+        {
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.EPID):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.EPID)
+                    @Html.ValidationMessageFor(model => model.EPID)
+                </td>
+            </tr>
+        }
+        @if (Model.AvailableMapCategories.Count > 1)
+        {
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.CategoryMap):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.CategoryMap, Model.AvailableMapCategories, new { style = "width:500px;" })
+                    @Html.ValidationMessageFor(model => model.CategoryMap)
+                </td>
+            </tr>
+        }
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        @if (Model.HaveAdvancedFileds())
+        {
+            <tr>
+               <td class="adminTitle">
+                  @Html.NopLabelFor(model => model.showAdvancedFileds):
+               </td>
+               <td class="adminData">
+                    @Html.EditorFor(model => model.showAdvancedFileds)
+               </td>
+            </tr>
+            <tr class="adminSeparator">
+                <td colspan="2">
+                    <hr />
+                </td>
+            </tr>
+        }
+        @foreach (var attributeValue in Model.FeedAttributeValues)
+        {
+           string controlId = string.Format("feed_attribute_value_{0}_{1}", attributeValue.FeedId, attributeValue.FeedAttributeId);
+           string cssclass = attributeValue.AdvancedField ? "class=advancedfiled" : "";    
+           <tr @cssclass>
+             <td class="adminTitle">
+                  <span class="text-prompt">
+                    @attributeValue.FeedCaption:
+                  </span>
+                   @if (attributeValue.IsRequired)
+                   {
+                      <span class="required">*</span>
+                   }
+              </td>
+              <td class="adminData">
+                    @*DropdownList*@
+                    @if (attributeValue.AttributeControlType==FeedAttributeControlType.DropdownList)
+                    {
+                        <select name="@(controlId)" id="@(controlId)">
+                        @foreach (var valueItem in attributeValue.AvailableValues)
+                        {
+                            <option selected="@valueItem.Selected" value="@valueItem.Value">@valueItem.Text</option>
+                        }
+                        </select>
+                    }
+                    @*TexBox*@
+                    @if (attributeValue.AttributeControlType==FeedAttributeControlType.TextBox)
+                    {
+                        <input name="@(controlId)" type="text" id="@(controlId)" class="textbox"  value="@attributeValue.Value"/>
+                    }
+              </td>
+           </tr>
+        }
+    </table>
+}

@@ -1,0 +1,339 @@
+﻿@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedRecModel
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+@using Nop.Web.Framework.Kendoui
+@using Nop.Core.Events
+@using Nop.Web.Framework.Events
+@using Nop.Core.Infrastructure
+@using FoxNetSoft.Plugin.Feed.Manager.Services
+@using FoxNetSoft.Plugin.Feed.Manager.Core
+
+@if (Model.Id > 0)
+{
+    <table class="adminContent">
+    @if (!String.IsNullOrWhiteSpace(Model.Documentation))
+    {
+       <tr>
+          <td colspan="2">
+              @Html.Raw(Model.Documentation)
+          </td>
+       </tr>
+    }
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.EncodingId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.EncodingId, Model.AvailableEncodings)
+
+                @Html.ValidationMessageFor(model => model.EncodingId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.CategoryPathDelimiter):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.CategoryPathDelimiter)
+                @Html.ValidationMessageFor(model => model.CategoryPathDelimiter)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.DecimalDelimiterId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.DecimalDelimiterId, Model.AvailableDecimalDelimiters)
+
+                @Html.ValidationMessageFor(model => model.DecimalDelimiterId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PriceFormatId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.PriceFormatId, Model.AvailablePriceFormats)
+
+                @Html.ValidationMessageFor(model => model.PriceFormatId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.DatetimeFormatId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.DatetimeFormatId, Model.AvailableDatetimeFormats)
+
+                @Html.ValidationMessageFor(model => model.DatetimeFormatId)
+            </td>
+        </tr>
+    </table>    
+    
+    <div id="feedattributes-grid"></div>
+
+    <script>
+        $(document).ready(function () {
+            $("#feedattributes-grid").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "@Html.Raw(Url.Action("FeedAttributeList", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"feedId" , Model.Id} }))",
+                            type: "POST",
+                            dataType: "json",
+                            data: addAntiForgeryToken
+                        },
+                        create: {
+                            url: "@Html.Raw(Url.Action("FeedAttributeInsert", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" },{ "area", "Admin" }, {"feedId" , Model.Id} }))",
+                            type: "POST",
+                            dataType: "json",
+                            data: addAntiForgeryToken
+                            },
+                        update: {
+                            url:"@Html.Raw(Url.Action("FeedAttributeUpdate", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" },{ "area", "Admin" } }))",
+                            type: "POST",
+                            dataType: "json",
+                            data: addAntiForgeryToken
+                            },
+                        destroy: {
+                            url: "@Html.Raw(Url.Action("FeedAttributeDelete", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" },{ "area", "Admin" }, {"feedId" , Model.Id} }))",
+                            type: "POST",
+                            dataType: "json",
+                            data: addAntiForgeryToken
+                        }
+                    },
+                    schema: {
+                        data: "Data",
+                        total: "Total",
+                        errors: "Errors",
+                        model: {
+                            id: "Id",
+                            fields: {
+                                FeedCaption: { editable: false, type: "string" },
+                                FeedName: { editable: false, type: "string" },
+                                Prefix: { editable: true, type: "string" },
+                                DefaultValue: { editable: true, type: "string" },
+                                FieldName: { editable: false, type: "string" },
+                                XPath: { editable: false, type: "string" },
+                                FieldNameCode: { editable: true, type: "string" },
+                                Suffix: { editable: true, type: "string" },
+                                CharsLimit: { editable: false, type: "number" },
+                                Required: { editable: false, type: "boolean" },
+                                IgnoreNullOrEmpty: { editable: false, type: "boolean" },
+                                UseCDATA: { editable: false, type: "boolean" },
+                                ActionName: { editable: false, type: "string" },
+                                ActionId: { editable: false, type: "number" },
+                                AdvancedField: { editable: true, type: "boolean" },
+                                //FeedId: { editable: false, type: "number" },
+                                Id: { editable: false, type: "number" }
+                            }
+                        }
+                    },
+                    requestEnd: function (e) {
+                        if (e.type == "create" || e.type == "update") {
+                            this.read();
+                        }
+                    },
+                    error: function (e) {
+                        display_kendoui_grid_error(e);
+                        // Cancel the changes
+                        this.cancelChanges();
+                    },
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true
+                },
+                pageable: {
+                    refresh: true,
+                    numeric: false,
+                    previousNext: false,
+                    info: false
+                },
+                edit: function (e) {
+                    if (e.model.isNew()) {
+                        //little hack here
+                        //pre-select the first value of kendoui dropdownlist datasource
+                        //for some reasons (maybe, bug) it always sends 0
+                        //if no value has been selected (changed) in the dropdownlist
+                        if (allFeedFieldNames.length > 0) {
+                            e.model.FieldNameCode = allFeedFieldNames[0].Id;
+                        }
+                        if (allActionValues.length > 0) {
+                            e.model.ActionId = allActionValues[0].Id;
+                        }
+                    }
+                },
+                editable: {
+                    confirmation: false,
+                    mode: "inline"
+                },
+                scrollable: false,
+                columns: [
+                    {
+                        field: "Id",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Id")",
+                        width: 40,
+                        headerAttributes: { style: "text-align:center" }
+                    },{
+                        field: "FeedCaption",
+                        headerAttributes: { style: "text-align:center" },
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.FeedCaption")",
+                        width: 400
+                    },{
+                        field: "FeedName",
+                        headerAttributes: { style: "text-align:center" },
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.FeedName")",
+                        width: 100
+                    },{
+                        field: "XPath",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.XPath")",
+                        width: 100
+                    },{
+                        field: "Prefix",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Prefix")",
+                        width: 120
+                    },{
+                        field: "DefaultValue",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.DefaultValue")",
+                        width: 120,
+                    },{
+                        field: "FieldNameCode",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.FieldName")",
+                        width: 350,
+                        editor: feedAttributeFieldNameDropDownEditor,
+                        template: "#:FieldName#"
+                    },{
+                        field: "Suffix",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Suffix")",
+                        width: 120
+                    }, {
+                        field: "CharsLimit",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.CharsLimit")",
+                        width: 100,
+                        format: "{0:0}"
+                    },{
+                        field: "Required",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.Required")",
+                        width: 50,
+                        headerAttributes: { style: "text-align:center" },
+                        attributes: { style: "text-align:center" },
+                        template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=Required#.gif" />'
+                    },{
+                        field: "IgnoreNullOrEmpty",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.IgnoreNullOrEmpty")",
+                        width: 70,
+                        headerAttributes: { style: "text-align:center" },
+                        attributes: { style: "text-align:center" },
+                        template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=IgnoreNullOrEmpty#.gif" />'
+                    },{
+                        field: "UseCDATA",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.UseCDATA")",
+                        width: 70,
+                        headerAttributes: { style: "text-align:center" },
+                        attributes: { style: "text-align:center" },
+                        template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=UseCDATA#.gif" />'
+                    },{
+                        field: "AdvancedField",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.AdvancedField")",
+                        width: 70,
+                        headerAttributes: { style: "text-align:center" },
+                        attributes: { style: "text-align:center" },
+                        template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=AdvancedField#.gif" />'
+                    },
+                    {
+                         field: "ActionName",
+                        title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.Fields.ActionName")",
+                        width: 50,
+                        editor: feedAttributeActionDropDownEditor,
+                        template: "#:ActionName#"
+                    }
+                     , {
+                        command: [{
+                            name: "edit",
+                            text: "@T("Admin.Common.Edit")"
+                            }
+                            //, {
+                            //name: "destroy",
+                            //text: "@T("Admin.Common.Delete")"
+                            //}
+                        ],
+                        width: 120
+                     }
+                ]
+            });
+        });
+
+        //local datasource
+        var allFeedFieldNames = [
+            {
+                Id : "none",
+                Name : "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.None")"
+            }
+            @{
+            var feedfieldNames = EngineContext.Current.Resolve<IFeedManagerAttributeParser>().GetFeedAttributeFieldNames();
+            }
+            @foreach (var fieldName in feedfieldNames)
+            {
+                <text>
+                , {
+                     Id: "@(fieldName.Code)",
+                     Name: "@(Html.Raw(HttpUtility.JavaScriptStringEncode(fieldName.Name)))"
+                }
+                </text>
+            }
+        ];
+        
+        var allActionValues = [
+            {
+                Id: 0,
+                Name: "@T("enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.none")"
+            }, {
+                Id: 1,
+                Name: "@T("enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.cdata")"
+            }, {
+                Id: 2,
+                Name: "@T("enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.decode_html_entity")"
+            }, {
+                Id: 3,
+                Name: "@T("enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.decode_special_chars")"
+            }, {
+                Id: 4,
+                Name: "@T("enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.delete_spaces")"
+            }, {
+                Id: 5,
+                Name: "@T("enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.encode_html_entity")"
+            }, {
+                Id: 6,
+                Name: "@T("enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.encode_special_chars")"
+            }, {
+                Id: 7,
+                Name: "@T("enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.remove_eol")"
+            }, {
+                Id: 8,
+                Name: "@T("enums.FoxNetSoft.Plugin.Feed.Manager.Domain.ExportActionAdjustment.strip_tags")"
+            }
+        ];
+
+        function feedAttributeFieldNameDropDownEditor(container, options) {
+            $('<input required data-text-field="Name" data-value-field="Id" data-bind="value:FieldNameCode"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    dataSource: allFeedFieldNames
+                });
+        }
+
+        function feedAttributeActionDropDownEditor(container, options) {
+            $('<input required data-text-field="Name" data-value-field="Id" data-bind="value:ActionId"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    dataSource: allActionValues
+                });
+        }
+    </script>
+}
+else
+{
+    @T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedAttribute.SaveBeforeEdit")
+}

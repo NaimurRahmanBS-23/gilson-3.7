@@ -1,0 +1,178 @@
+﻿@model CategoryModel
+@using Nop.Core
+@using Nop.Core.Domain.Common;
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Services.Localization
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    var storeName = EngineContext.Current.Resolve<IStoreContext>().CurrentStore.GetLocalized(x => x.Name);
+
+    Html.AddHeadCustomParts("<meta property=\"Categories\" data-sj-field=\"category\" content=\"Categories\" />");
+
+    //open graph META tags
+    Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"category\" />");
+    if (!string.IsNullOrWhiteSpace(Model.OverrideName))
+    {
+        Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.OverrideName) + "\" />");
+    }
+    else
+    {
+        Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+    }
+    Html.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + Html.Encode(Model.MetaDescription) + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"" + Model.PictureModel.ImageUrl + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:site_name\" content=\"" + Html.Encode(storeName) + "\" />");
+
+    //Twitter META tags
+    Html.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"summary\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"" + Html.Encode(storeName) + "\" />");
+    if (!string.IsNullOrWhiteSpace(Model.OverrideName))
+    {
+        Html.AddHeadCustomParts("<meta property=\"twitter:title\" content=\"" + Html.Encode(Model.OverrideName) + "\" />");
+    }
+    else
+    {
+        Html.AddHeadCustomParts("<meta property=\"twitter:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+    }
+    Html.AddHeadCustomParts("<meta property=\"twitter:description\" content=\"" + Html.Encode(Model.MetaDescription) + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:image\" content=\"" + Model.PictureModel.ImageUrl + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var categoryUrl = Url.RouteUrl("Category", new { SeName = Model.SeName }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(categoryUrl);
+    }
+
+    if (Model.ShowFilters)
+    {
+        //TODO: Bugfix - do not add CategoryTemplate.SubCategories.js when no filters.
+        var filters = Html.Widget("NopAjaxFilters");
+        if (!MvcHtmlString.IsNullOrEmpty(filters))
+        {
+            @section CategoryFilters{@filters}
+            Html.AddScriptParts("~/Themes/Nitro/Content/scripts/CategoryTemplate.SubCategories.js");
+        }
+    }
+
+}
+<div class="page category-page">
+    <div class="page-title">
+        @if (!string.IsNullOrWhiteSpace(Model.OverrideName))
+        {
+            <h1>@Model.OverrideName</h1>
+        }
+        else
+        {
+            <h1>@Model.Name</h1>
+        }
+    </div>
+    @* ReSharper disable once Mvc.PartialViewNotResolved *@
+    @if (Model.DisplayCategoryBreadcrumb)
+    {
+        @Html.Partial("_CategoryBreadcrumb", Model.CategoryBreadcrumb, new ViewDataDictionary { { "CurrentCategory", Model.Name } })
+        @Html.Widget("categorydetails_after_breadcrumb", Model.Id)
+    }
+    @Html.Partial("_ShareButtons", Model.PageShareCode)
+    <div class="page-body">
+        @Html.Widget("categorydetails_top", Model.Id)
+        @*description*@
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
+        {
+            <div class="category-description">
+                @Html.Raw(Model.Description)
+            </div>
+        }
+        @Html.Widget("categorydetails_before_subcategories", Model.Id)
+        @*subcategories*@
+        @if (Model.SubCategories.Count > 0)
+        {
+            <div class="category-grid sub-category-grid">
+                <div class="item-grid">
+                    @if (Model.SubCategories.Count > 0 && Model.FeaturedProducts.Count == 0)
+                    {
+                        foreach (var item in Model.SubCategories)
+                        {
+                            <div class="item-box">
+                                <div class="sub-category-item">
+                                    <h2 class="title"><a href="@Url.RouteUrl("Category", new {SeName = item.SeName})">@item.Name</a></h2>
+                                    <div class="picture"><a href="@Url.RouteUrl("Category", new {SeName = item.SeName})">
+                                        <img loading="lazy" src="@item.PictureModel.ImageUrl" alt="@item.Name"/>
+                                    </a></div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else if (Model.SubCategories.Count > 0 && Model.FeaturedProducts.Count > 0)
+                    {
+                        var totalCount = (Model.SubCategories.Count + Model.FeaturedProducts.Count) - 1;
+                        for (var i = 0; i <= totalCount; i++)
+                        {
+                            var subCategory = Model.SubCategories.FirstOrDefault(p => p.DisplayOrder == i);
+                            if (subCategory == null)
+                            {
+                                var product = Model.FeaturedProducts.FirstOrDefault(p => p.DisplayOrder == i);
+                                if (product == null){continue;}
+                                <div class="item-box">
+                                    <div class="sub-category-item">
+                                        <h2 class="title"><a href="@Url.RouteUrl("Product", new {SeName = product.SeName})">@product.Name</a></h2>
+                                        <div class="picture"><a href="@Url.RouteUrl("Product", new {SeName = product.SeName})"><img loading="lazy" src="@product.DefaultPictureModel.ImageUrl" alt="@product.Name" /></a></div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="item-box">
+                                    <div class="sub-category-item">
+                                        <h2 class="title"><a href="@Url.RouteUrl("Category", new {SeName = subCategory.SeName})">@subCategory.Name</a></h2>
+                                        <div class="picture"><a href="@Url.RouteUrl("Category", new {SeName = subCategory.SeName})"><img loading="lazy" src="@subCategory.PictureModel.ImageUrl" alt="@subCategory.Name" /></a></div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        }
+        @if (Model.ShowFilters)
+        {
+            @Html.Widget("categorydetails_before_filters", Model.Id)
+            <div id="products-container" style="display:none;">
+                @if (Model.PagingFilteringContext.ViewMode == "list")
+                {
+                    @*list mode*@
+                    <div class="product-list"><div class="item-grid"></div></div>
+                }
+                else
+                {
+                    @*grid mode*@
+                    <div class="product-grid"><div class="item-grid"></div></div>
+                }
+                <div class="pager"></div>                 
+                @Html.Partial("_CatalogSelectors", Model.PagingFilteringContext, new ViewDataDictionary())
+            </div>
+        }
+        @*description*@
+    @if (!string.IsNullOrWhiteSpace(Model.Description2))
+    {
+        <div id="description2" class="category-description">
+            @Html.Raw(Model.Description2)
+            @if (Model.Description2.Contains("common-questions"))
+            {
+                <script>$(function () { $(".question").click(function () { $(this).find(".answer").slideToggle(200, 'swing'); $(this).toggleClass("up"); }); });</script>
+            }
+        </div>
+    }
+
+        @Html.Widget("categorydetails_bottom", Model.Id)
+    </div>
+</div>
+<script>$(document).on("nopAjaxFiltersFiltrationCompleteEvent", function () { bLazyRevalidate(); });</script>

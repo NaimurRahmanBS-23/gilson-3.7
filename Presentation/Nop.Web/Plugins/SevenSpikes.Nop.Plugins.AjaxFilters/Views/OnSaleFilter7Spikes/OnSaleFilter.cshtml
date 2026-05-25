@@ -1,0 +1,69 @@
+﻿@** Copyright 2015 Seven Spikes Ltd. All rights reserved. (http://www.nop-templates.com)
+    * http://www.nop-templates.com/t/licensinginfo
+*@
+
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Models.OnSaleFilter
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Common
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Domain
+
+@model OnSaleFilterModel7Spikes
+
+@{
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.AjaxFilters/Scripts/OnSaleFilter.min.js");
+
+    string toggleStateClass = "toggleControl";
+    string toggleStateStyles = "";
+    if (Model.NopAjaxFiltersSettings.CloseOnSaleFilterBox == true)
+    {
+        toggleStateClass = "toggleControl closed";
+        toggleStateStyles = "display: none;";
+    }
+
+    string filterItemCssClass = "filterItemUnselected";
+
+    if (Model.FilterItemState == FilterItemState.Checked)
+    {
+        filterItemCssClass = "filterItemSelected";
+    }
+
+    Func<int, HelperResult> onSaleOptionsHtml =
+        @<text>
+            <li><a class="@filterItemCssClass" data-option-id="@Model.Id">@Model.Name</a></li>
+        </text>;
+}
+
+<div class="block filter-block onSaleFilterPanel7Spikes">
+    <div class="title">
+        <a class="@toggleStateClass">@T("SevenSpikes.NopAjaxFilters.Public.OnSale")</a>
+        <a class="clearFilterOptions">@T("SevenSpikes.NopAjaxFilters.Client.Common.Clear")</a>
+    </div>
+    @if (Model.NopAjaxFiltersSettings.FiltersUIMode == FiltersUIMode.UseCheckboxes)
+    {
+        <div class="filtersGroupPanel" style="@toggleStateStyles">
+            <ul class="checkbox-list">
+                @onSaleOptionsHtml(0)
+            </ul>
+        </div>
+    }
+    else if (Model.NopAjaxFiltersSettings.FiltersUIMode == FiltersUIMode.UseDropdowns)
+    {
+        <div class="filtersGroupPanel filtersDropDownPanel" style="z-index: 6; @toggleStateStyles">
+            <div id="onSaleFiltersDropDown" class="filtersDropDown">
+                <div class="filters-select-wrap">
+                    <p class="filters-select-text"></p>
+                </div>
+                <ul class="filters-select-dropdown">
+                    <li class="selected">
+                        <a class="allFilterDropDownOptions">@T("SevenSpikes.NopAjaxFilters.Client.Common.All")</a>
+                    </li>
+                    @onSaleOptionsHtml(0)
+                </ul>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#onSaleFiltersDropDown").jDropDown();
+            });
+        </script>
+    }
+</div>

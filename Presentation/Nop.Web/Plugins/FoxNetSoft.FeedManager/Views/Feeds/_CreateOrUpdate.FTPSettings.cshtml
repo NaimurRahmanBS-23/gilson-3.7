@@ -1,0 +1,76 @@
+﻿@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedRecModel
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FTPSettings.Enabled):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FTPSettings.Enabled)
+                @Html.ValidationMessageFor(model => model.FTPSettings.Enabled)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FTPSettings.Protocol):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.FTPSettings.Protocol, Model.FTPSettings.ProtocolValues)
+                @Html.ValidationMessageFor(model => model.FTPSettings.Protocol)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FTPSettings.HostName):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FTPSettings.HostName)
+                @Html.ValidationMessageFor(model => model.FTPSettings.HostName)
+            </td>
+        </tr>    
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FTPSettings.Port):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FTPSettings.Port)
+                @Html.ValidationMessageFor(model => model.FTPSettings.Port)
+            </td>
+        </tr>    
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FTPSettings.UserName):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FTPSettings.UserName)
+                @Html.ValidationMessageFor(model => model.FTPSettings.UserName)
+            </td>
+        </tr>    
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FTPSettings.Password):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FTPSettings.Password)
+                @Html.ValidationMessageFor(model => model.FTPSettings.Password)
+            </td>
+        </tr>  
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FTPSettings.PassiveMode):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FTPSettings.PassiveMode)
+                @Html.ValidationMessageFor(model => model.FTPSettings.PassiveMode)
+            </td>
+        </tr>   
+        <tr>
+            <td class="adminTitle">
+            </td>
+            <td class="adminData">
+                <input type="submit" name="uploadftpfile" class="k-button" value="@T("Admin.FoxNetSoft.Plugin.Feed.Manager.FTPSettings.Fields.UploadFileMaually")" />
+            </td>
+        </tr>
+    </table>
+

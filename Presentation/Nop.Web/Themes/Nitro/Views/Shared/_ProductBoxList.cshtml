@@ -1,0 +1,88 @@
+﻿@model ProductOverviewModel
+@using Nop.Core
+@using Nop.Core.Domain.Orders
+@using Nop.Core.Domain.Tax
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.Catalog;
+@{
+    //prepare "Add to cart" AJAX link
+    string addtocartlink = "";
+    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+    var quantity = 1;
+    if (Model.ProductPrice.ForceRedirectionAfterAddingToCart)
+    {
+        addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity, forceredirection = Model.ProductPrice.ForceRedirectionAfterAddingToCart });
+    }
+    else
+    {
+        addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity, });
+    }
+    var addtocomparelink = Url.RouteUrl("AddProductToCompare", new { productId = Model.Id });
+}
+<div class="product-item" data-productid="@Model.Id">
+    <div class="picture">
+        <a href="@Url.RouteUrl("Product", new {SeName = Model.SeName})" title="@Model.DefaultPictureModel.Title">
+            <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" />
+        </a>
+    </div>
+    <div class="details">
+        <h2 class="product-title">
+            <a href="@Url.RouteUrl("Product", new {SeName = Model.SeName})">@Model.Name</a>
+        </h2>
+        @if (Model.ReviewOverviewModel.AllowCustomerReviews)
+        {
+            int ratingPercent = 0;
+            if (Model.ReviewOverviewModel.TotalReviews != 0)
+            {
+                ratingPercent = ((Model.ReviewOverviewModel.RatingSum * 100) / Model.ReviewOverviewModel.TotalReviews) / 5;
+            }
+            <div class="product-rating-box" title="@string.Format(T("Reviews.TotalReviews").Text, Model.ReviewOverviewModel.TotalReviews)">
+                <div class="rating">
+                    <div style="width: @(ratingPercent)%">
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="description">
+            @Html.Raw(Model.ShortDescription)
+        </div>
+        <div class="add-info">
+            @Html.Widget("productbox_addinfo_before", Model.Id)
+            <div><span class="label">Model@(Model.Sku.Contains(", ") ? "s" : ""): </span>@Model.Sku</div>
+            
+            <div class="prices">
+                @if (!String.IsNullOrEmpty(Model.ProductPrice.OldPrice))
+                {
+                    if (Model.ProductPrice.OldPrice.StartsWith("Starting"))
+                    {
+                        <div><span class="label">Starting List Price: </span><span class="price old-price">@Model.ProductPrice.OldPrice.Replace("Starting at ", "")</span></div>
+                        <div><span class="label">Starting Dealer Price: </span><span class="price actual-price">@Model.ProductPrice.Price.Replace("Starting at ", "")</span></div>
+                    }
+                    else
+                    {
+                        <div><span class="label">List Price: </span><span class="price old-price">@Model.ProductPrice.OldPrice</span></div>
+                        <div><span class="label">Dealer Price: </span><span class="price actual-price">@Model.ProductPrice.Price</span></div>
+                    }
+                }
+                else
+                {
+                    <span class="price actual-price">@Model.ProductPrice.Price</span>
+                }
+            </div>
+        </div>
+        <div>
+            <div class="buttons">
+                @if (!Model.ProductPrice.DisableAddToCompareListButton)
+                {
+                    <div class="compare-products">
+                        <input type="button" value="@T("ShoppingCart.AddToCompareList")" title="@T("ShoppingCart.AddToCompareList")" class="button-2 add-to-compare-list-button" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;" />
+                    </div>
+                }
+                @if (!Model.ProductPrice.DisableBuyButton)
+                {
+                    <input type="button" value="Add To Cart" class="button-2 product-box-add-to-cart-button" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink    ');return false;" />
+                }
+            </div>
+        </div>
+    </div>
+</div>

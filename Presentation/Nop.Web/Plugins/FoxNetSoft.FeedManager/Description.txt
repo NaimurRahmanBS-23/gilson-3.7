@@ -1,0 +1,8 @@
+﻿Group: Promotion feeds
+FriendlyName: Feed Manager
+SystemName: FoxNetSoft.Plugin.Feed.Manager
+Version: 1.54
+SupportedVersions: 3.70
+Author: FoxNetSoft
+DisplayOrder: 1
+FileName: FoxNetSoft.Plugin.Feed.Manager.dll         

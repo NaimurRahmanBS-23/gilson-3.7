@@ -1,0 +1,96 @@
+﻿@using Nop.Core.Infrastructure
+@using Nop.Web.Framework.UI;
+@model  Nop.Plugin.Tax.AvaTax.Models.AvataxLogListModel
+@{
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+
+    //var defaultGridPageSize = 15;
+    //var gridPageSizes = 3;
+    Layout = "~/_AdminLayout.cshtml";
+    //page title
+    ViewBag.Title = @T("Nop.Plugin.Tax.AvaTax.AvataxLogList").Text; 
+}
+@Html.AntiForgeryToken()
+
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+       @T("Nop.Plugin.Tax.AvaTax.AvataxLogList")     
+    </h1> 
+</div>
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <table class="adminContent">
+                <tr>
+                    <td>
+                        <div id="AvaTax-grid"></div>
+
+                        <script>
+                            $(document).ready(function () {
+                                $("#AvaTax-grid").kendoGrid({
+                                    dataSource: {
+                                        type: "json",
+                                        transport: {
+                                            read: {
+                                            url: "@Html.Raw(Url.Action("AvataxLogList", "AvataxLog"))",
+                                            type: "POST",
+                                            dataType: "json",
+                                            //data: additionalData
+                                        }
+                                    },
+                                    schema: {
+                                        data: "Data",
+                                        total: "Total",
+                                        errors: "Errors"
+                                    },
+                                    error: function(e) {
+                                        display_kendoui_grid_error(e);
+                                        // Cancel the changes
+                                        this.cancelChanges();
+                                    },
+                                    pageSize: @(defaultGridPageSize),
+                                    serverPaging: true,
+                                    serverFiltering: true,
+                                    serverSorting: true
+                                },
+                                    pageable: {
+                                    refresh: true,
+                                    pageSizes: [@(gridPageSizes)]
+                                    },
+                                editable: {
+                                    confirmation: false,
+                                    mode: "inline"
+                                },
+                                scrollable: false,
+                                //dataBound: onDataBound,
+                                columns: [{
+                                            field: "Id",
+                                            title: "@T("Admin.ContentManagement.AvaTax.Id")",
+                                            width: 100
+                                        },
+                                        {
+                                            field: "TransactionId",
+                                            title: "@T("Admin.ContentManagement.TransactionId")",
+                                            width: 150
+                                        }, {
+                                            field: "CreatedOn",
+                                            type: "datetime",
+                                            title: "@T("Admin.ContentManagement.AvaTax.CreatedOn")",
+                                            width: 300,
+                                            template: "#= kendo.toString(kendo.parseDate(CreatedOn, 'yyyy-MM-dd HH.mm.ss'), 'MM/dd/yyyy HH:mm:ss') #"
+                                        },{
+                                            field: "Id",
+                                            title: "@T("Nop.Plugin.Tax.AvaTax.AvataxLogDetails")",
+                                            template:"<a href='AvataxLogDetails/#=Id#'> @T("Nop.Plugin.Tax.AvaTax.AvataxLogDetails")</a>"
+                                        }]
+                                 });
+                            });
+                        </script>                        
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,154 @@
+﻿@model FoxNetSoft.Plugin.Feed.Manager.Models.TabContentModel
+@using Nop.Core.Infrastructure
+@using Nop.Web.Framework.Kendoui
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+@if (Model.IsRegisted == false)
+{
+  @T("Admin.FoxNetSoft.Plugin.Feed.Manager.Settings.IsNoRegisted")        
+}
+<table class="adminContent">
+    <tr>
+        <td>
+            <div id="feedproductfilter-grid"></div>
+
+            <script>
+                $(document).ready(function () {
+                    $("#feedproductfilter-grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("AdminTabStripContentList", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"productId" , Model.ProductId}, {"categoryId" , Model.CategoryId} }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                },
+                                destroy: {
+                                    url: "@Html.Raw(Url.Action("AdminTabStripContentDelete", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"productId" , Model.ProductId}, {"categoryId" , Model.CategoryId} }))",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: addAntiForgeryToken
+                                        }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors",
+                                model: {
+                                    id: "Id"
+                                }
+                            },
+                            error: function(e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            numeric: false,
+                            previousNext: false,
+                            info: false
+                        },
+                        editable: {
+                            confirmation: false,
+                            mode: "inline"
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "Id",
+                            headerAttributes: { style: "text-align:center" },
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Id")",
+                            width: 50
+                        }, {
+                            field: "IsActive",
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.IsActive")",
+                            width: 70,
+                            headerAttributes: { style: "text-align:center" },
+                            attributes: { style: "text-align:center" },
+                            template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=IsActive#.gif" />'
+                        }, {
+                            field: "PictureUrl",
+                            headerAttributes: { style: "text-align:center" },
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.PictureUrl")",
+                            template: '<img style="max-width: 100px" src="#=PictureUrl#" /> ',
+                            width: 110
+                        }, {
+                            field: "Name",
+                            headerAttributes: { style: "text-align:center" },
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Fields.Name")",
+                            template: '<a href="@Url.Content("~/Admin/Feeds/Edit/")#=FeedId#"> #=Name# </a>',
+                            width: 200
+                        },
+                        @if (Model.EnableASIN)
+                        {
+                                        <text>
+                                        {
+                                            field: "ASIN",
+                                            headerAttributes: { style: "text-align:center" },
+                                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.ASIN")",
+                                            width: 100,
+                                        },
+                                        </text>
+                        }
+                        @if (Model.EnableEPID)
+                        {
+                                        <text>
+                                        {
+                                            field: "ASIN",
+                                            headerAttributes: { style: "text-align:center" },
+                                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.EPID")",
+                                            width: 100,
+                                        },
+                                        </text>
+                        }
+                        {
+                             field: "CategoryMap",
+                             title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.CategoryMap")",
+                             width: 500,
+                        }, {
+                                field: "TypeActiveId",
+                                title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.TypeActive")",
+                                width: 80,
+                                template: "#:TypeActiveValue#"
+                            }, {
+                                field: "DefaultValuesXML",
+                                title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.DefaulValues")",
+                                width: 500,
+                                template: "#=DefaultValuesHTML#",
+                                encoded: false
+                            }, {
+                                field: "Id",
+                                title: "@T("Admin.Common.Edit")",
+                                width: 100,
+                                template: "<input type='submit' value='@T("Admin.Common.Edit")' onclick=\"javascript:OpenWindow('@Url.Content("~/Admin/Feeds/ProductFilterValuesEditPopup")?feedId=#=FeedId#&productId=#=ProductId#&categoryId=#=CategoryId#&feedProductId=#=FeedProductId#&feedCategoryId=#=FeedCategoryId#&btnId=btnRefreshFeedProductFilter&formId=@Model.FormId', 800, 450, true); return false;\" class='k-button' />"
+                            }, {
+                                command: { name: "destroy", text: "@T("Admin.Common.Delete")" },
+                                title: "@T("Admin.Common.Delete")",
+                                width: 110
+                            }]
+                    });
+                });
+            </script>
+        </td>
+    </tr>
+        <tr>
+           <td width="100%">
+                        <input type="submit" id="btnRefreshFeedProductFilter" name="btnRefreshFeedProductFilter" style="display: none" />
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                $('#btnRefreshFeedProductFilter').click(function () {
+                                    //refresh grid
+                                    $("#feedproductfilter-grid").data('kendoGrid').dataSource.read();
+                                    //return false to don't reload a page
+                                    return false;
+                                });
+                            });
+                        </script>
+            </td>
+        </tr>
+</table>

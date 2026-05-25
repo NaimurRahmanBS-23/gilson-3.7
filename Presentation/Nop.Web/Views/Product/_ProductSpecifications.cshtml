@@ -1,0 +1,41 @@
+﻿@model IList<ProductSpecificationModel>
+@using Nop.Web.Models.Catalog;
+@if (Model.Count > 0)
+{
+    System.Collections.Specialized.OrderedDictionary od = new System.Collections.Specialized.OrderedDictionary();
+
+    for (int i = 0; i < Model.Count; i++)
+    {
+        if (!od.Contains(Model[i].SpecificationAttributeName))
+        {
+            od.Add(Model[i].SpecificationAttributeName, Model[i].ValueRaw);
+        }
+        else
+        {
+            od[Model[i].SpecificationAttributeName] = string.Format("{0}, {1}", od[Model[i].SpecificationAttributeName].ToString(), Model[i].ValueRaw);
+        }
+    }
+    <div class="product-specs-box">
+        <div class="table-wrapper">
+            <table class="data-table">
+                <colgroup>
+                    <col width="35%" />
+                    <col />
+                </colgroup>
+                <tbody>
+                    @{
+                        int row = 0;
+                        foreach (System.Collections.DictionaryEntry entry in od)
+                        {
+                            <tr @(row % 2 == 0 ? Html.Raw(" class=\"odd\"") : Html.Raw(" class=\"even\""))>
+                                <td class="spec-name">@Html.Raw(entry.Key.ToString())</td>
+                                <td class="spec-value">@Html.Raw(HttpUtility.HtmlDecode(entry.Value.ToString()))</td>
+                            </tr>
+                            row++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+                        }

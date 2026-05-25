@@ -1,0 +1,148 @@
+﻿@{
+    Layout = "~/Administration/Views/Shared/_AdminPopupLayout.cshtml";
+}
+@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedRecModel.FeedConditionPopUpModel
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+@{
+    //page title
+    ViewBag.Title = T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.EditValueDetails").Text;
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+            @T("Admin.FoxNetSoft.Plugin.Feed.Manager.FeedCondition.EditValueDetails")
+        </div>
+        <div class="options">
+            <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            <input type="submit" name="cancel" class="k-button" value="@T("Admin.Common.Cancel")" />
+        </div>
+    </div>
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.FeedId)
+    @Html.HiddenFor(model => model.ConditionGroupId)
+
+    if (ViewBag.RefreshPage == true)
+    {
+        <script type="text/javascript">
+            try {window.opener.document.forms['@(ViewBag.formId)'].@(ViewBag.btnId).click();}
+            catch (e){} 
+            window.close();
+        </script>
+    }
+    <table class="adminContent">
+      <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ConditionTypeId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.ConditionTypeId, Model.AvailableConditionTypes)
+                @Html.ValidationMessageFor(model => model.ConditionTypeId)
+            </td>
+      </tr>
+      <tr>
+            <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.ConditionPropertyId):
+            </td>
+            <td class="adminData">
+                    @Html.DropDownListFor(model => model.ConditionPropertyId, Model.AvailableConditionProperties)
+                    <span id="conditionproperty-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
+                    @Html.ValidationMessageFor(model => model.ConditionPropertyId)
+            </td>
+      </tr>
+      <tr>
+            <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.ConditionOperatorId):
+            </td>
+            <td class="adminData">
+                    @Html.DropDownListFor(model => model.ConditionOperatorId, Model.AvailableConditionOperators)
+                    <span id="conditionoperator-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
+                    @Html.ValidationMessageFor(model => model.ConditionOperatorId)
+            </td>
+      </tr>
+      <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ConditionValueId):
+            </td>
+            <td class="adminData">
+                @Html.Partial(String.Format(Model.ViewPath,"_ConditionEditPopup.Values"), Model)  
+                <span id="conditionvalue-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
+                @Html.ValidationMessageFor(model => model.ConditionValueId)
+            </td>
+      </tr>
+    </table>
+        <script type="text/javascript">
+            $(function () {
+                $("#@Html.FieldIdFor(model => model.ConditionTypeId)").change(function () {
+                    var selectedItem = $(this).val();
+                    var ddlProperties = $("#@Html.FieldIdFor(model => model.ConditionPropertyId)");
+                    var propertyProgress = $("#conditionproperty-loading-progress");
+                    propertyProgress.show();
+                    var postData = {
+                        conditionTypeId: selectedItem
+                    };
+                    addAntiForgeryToken(postData);
+
+                    $.ajax({
+                        cache: false,
+                        type: "POST",
+                        url: "@(Url.Action("GetConditionProperties","Feeds", new RouteValueDictionary { { "area", "Admin" } }))",
+                        data: postData,
+                        async: false,
+                        success: function (data) {
+                            ddlProperties.html('');
+                            $.each(data, function (id, option) {
+                                ddlProperties.append($('<option></option>').val(option.id).html(option.name));
+                            });
+                            propertyProgress.hide();
+                            ddlProperties.change();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert('Failed to retrieve properties.');
+                            propertyProgress.hide();
+                        }
+                    });
+                });
+
+                $("#@Html.FieldIdFor(model => model.ConditionPropertyId)").change(function () {
+                    var selectedItem = $(this).val();
+                    var selectedTypeItem = $("#@Html.FieldIdFor(model => model.ConditionTypeId)").val();
+                    var ddlOperators = $("#@Html.FieldIdFor(model => model.ConditionOperatorId)");
+                    var ddlValues = $("#@Html.FieldIdFor(model => model.ConditionValueId)");
+                    var propertyOperators = $("#conditionoperator-loading-progress");
+                    propertyOperators.show();
+                    var postData = {
+                        conditionTypeId: selectedTypeItem,
+                        conditionPropertyId: selectedItem
+                    };
+                    addAntiForgeryToken(postData);
+                    $.ajax({
+                        cache: false,
+                        type: "POST",
+                        url: "@(Url.Action("GetConditionOperators","Feeds", new RouteValueDictionary { { "area", "Admin" } }))",
+                        data: postData,
+                        async: false,
+                        success: function (data) {
+                            if (data.updateconditionvalueshtml)
+                            {
+                                $("#conditionvalueblock").replaceWith(data.updateconditionvalueshtml);
+                            }
+                            ddlOperators.html('');
+                            $.each(data.conditionoperators, function (id, option) {
+                                ddlOperators.append($('<option></option>').val(option.id).html(option.name));
+                            });
+                            propertyOperators.hide();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert('Failed to retrieve operators.');
+                            propertyOperators.hide();
+                        }
+                    });
+                });
+            });
+    </script>
+}

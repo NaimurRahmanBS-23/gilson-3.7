@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>Product url</FeedCaption>
+    <FeedName>url</FeedName>
+    <FieldNameCode>url</FieldNameCode>
+    <ConvertValues />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>Price</FeedCaption>
+    <FeedName>price</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>price</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>Currency</FeedCaption>
+    <FeedName>currencyId</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>currency</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>Category</FeedCaption>
+    <FeedName>categoryId</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>categoryId</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>Picture</FeedCaption>
+    <FeedName>picture</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>picture</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>Delivery</FeedCaption>
+    <FeedName>delivery</FeedName>
+    <Prefix />
+    <DefaultValue>false</DefaultValue>
+    <FieldNameCode />
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>delivery-options (option cost)</FeedCaption>
+    <FeedName>delivery_options_option_cost</FeedName>
+    <DefaultValue>0</DefaultValue>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>77</Id>
+    <FeedCaption>delivery-options (option days)</FeedCaption>
+    <FeedName>delivery_options_option_days</FeedName>
+    <DefaultValue></DefaultValue>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>Product Name</FeedCaption>
+    <FeedName>name</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>name</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit>100</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>Vendor</FeedCaption>
+    <FeedName>vendor</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>Vendor code</FeedCaption>
+    <FeedName>vendorCode</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode />
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>11</Id>
+    <FeedCaption>Description</FeedCaption>
+    <FeedName>description</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit>512</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>12</Id>
+    <FeedCaption>Country</FeedCaption>
+    <FeedName>country_of_origin</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode />
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

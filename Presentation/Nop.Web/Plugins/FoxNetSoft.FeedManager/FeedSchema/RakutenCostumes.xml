@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>Seller-id</FeedCaption>
+    <FeedName>Seller-id</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>merchantid</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>gtin</FeedCaption>
+    <FeedName>gtin</FeedName>
+    <DefaultValue />
+    <FieldNameCode>gtin</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>isbn</FeedCaption>
+    <FeedName>isbn</FeedName>
+    <DefaultValue />
+    <FieldNameCode>gtin</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>Manufacturer</FeedCaption>
+    <FeedName>mfg-name</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>Mfr part number</FeedCaption>
+    <FeedName>mfg-part-numbe</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>manufacturerpartnumber</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>asin</FeedCaption>
+    <FeedName>asin</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>50</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>Seller-sku</FeedCaption>
+    <FeedName>seller-sku</FeedName>
+    <FieldNameCode>id</FieldNameCode>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>title</FeedCaption>
+    <FeedName>title</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>name</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>100</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>description</FeedCaption>
+    <FeedName>description</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit>8000</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>main-image</FeedCaption>
+    <FeedName>main-image</FeedName>
+    <FieldNameCode>picture</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>11</Id>
+    <FeedCaption>additional-image</FeedCaption>
+    <FeedName>additional-image</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>12</Id>
+    <FeedCaption>weight</FeedCaption>
+    <FeedName>weight</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode>weight</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>13</Id>
+    <FeedCaption>features</FeedCaption>
+    <FeedName>features</FeedName>
+    <DefaultValue></DefaultValue>
+    <FieldNameCode></FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>14</Id>
+    <FeedCaption>listing-price</FeedCaption>
+    <FeedName>listing-price</FeedName>
+    <FieldNameCode>price</FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>15</Id>
+    <FeedCaption>msrp</FeedCaption>
+    <FeedName>msrp</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>16</Id>
+    <FeedCaption>category-id</FeedCaption>
+    <FeedName>category-id</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>17</Id>
+    <FeedCaption>keywords</FeedCaption>
+    <FeedName>keywords</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit>250</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>18</Id>
+    <FeedCaption>product-set-id</FeedCaption>
+    <FeedName>product-set-id</FeedName>
+    <FieldNameCode></FieldNameCode>
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>68</Id>
+	  <FeedCaption>*Size Modifier</FeedCaption>
+	  <FeedName>*Size Modifier</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>69</Id>
+	  <FeedCaption>Age Segment</FeedCaption>
+	  <FeedName>Age Segment</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>70</Id>
+	  <FeedCaption>Apparel Material</FeedCaption>
+	  <FeedName>Apparel Material</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>71</Id>
+	  <FeedCaption>Brassiere Cup Size (US)</FeedCaption>
+	  <FeedName>Brassiere Cup Size (US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>72</Id>
+	  <FeedCaption>Brassiere Size (US)</FeedCaption>
+	  <FeedName>Brassiere Size (US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>73</Id>
+	  <FeedCaption>Casual</FeedCaption>
+	  <FeedName>Casual</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>74</Id>
+	  <FeedCaption>Character</FeedCaption>
+	  <FeedName>Character</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>75</Id>
+	  <FeedCaption>Color</FeedCaption>
+	  <FeedName>Color</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>76</Id>
+	  <FeedCaption>Color Class</FeedCaption>
+	  <FeedName>Color Class</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>77</Id>
+	  <FeedCaption>Costume Theme</FeedCaption>
+	  <FeedName>Costume Theme</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>78</Id>
+	  <FeedCaption>Formal</FeedCaption>
+	  <FeedName>Formal</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>79</Id>
+	  <FeedCaption>Gender</FeedCaption>
+	  <FeedName>Gender</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>80</Id>
+	  <FeedCaption>MLB Team</FeedCaption>
+	  <FeedName>MLB Team</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>81</Id>
+	  <FeedCaption>MLS Team</FeedCaption>
+	  <FeedName>MLS Team</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>82</Id>
+	  <FeedCaption>NASCAR Driver</FeedCaption>
+	  <FeedName>NASCAR Driver</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>83</Id>
+	  <FeedCaption>NBA Team</FeedCaption>
+	  <FeedName>NBA Team</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>84</Id>
+	  <FeedCaption>NCAA Team</FeedCaption>
+	  <FeedName>NCAA Team</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>85</Id>
+	  <FeedCaption>NFL Team</FeedCaption>
+	  <FeedName>NFL Team</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>86</Id>
+	  <FeedCaption>NHL Team</FeedCaption>
+	  <FeedName>NHL Team</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>87</Id>
+	  <FeedCaption>Occasion</FeedCaption>
+	  <FeedName>Occasion</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>88</Id>
+	  <FeedCaption>Pattern</FeedCaption>
+	  <FeedName>Pattern</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>89</Id>
+	  <FeedCaption>Pet</FeedCaption>
+	  <FeedName>Pet</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>90</Id>
+	  <FeedCaption>Pet Size Code</FeedCaption>
+	  <FeedName>Pet Size Code</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>91</Id>
+	  <FeedCaption>Raingear</FeedCaption>
+	  <FeedName>Raingear</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>92</Id>
+	  <FeedCaption>Season</FeedCaption>
+	  <FeedName>Season</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>93</Id>
+	  <FeedCaption>Shapewear</FeedCaption>
+	  <FeedName>Shapewear</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>94</Id>
+	  <FeedCaption>Size</FeedCaption>
+	  <FeedName>Size</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>95</Id>
+	  <FeedCaption>Size (Boys US)</FeedCaption>
+	  <FeedName>Size (Boys US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>96</Id>
+	  <FeedCaption>Size (Children US)</FeedCaption>
+	  <FeedName>Size (Children US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>97</Id>
+	  <FeedCaption>Size (Girls US)</FeedCaption>
+	  <FeedName>Size (Girls US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>98</Id>
+	  <FeedCaption>Size (Infant US)</FeedCaption>
+	  <FeedName>Size (Infant US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>99</Id>
+	  <FeedCaption>Size (Junior US)</FeedCaption>
+	  <FeedName>Size (Junior US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>100</Id>
+	  <FeedCaption>Size (Misses US)</FeedCaption>
+	  <FeedName>Size (Misses US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>101</Id>
+	  <FeedCaption>Size (Toddler US)</FeedCaption>
+	  <FeedName>Size (Toddler US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>102</Id>
+	  <FeedCaption>Size Code (Child US)</FeedCaption>
+	  <FeedName>Size Code (Child US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>103</Id>
+	  <FeedCaption>Size Code (Men US)</FeedCaption>
+	  <FeedName>Size Code (Men US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>104</Id>
+	  <FeedCaption>Size Code (Women US)</FeedCaption>
+	  <FeedName>Size Code (Women US)</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>105</Id>
+	  <FeedCaption>Sports</FeedCaption>
+	  <FeedName>Sports</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>106</Id>
+	  <FeedCaption>Sports League</FeedCaption>
+	  <FeedName>Sports League</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>107</Id>
+	  <FeedCaption>Stain Resistant</FeedCaption>
+	  <FeedName>Stain Resistant</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>108</Id>
+	  <FeedCaption>Trend/Style</FeedCaption>
+	  <FeedName>Trend/Style</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>109</Id>
+	  <FeedCaption>WNBA Team</FeedCaption>
+	  <FeedName>WNBA Team</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+	  <Id>110</Id>
+	  <FeedCaption>Wrinkle Resistant</FeedCaption>
+	  <FeedName>Wrinkle Resistant</FeedName>
+	  <FieldNameCode></FieldNameCode>
+	  <CharsLimit></CharsLimit>
+	  <Required>false</Required>
+	  <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+	  <ActionId>0</ActionId>
+	  <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

@@ -1,0 +1,103 @@
+05.05.2021 0:15:27
+Feed - Google
+product.count=4594, duration=00:01:10.5890851
+
+05.05.2021 0:00:28
+Feed - Google
+product.count=4594, duration=00:01:13.3310258
+
+04.05.2021 0:15:23
+Feed - Google
+product.count=4594, duration=00:01:14.1213509
+
+04.05.2021 0:00:23
+Feed - Google
+product.count=4594, duration=00:01:15.6612809
+
+03.05.2021 0:15:26
+Feed - Google
+product.count=4594, duration=00:01:12.0507999
+
+03.05.2021 0:00:26
+Feed - Google
+product.count=4594, duration=00:01:14.0588220
+
+02.05.2021 0:15:20
+Feed - Google
+product.count=4594, duration=00:01:13.1770927
+
+02.05.2021 0:00:20
+Feed - Google
+product.count=4594, duration=00:01:14.0954027
+
+01.05.2021 0:15:26
+Feed - Google
+product.count=4594, duration=00:01:14.2217335
+
+01.05.2021 0:00:26
+Feed - Google
+product.count=4594, duration=00:01:16.4401711
+
+30.04.2021 0:28:05
+Feed - Google
+product.count=4594, duration=00:01:27.6553580
+
+30.04.2021 0:13:05
+Feed - Google
+product.count=4594, duration=00:01:24.3688707
+
+29.04.2021 0:28:30
+Feed - Google
+product.count=4594, duration=00:01:19.9497639
+
+29.04.2021 0:13:30
+Feed - Google
+product.count=4594, duration=00:01:21.2041749
+
+28.04.2021 0:15:27
+Feed - Google
+product.count=4594, duration=00:01:19.3030292
+
+28.04.2021 0:00:27
+Feed - Google
+product.count=4594, duration=00:01:24.2683843
+
+27.04.2021 0:15:26
+Feed - Google
+product.count=4594, duration=00:01:29.6722963
+
+27.04.2021 0:00:26
+Feed - Google
+product.count=4594, duration=00:01:38.9155033
+
+26.04.2021 0:15:23
+Feed - Google
+product.count=4594, duration=00:01:15.9747832
+
+26.04.2021 0:00:23
+Feed - Google
+product.count=4594, duration=00:01:18.1954185
+
+25.04.2021 0:15:32
+Feed - Google
+product.count=4594, duration=00:01:20.3089167
+
+25.04.2021 0:00:32
+Feed - Google
+product.count=4594, duration=00:01:21.6980786
+
+24.04.2021 0:15:25
+Feed - Google
+product.count=4594, duration=00:01:15.2741644
+
+24.04.2021 0:00:25
+Feed - Google
+product.count=4594, duration=00:01:26.4670181
+
+23.04.2021 0:15:26
+Feed - Google
+product.count=4594, duration=00:01:19.8829384
+
+23.04.2021 0:00:26
+Feed - Google
+product.count=4594, duration=00:01:19.9248005

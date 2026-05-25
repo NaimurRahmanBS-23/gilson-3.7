@@ -1,0 +1,55 @@
+﻿@model NewsItemModel
+@using System.Text.RegularExpressions
+@using Nop.Web.Models.News;
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+
+    //title
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Title);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+
+    Html.AddHeadCustomParts("<meta property=\"Breadcrumb\" data-sj-field=\"breadcrumbTitle\" content=\"Home\"/>");
+    Html.AddHeadCustomParts("<meta property=\"Breadcrumb\" data-sj-field=\"breadcrumbURL\" content=\"/\"/>");
+    Html.AddHeadCustomParts("<meta property=\"Breadcrumb\" data-sj-field=\"breadcrumbTitle\" content=\"Gilson News\"/>");
+    Html.AddHeadCustomParts("<meta property=\"Breadcrumb\" data-sj-field=\"breadcrumbURL\" content=\"/news\"/>");
+
+    Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"article\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.Title) + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + Html.Encode(Model.MetaDescription) + "\" />");
+
+    try
+    {
+        var regexImgSrc = @"<img[^>]*?src\s*=\s*[""']?([^'"" >]+?)[ '""][^>]*?>";
+        var matchesImgSrc = Regex.Matches(Model.Full, regexImgSrc, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        foreach (Match m in matchesImgSrc)
+        {
+            var href = m.Groups[1].Value;
+            Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"https://www.globalgilson.com" + href + "\" />");
+            break;
+        }
+    }
+    catch (Exception ex)
+    {
+        // ignored
+    }
+
+    Html.AddHeadCustomParts("<meta property=\"og:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:site_name\" content=\"GlobalGilson.com\" />");
+
+    Html.AddCanonicalUrlParts(Request.Url.AbsoluteUri);
+}
+<div class="page news-item-page">
+    <div class="page-title">
+        <h1>@Model.Title</h1>
+    </div>
+    <div class="page-body">
+        <div class="news-date">
+            @Model.CreatedOn.ToString("D")
+        </div>
+        
+        <div class="news-body">
+            @Html.Raw(Model.Full)
+        </div>
+        
+    </div>
+</div>

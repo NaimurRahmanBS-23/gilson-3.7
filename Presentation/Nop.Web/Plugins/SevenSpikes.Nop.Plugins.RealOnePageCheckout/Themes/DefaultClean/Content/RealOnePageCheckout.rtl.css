@@ -1,0 +1,68 @@
+
+.section .title {
+	text-align: right;
+}
+.shipping-results {
+	text-align: right;
+}
+.shipping-method .method-list,
+.payment-method .method-list {
+	text-align: right;
+}
+.payment-method .use-reward-points {
+	text-align: right;
+}
+.payment-info {
+	text-align: right;
+}
+.payment-info .info p {
+	text-align: right;
+}
+.coupon-box-panel input[type="text"],
+.giftcard-box-panel input[type="text"] {
+	float: right;
+}
+.coupon-box-panel .coupon-code button,
+.giftcard-box-panel .coupon-code button {
+	float: right;
+}
+.total-info .cart-total button {
+	margin-left: -10px;
+}
+
+@media all and (min-width:769px) {
+	
+.payment-method .payment-logo,
+.payment-method .payment-details {
+	margin: 0 0 0 10px;
+	
+}
+.checkout-attributes li *:first-child {
+	margin-right: 0 !important;
+}
+}
+
+@media all and (min-width:1001px) {
+	
+.inputs label {
+	text-align: right;
+}
+.checkout-page .selected-checkout-attributes {
+	text-align: left !important;
+}
+.payment-info .info tr {
+	text-align: right;
+}
+.payment-info .info td:first-child {
+	text-align: right !important;
+}
+.order-totals-panel {
+	float: left;
+	text-align: left;
+}
+.order-confirm,
+.terms-of-service,
+.complete-button {
+	text-align: left !important;
+}
+}

@@ -1,0 +1,8 @@
+﻿Group: Tax providers
+FriendlyName: Vertex tax rate provider
+SystemName: Tax.Vertex
+Version: 1.0
+SupportedVersions: 3.70
+Author: Gilson Company, Inc.
+DisplayOrder: 1
+FileName: Nop.Plugin.Tax.Vertex.dll

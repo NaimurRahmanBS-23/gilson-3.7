@@ -1,0 +1,291 @@
+﻿@{
+    Layout = "";
+}
+@model Nop.Plugin.Shipping.FedexFreight.Models.FedexFreightShippingModel
+@using Nop.Web.Framework;
+@using Nop.Plugin.Shipping.FedexFreight;
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#PackingType").change(togglePackingType);
+        
+        togglePackingType();
+    });
+
+    function togglePackingType() {
+        var selectedPackingTypeId = $("#PackingType").val();
+        if (selectedPackingTypeId == @(((int)PackingType.PackByDimensions).ToString())) {
+            $('#pnlPassDimensions').show();
+            $('#pnlPackingPackageVolume').hide();
+        }
+        else if (selectedPackingTypeId == @(((int)PackingType.PackByOneItemPerPackage).ToString())) {
+            $('#pnlPassDimensions').hide();
+            $('#pnlPackingPackageVolume').hide();
+        }
+        else if (selectedPackingTypeId == @(((int)PackingType.PackByVolume).ToString())) {
+            $('#pnlPassDimensions').hide();
+            $('#pnlPackingPackageVolume').show();
+        }
+    }
+</script>
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Url):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Url)
+                @Html.ValidationMessageFor(model => model.Url)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Key):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Key)
+                @Html.ValidationMessageFor(model => model.Key)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Password):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Password)
+                @Html.ValidationMessageFor(model => model.Password)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AccountNumber):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.AccountNumber)
+                @Html.ValidationMessageFor(model => model.AccountNumber)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.MeterNumber):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.MeterNumber)
+                @Html.ValidationMessageFor(model => model.MeterNumber)
+            </td>
+        </tr>
+        @*<tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AvailableDropOffTypes):
+            </td>
+            <td class="adminData">
+                @Html.DropDownList("DropoffType", Model.AvailableDropOffTypes)
+            </td>
+        </tr>*@
+        @*<tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.UseResidentialRates):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.UseResidentialRates)
+                @Html.ValidationMessageFor(model => model.UseResidentialRates)
+            </td>
+        </tr>*@
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ApplyDiscounts):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.ApplyDiscounts)
+                @Html.ValidationMessageFor(model => model.ApplyDiscounts)
+            </td>
+        </tr>
+        @*<tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AdditionalHandlingCharge):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.AdditionalHandlingCharge)
+                @Html.ValidationMessageFor(model => model.AdditionalHandlingCharge)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AvailableCarrierServices):
+            </td>
+            <td class="adminData">
+                <div style="height: 250px; width: 300px; overflow: auto; border: solid 1px #bbb;">
+                    @foreach (var csd in Model.AvailableCarrierServices)
+                    {
+                        <input type="checkbox" name="CheckedCarrierServices" value="@(csd)" checked="@Model.CarrierServicesOffered.Contains(csd)" />
+                        <label>@csd</label>
+                        <br />
+                    }
+                </div>
+            </td>
+        </tr>*@
+        @*<tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PackingTypeValues):
+            </td>
+            <td class="adminData">
+                @Html.DropDownList("PackingType", Model.PackingTypeValues)
+            </td>
+        </tr>*@
+        @*<tr id="pnlPassDimensions">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PassDimensions):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PassDimensions)
+                @Html.ValidationMessageFor(model => model.PassDimensions)
+            </td>
+        </tr>*@
+    @*<tr id="pnlPackingPackageVolume">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PackingPackageVolume):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PackingPackageVolume)
+                @Html.ValidationMessageFor(model => model.PackingPackageVolume)
+            </td>
+        </tr>*@
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightAccountNumber):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightAccountNumber)
+                @Html.ValidationMessageFor(model => model.FreightAccountNumber)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightBillingAddress1):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightBillingAddress1)
+                @Html.ValidationMessageFor(model => model.FreightBillingAddress1)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightBillingAddress2):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightBillingAddress2)
+                @Html.ValidationMessageFor(model => model.FreightBillingAddress2)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightBillingCity):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightBillingCity)
+                @Html.ValidationMessageFor(model => model.FreightBillingCity)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightBillingCountry):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightBillingCountry)
+                @Html.ValidationMessageFor(model => model.FreightBillingCountry)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightBillingPostalCode):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightBillingPostalCode)
+                @Html.ValidationMessageFor(model => model.FreightBillingPostalCode)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightBillingState):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightBillingState)
+                @Html.ValidationMessageFor(model => model.FreightBillingState)
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightAltAccountNumber):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightAltAccountNumber)
+                @Html.ValidationMessageFor(model => model.FreightAltAccountNumber)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightAltBillingAddress1):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightAltBillingAddress1)
+                @Html.ValidationMessageFor(model => model.FreightAltBillingAddress1)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightAltBillingAddress2):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightAltBillingAddress2)
+                @Html.ValidationMessageFor(model => model.FreightAltBillingAddress2)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightAltBillingCity):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightAltBillingCity)
+                @Html.ValidationMessageFor(model => model.FreightAltBillingCity)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightAltBillingCountry):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightAltBillingCountry)
+                @Html.ValidationMessageFor(model => model.FreightAltBillingCountry)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightAltBillingPostalCode):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightAltBillingPostalCode)
+                @Html.ValidationMessageFor(model => model.FreightAltBillingPostalCode)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightAltBillingState):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightAltBillingState)
+                @Html.ValidationMessageFor(model => model.FreightAltBillingState)
+            </td>
+        </tr>
+        
+
+        <tr>
+            <td colspan="2">
+                <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            </td>
+        </tr>
+    </table>    
+}

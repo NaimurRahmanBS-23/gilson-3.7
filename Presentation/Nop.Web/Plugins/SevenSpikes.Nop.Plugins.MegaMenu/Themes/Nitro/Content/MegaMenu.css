@@ -1,0 +1,176 @@
+﻿/*
+* Copyright 2014 Seven Spikes Ltd. All rights reserved. (http://www.nop-templates.com)
+* http://www.nop-templates.com/t/licensinginfo
+*/
+
+/*=====================================================
+    
+    RESPONSIVE
+
+=====================================================*/
+
+@media all and (min-width: 240px) {
+
+    .menu-title {
+        text-align: center;
+    }
+    .mega-menu, .header-menu .menu-title {
+        display: none;
+    }
+    .mega-menu-responsive {
+        display: block !important;
+    }
+
+}
+
+    @media all and (max-width: 980px) {
+
+        .dropdown .topic-wrapper {
+            display: none;
+        }
+    
+    }
+
+/*=====================================================
+    
+    DESKTOP
+
+=====================================================*/
+
+@media all and (min-width: 981px) {
+
+    .menu-title,
+    .close-menu {
+        display: none;
+    }
+
+/* MAIN PANEL & DROPDOWN*/
+
+    .mega-menu {
+        position: relative;
+        z-index: 1001;
+        display: block;
+    }
+    .mega-menu-responsive {
+        display: none !important;
+    }
+    .mega-menu .dropdown {
+        display: none;
+        position: absolute;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        overflow: hidden;
+		border: 1px solid #bbb;
+        background-color: #fff;
+        /*background-image: url(images/sublist-shadow-top.png);*/
+        background-position: top left;
+        background-repeat: repeat-x;
+        padding: 10px;
+        z-index: 1003;
+    }
+    .mega-menu .dropdown.fullWidth {
+        left: 50%;
+        margin-left: -490px;
+        width: 980px;
+    }
+        .mega-menu .dropdown.active {
+            display: block;
+        }
+
+/* ROWS AND BOXES */
+
+    .mega-menu .row {
+        overflow: hidden;
+        margin-bottom: 15px;
+    }
+    .dropdown .box {
+        float: left;
+        padding: 0;
+        border: solid 1px #eee;
+        margin: 0 5px 0 4px;
+    }
+    .categories.fullWidth .box {
+        width: 24%;
+    }
+    .categories .box{
+        width: 250px;
+    }
+    .mega-menu .title {
+        margin-bottom: 5px;
+        border-bottom: 1px solid #002c58;
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+        position: relative;
+        height: 20px;
+    }
+
+    .mega-menu .title a {
+
+    }
+    .mega-menu .title a:hover {
+	    color: #fe9900;
+    }
+    .mega-menu .picture {
+        margin: auto;
+	    width: 80px;
+	    height: 80px;
+        text-align: center;
+    }
+
+        .mega-menu .picture a img {
+            max-height: 100%;
+        }
+
+    .mega-menu .subcategories {
+	    margin-left: 100px;
+    }
+    .mega-menu .box ul {
+        margin-top: 5px;
+    }
+    .mega-menu .box li {
+	    margin-top: 8px;
+        text-align: left;
+    }
+    .mega-menu .box li a {
+	    background: url(images/arrow-right-black.png) left center no-repeat;
+	    padding-left: 10px;
+        font-size: 12px;
+        color: #333;
+    }
+        .mega-menu .box li a:hover {
+            text-decoration: underline;
+        }
+    .mega-menu .box li:nth-child(odd) a:hover {
+    }
+    .mega-menu .box li:nth-child(even) a:hover {
+    }
+    .mega-menu li a.view-all {
+	    font-weight: bold;
+        background: none;
+    }
+
+    .manufacturers.fullWidth .box {
+        width: 16.66666666666667%;
+    }
+    .manufacturers.fullWidth li * {
+	    background: none !important;
+	    padding-left: 0;
+    }
+
+    .mega-menu .topic-wrapper {
+	    overflow: hidden;
+    }
+    .mega-menu .topic-wrapper p {
+	    font-size: 14px;
+	    line-height: 20px;
+    }
+    .mega-menu .topic-wrapper strong {
+	    display: block;
+	    border-bottom: 1px solid #999;
+	    padding: 8px 0;
+	    font-size: 14px;
+	    text-transform: uppercase;
+	    color: #222;
+    }
+
+}

@@ -1,0 +1,303 @@
+@model FoxNetSoft.Plugin.Feed.Manager.Models.AddFeedRecModel
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+@{
+    Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
+    //page title
+    ViewBag.Title = @T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.AddNew").Text;
+}
+<style>
+.typefeed-selector-all{
+}
+.typefeed-selector{
+    width: 300px;
+    float: left;
+    text-align: center;
+    border: 4px double grey;
+    padding: 5px;
+    margin: 5px;
+}
+.typefeed-selector input{
+    margin:0;padding:0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
+
+@foreach (var typeFeed in Model.AvailableTypeFeeds)
+{
+   <text>
+         .style-typefeed@(typeFeed.Id){background-image:url(@(typeFeed.PictureUrl));}
+   </text>
+}
+    @foreach (var typeFeed in Model.GooleTypeFeeds)
+{
+   <text>
+         .style-typefeed@(typeFeed.Id){background-image:url(@(typeFeed.PictureUrl));}
+   </text>
+}
+    @foreach (var typeFeed in Model.AmazonTypeFeeds)
+{
+   <text>
+         .style-typefeed@(typeFeed.Id){background-image:url(@(typeFeed.PictureUrl));}
+   </text>
+}
+   @foreach (var typeFeed in Model.EbayTypeFeeds)
+{
+   <text>
+         .style-typefeed@(typeFeed.Id){background-image:url(@(typeFeed.PictureUrl));}
+   </text>
+}
+   @foreach (var typeFeed in Model.PopularTypeFeeds)
+{
+   <text>
+         .style-typefeed@(typeFeed.Id){background-image:url(@(typeFeed.PictureUrl));}
+   </text>
+}
+   @foreach (var typeFeed in Model.RakutenTypeFeeds)
+{
+   <text>
+         .style-typefeed@(typeFeed.Id){background-image:url(@(typeFeed.PictureUrl));}
+   </text>
+}
+   @foreach (var typeFeed in Model.WalmartTypeFeeds)
+{
+   <text>
+         .style-typefeed@(typeFeed.Id){background-image:url(@(typeFeed.PictureUrl));}
+   </text>
+}
+.typefeed-selector input:active +.drinktypefeed-cc{opacity: .9;}
+.typefeed-selector input:checked +.drinktypefeed-cc{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+    border: 1px dotted gray;
+}
+.drinktypefeed-cc{
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position: center;
+    display:inline-block;
+    width:300px;
+    height:70px;
+    background-position-y: 10px;
+    /*-webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+    */
+}
+.drinktypefeed-cc:hover{
+    /*-webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+    */
+}
+</style>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "addfeed-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+            @T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.AddNew") @Html.ActionLink("(" + T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.BackToList") + ")", "List")
+        </div>
+        <div class="options">
+            <button type="submit" name="save" value="save" class="k-button">@T("Admin.Common.Save")</button>
+        </div>
+    </div>
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Name):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+        </tr>  
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AdminComment):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.AdminComment)
+                @Html.ValidationMessageFor(model => model.AdminComment)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ExportFileName):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.ExportFileName)
+                @Html.ValidationMessageFor(model => model.ExportFileName)
+            </td>
+        </tr>
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                Google:
+            </td>
+            <td class="adminData">
+                <div class="typefeed-selector-all">
+                    @foreach (var typeFeed in Model.GooleTypeFeeds)
+                    {
+                        <text>
+                        <div class="typefeed-selector">
+                        <input id="typefeed@(typeFeed.Id)" type="radio" name="typefeedid" value="@(typeFeed.Id)" />
+                        <label class="drinktypefeed-cc style-typefeed@(typeFeed.Id)" for="typefeed@(typeFeed.Id)">@(typeFeed.Name)</label>
+                        </div>
+                        </text>
+                    }
+                </div>
+            </td>
+        </tr>  
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                Amazon:
+            </td>
+            <td class="adminData">
+                <div class="typefeed-selector-all">
+                    @foreach (var typeFeed in Model.AmazonTypeFeeds)
+                    {
+                        <text>
+                        <div class="typefeed-selector">
+                        <input id="typefeed@(typeFeed.Id)" type="radio" name="typefeedid" value="@(typeFeed.Id)" />
+                        <label class="drinktypefeed-cc style-typefeed@(typeFeed.Id)" for="typefeed@(typeFeed.Id)">@(typeFeed.Name)</label>
+                        </div>
+                        </text>
+                    }
+                </div>
+            </td>
+        </tr>  
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                Ebay:
+            </td>
+            <td class="adminData">
+                <div class="typefeed-selector-all">
+                    @foreach (var typeFeed in Model.EbayTypeFeeds)
+                    {
+                        <text>
+                        <div class="typefeed-selector">
+                        <input id="typefeed@(typeFeed.Id)" type="radio" name="typefeedid" value="@(typeFeed.Id)" />
+                        <label class="drinktypefeed-cc style-typefeed@(typeFeed.Id)" for="typefeed@(typeFeed.Id)">@(typeFeed.Name)</label>
+                        </div>
+                        </text>
+                    }
+                </div>
+            </td>
+        </tr>  
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                Rakuten:
+            </td>
+            <td class="adminData">
+                <div class="typefeed-selector-all">
+                    @foreach (var typeFeed in Model.RakutenTypeFeeds)
+                    {
+                        <text>
+                        <div class="typefeed-selector">
+                        <input id="typefeed@(typeFeed.Id)" type="radio" name="typefeedid" value="@(typeFeed.Id)" />
+                        <label class="drinktypefeed-cc style-typefeed@(typeFeed.Id)" for="typefeed@(typeFeed.Id)">@(typeFeed.Name)</label>
+                        </div>
+                        </text>
+                    }
+                </div>
+            </td>
+        </tr>  
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                Walmart:
+            </td>
+            <td class="adminData">
+                <div class="typefeed-selector-all">
+                    @foreach (var typeFeed in Model.WalmartTypeFeeds)
+                    {
+                        <text>
+                        <div class="typefeed-selector">
+                        <input id="typefeed@(typeFeed.Id)" type="radio" name="typefeedid" value="@(typeFeed.Id)" />
+                        <label class="drinktypefeed-cc style-typefeed@(typeFeed.Id)" for="typefeed@(typeFeed.Id)">@(typeFeed.Name)</label>
+                        </div>
+                        </text>
+                    }
+                </div>
+            </td>
+        </tr> 
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+               Popular:
+            </td>
+            <td class="adminData">
+                <div class="typefeed-selector-all">
+                    @foreach (var typeFeed in Model.PopularTypeFeeds)
+                    {
+                        <text>
+                        <div class="typefeed-selector">
+                        <input id="typefeed@(typeFeed.Id)" type="radio" name="typefeedid" value="@(typeFeed.Id)" />
+                        <label class="drinktypefeed-cc style-typefeed@(typeFeed.Id)" for="typefeed@(typeFeed.Id)">@(typeFeed.Name)</label>
+                        </div>
+                        </text>
+                    }
+                </div>
+            </td>
+        </tr>  
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                Another:
+            </td>
+            <td class="adminData">
+                <div class="typefeed-selector-all">
+                    @foreach (var typeFeed in Model.AvailableTypeFeeds)
+                    {
+                        <text>
+                        <div class="typefeed-selector">
+                        <input id="typefeed@(typeFeed.Id)" type="radio" name="typefeedid" value="@(typeFeed.Id)" />
+                        <label class="drinktypefeed-cc style-typefeed@(typeFeed.Id)" for="typefeed@(typeFeed.Id)">@(typeFeed.Name)</label>
+                        </div>
+                        </text>
+                    }
+                </div>
+            </td>
+        </tr>  
+    </table>
+}

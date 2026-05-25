@@ -1,0 +1,405 @@
+﻿@{
+    Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
+}
+@model PaymentDirectorListModel
+@using Nop.Plugin.NopTools.PaymentDirector.Models;
+@using Nop.Web.Framework;
+
+<div class="section-header">
+    <div class="title">
+        <img src="~/Administration/Content/images/ico-configuration.png" alt="" />
+        nopTools - Payment Director
+    </div>
+</div>
+
+<div style="font-weight:bold;float:left;margin-bottom:4px;@if (!Model.IsLicensed) { Html.Raw("color:red"); }">
+    <a href="http://www.noptools.com/contactus" target="_blank">
+        <img alt="nopTools.com" src="~/Administration/Content/images/ico-help.gif" title="Contact nopTools for support">
+    </a>
+    @Model.Identification
+    <div style="color:red">@(!Model.IsActive ? "Warning: Payment Director is NOT active (see setting below)" : "") </div>
+</div>
+
+<div class="options" style="float:right;margin-bottom:4px;">
+    <input type="button" id="testrules" name="testrules" class="k-button" value="@T("Plugins.NopTools.PaymentDirector.Test")" />
+    <a href="ExportTabDelimited" id="export" class="k-button">@T("Plugins.NopTools.PaymentDirector.Export")</a>
+    <input type="button" id="import" name="import" class="k-button" value="@T("Plugins.NopTools.PaymentDirector.Import")" />
+</div>
+
+<table class="adminContent">
+    <tr>
+        <td>
+            <div id="payment-rule-grid"></div>
+            <script>
+                $(document).ready(function () {
+                    $("#payment-rule-grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("RuleList", "PaymentDirector", new RouteValueDictionary() { { "Namespaces", "Nop.Plugin.NopTools.PaymentDirector.Controllers" }, { "area", "" } }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                },
+                                update: {
+                                    url: "@Html.Raw(Url.Action("RuleUpdate", "PaymentDirector", new RouteValueDictionary() { { "Namespaces", "Nop.Plugin.NopTools.PaymentDirector.Controllers" }, { "area", "" } }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                },
+                                destroy: {
+                                    url: "@Html.Raw(Url.Action("RuleDelete", "PaymentDirector", new RouteValueDictionary() { { "Namespaces", "Nop.Plugin.NopTools.PaymentDirector.Controllers" }, { "area", "" } }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors",
+                                model: {
+                                    id: "Id",
+                                    fields: {
+                                        Active: { editable: true, type: "boolean" },
+                                        EvalType: { editable: false }
+                                    }
+                                }
+                            },
+                            requestEnd: function (e) {
+                                if (e.type == "update") {
+                                    this.read();
+                                }
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            numeric: false,
+                            previousNext: false,
+                            info: false
+                        },
+                        editable: {
+                                confirmation: false,
+                                mode: "inline"
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "EvalOrder",
+                            title: "@T("Plugins.NopTools.PaymentDirector.Fields.EvalOrder")",
+                            width: 20
+                        }, {
+                            field: "Active",
+                            title: "@T("Plugins.NopTools.PaymentDirector.Fields.Active")",
+                            attributes: { style: "text-align:center" },
+                            template: "<input name='Active' type='checkbox' disabled='disabled' class='checkboxGroups' # if(Active) {# checked='checked' #} # />",
+                            width: 30
+                        }, {
+                            field: "EvalType",
+                            title: "@T("Plugins.NopTools.PaymentDirector.Fields.EvalType")",
+                            width: 30
+                        }, {
+                            field: "Name",
+                            title: "@T("Plugins.NopTools.PaymentDirector.Fields.Name")",
+                            width: 100
+                        }, {
+                            field: "Expression",
+                            title: "@T("Plugins.NopTools.PaymentDirector.Fields.Expression")",
+                            width: 100
+                        }, {
+                            field: "FeeExpression",
+                            title: "@T("Plugins.NopTools.PaymentDirector.Fields.FeeExpression")",
+                            width: 100
+                        }, {
+                            field: "FriendlyNameExpression",
+                            title: "@T("Plugins.NopTools.PaymentDirector.Fields.FriendlyNameExpression")",
+                            width: 50
+                        }, {
+                            command: { name: "edit", text: "@T("Admin.Common.Edit")" },
+                            title: "@T("Admin.Common.Edit")",
+                            width: 100,
+                        }, {
+                            command: { name: "destroy", text: "@T("Admin.Common.Delete")" },
+                            title: "@T("Admin.Common.Delete")",
+                            width: 100
+                        }]
+                    });
+                });
+            </script>
+        </td>
+    </tr>
+</table>
+<p>
+</p>
+@using (Html.BeginForm())
+{
+@Html.AntiForgeryToken()    
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#export").prop("href", "ExportTabDelimited");
+        $("#@Html.FieldIdFor(model => model.AddEvalType)").change(toggleOption);
+        toggleOption();
+    });
+
+    function toggleOption() {
+        var typ = $('#@Html.FieldIdFor(model => model.AddEvalType)').val().substring(0, 3);
+
+        switch (typ) {
+            case "Opt":
+                $('#pnlNamePaymentMethod').show();
+                $('#pnlNameOther').hide();
+                $('#pnlOptionFeeExpr').show();
+                $('#pnlOptionFriendlyNameExpr').show();
+                break;
+            default:
+                $('#pnlNamePaymentMethod').hide();
+                $('#pnlNameOther').show();
+                $('#pnlOptionFeeExpr').hide();
+                $('#pnlOptionFriendlyNameExpr').hide();
+        }
+
+    }
+
+    function clearFields() {
+        $('#AddName').val('');
+        $('#AddExpression').val('');
+        $('#AddFeeExpression').val('');
+        $('#AddFriendlyNameExpression').val('');
+        toggleOption();
+    }
+
+</script>    
+    
+    <fieldset>
+        <legend><span style="font-weight: bold">@T("Plugins.NopTools.PaymentDirector.AddNewRecordTitle")</span></legend>
+        <table class="adminContent">
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.AddEvalOrder):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.AddEvalOrder)
+                    @Html.ValidationMessageFor(model => model.AddEvalOrder)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.AddActive):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.AddActive)
+                    @Html.ValidationMessageFor(model => model.AddActive)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.AddEvalType):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.AddEvalType, Model.AvailableEvaluationTypes)
+                    @Html.ValidationMessageFor(model => model.AddEvalType)
+                </td>
+            </tr>
+            <tr id="pnlNamePaymentMethod">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.AddPaymentName):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.AddPaymentName, Model.AvailablePaymentMethodSystemNames)
+                    @Html.ValidationMessageFor(model => model.AddPaymentName)
+                </td>
+            </tr>
+            <tr id="pnlNameOther">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.AddName):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.AddName)
+                    @Html.ValidationMessageFor(model => model.AddName)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.AddExpression):
+                </td>
+                <td class="adminData">
+                    @Html.TextBoxFor(model => model.AddExpression, new { style = "Width: 90%;" })
+                    @Html.ValidationMessageFor(model => model.AddExpression)
+                </td>
+            </tr>
+            <tr id="pnlOptionFeeExpr">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.AddFeeExpression):
+                </td>
+                <td class="adminData">
+                    @Html.TextBoxFor(model => model.AddFeeExpression, new { style = "Width: 90%;" })
+                    @Html.ValidationMessageFor(model => model.AddFeeExpression)
+                </td>
+            </tr>
+            <tr id="pnlOptionFriendlyNameExpr">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.AddFriendlyNameExpression):
+                </td>
+                <td class="adminData">
+                    @Html.TextBoxFor(model => model.AddFriendlyNameExpression, new { style = "Width: 50%;" })
+                    @Html.ValidationMessageFor(model => model.AddFriendlyNameExpression)
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="left">
+                    <button type="submit" name="addpaymentDirectorrecord" value="addpaymentDirectorrecord"
+                        class="k-button">@T("Admin.Common.AddNew")</button>
+                    <button type="button" 
+                        class="k-button" onclick="javascript:clearFields();" >@T("Admin.Common.Clear")</button>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <br />
+    <hr />
+    <br />
+    <fieldset>
+        <legend><span style="font-weight: bold">@T("Plugins.NopTools.PaymentDirector.SettingsTitle")</span></legend>
+        <table class="adminContent">
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.IsActive):
+                </td>
+                <td class="adminData">
+                    @Html.CheckBoxFor(model => model.IsActive)
+                    @Html.ValidationMessageFor(model => model.IsActive)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.Surcharge):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.Surcharge)
+                    @Html.ValidationMessageFor(model => model.Surcharge)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.SortExpression):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.SortExpression)
+                    @Html.ValidationMessageFor(model => model.SortExpression)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.AdditionalFeeErrorUseConfiguredFee):
+                </td>
+                <td class="adminData">
+                    @Html.CheckBoxFor(model => model.AdditionalFeeErrorUseConfiguredFee)
+                    @Html.ValidationMessageFor(model => model.AdditionalFeeErrorUseConfiguredFee)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="left">
+                    <button type="submit" name="savegeneralsettings" value="savegeneralsettings" class="k-button">@T("Admin.Common.Save")</button>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+}
+
+
+@*import form*@
+<div id="import-window" style="display:none;">
+    <form action="Configure" enctype="multipart/form-data" method="post">
+    @Html.AntiForgeryToken()
+        <table style="text-align: left;">
+            <tr>
+                <td>
+                    @T("Plugins.NopTools.PaymentDirector.DeleteAll"):
+                </td>
+                <td>
+                    <input type="checkbox" class="check-box" id="deleteall" name="deleteall" value="yes" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @T("Plugins.NopTools.PaymentDirector.ImportFile"):
+                </td>
+                <td>
+                    <input type="file" id="importfile" name="importfile" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="k-button" name="import" value="import" >@T("Plugins.NopTools.PaymentDirector.Import")</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+
+@*test form*@
+<div id="test-window" style="display:none;">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <table style="text-align: left;">
+            <tr>
+                <td class="adminTitle">
+                    <img alt="@T("Plugins.NopTools.PaymentDirector.Test.CustomerInput.Hint")" src="~/Administration/Content/images/ico-help.gif" title="@T("Plugins.NopTools.PaymentDirector.Test.CustomerInput.Hint")"/>
+                    <label for="customerinput" title="@T("Plugins.NopTools.PaymentDirector.Test.CustomerInput")">@T("Plugins.NopTools.PaymentDirector.Test.CustomerInput")</label>:
+                </td>
+                <td class="adminData">
+                    <input id="customerinput" name="customerinput" type="text" style="width:200px" value="0"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="k-button" name="testrules" value="testrules" >@T("Plugins.NopTools.PaymentDirector.Test.Run")</button>
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#import").click(function (e) {
+            e.preventDefault();
+            var window = $("#import-window");
+            if (!window.data("kendoWindow")) {
+                window.kendoWindow({
+                    modal: true,
+                    width: "430px",
+                    title: "@T("Plugins.NopTools.PaymentDirector.Import")",
+                    actions: ["Close"]
+                });
+            }
+            window.data('kendoWindow').center().open();
+        });
+
+        $("#testrules").click(function (e) {
+            e.preventDefault();
+            var window = $("#test-window");
+            if (!window.data("kendoWindow")) {
+                window.kendoWindow({
+                    modal: true,
+                    width: "470px",
+                    title: "@T("Plugins.NopTools.PaymentDirector.Test")",
+                    actions: ["Close"]
+                });
+            }
+            window.data('kendoWindow').center().open();
+        });
+    });
+</script>

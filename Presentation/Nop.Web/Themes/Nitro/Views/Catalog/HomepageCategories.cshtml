@@ -1,0 +1,3 @@
+﻿@model IList<CategoryModel>
+@using Nop.Web.Models.Catalog;
+@if (Model.Count > 0){<div class="category-grid home-page-category-grid"><div class="cat-title"><strong>Industry Favorites</strong></div><div class="item-grid">@foreach (var item in Model){<div class="item-box"><div class="category-item"><div class="title"><a href="@Url.RouteUrl("Category", new {SeName = item.SeName})">@item.Name</a></div><div class="picture"><a href="@Url.RouteUrl("Category", new {SeName = item.SeName})"><img loading="eager" src="@item.PictureModel.ImageUrl" alt="@item.PictureModel.AlternateText" /></a></div></div></div>}</div></div>}

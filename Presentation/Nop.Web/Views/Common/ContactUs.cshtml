@@ -1,0 +1,81 @@
+﻿@model ContactUsModel
+@using Nop.Web.Models.Common;
+@{
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+    Html.AddTitleParts(T("PageTitle.ContactUs").Text);
+    Html.AddMetaDescriptionParts(T("contact-us.metadescription").Text);
+}
+<div class="page contact-page">
+    <div class="page-title">
+        <h1>@T("PageTitle.ContactUs")</h1>
+    </div>
+    <div class="page-body">
+        @Html.Action("TopicBlock", "Topic", new { systemName = "ContactUs" })
+        <h2>Contact Us Form</h2>
+        <br />
+        @if (Model.SuccessfullySent)
+        {
+            <div class="result" style="border: 1px solid #ddd; padding: 10px;">@Html.Raw(Model.Result)</div>
+            <script>
+                $('html, body').animate({ scrollTop: $(".result").offset().top - 60 }, 1000);
+            </script>
+        }
+        else
+        {
+            <form action="/contact-us" method="post" onsubmit="return validateRecaptcha();">
+                @{
+                    @Html.AntiForgeryToken()
+                    var validationSummary = Html.ValidationSummary(true);
+                    if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                    {
+                        <div class="message-error">@validationSummary</div>
+                    }
+                }
+                <div class="fieldset" style="margin-bottom: 0;">
+                    <div class="form-fields">
+                        <div style="padding: 0 25px 15px 25px;">
+                            <p>
+                                <strong>Enter your name, email, and questions below and we will reply during business hours (8am - 5pm EST, Monday through Friday).</strong>
+                            </p>
+                        </div>
+                        <div class="inputs">
+                            @Html.LabelFor(model => model.FullName)
+                            @Html.TextBoxFor(model => model.FullName, new {@class = "fullname", placeholder = T("ContactUs.FullName.Hint")})
+                            @Html.RequiredHint()
+                            @Html.ValidationMessageFor(model => model.FullName)
+                        </div>
+                        <div class="inputs">
+                            @Html.LabelFor(model => model.Email)
+                            @Html.TextBoxFor(model => model.Email, new {@class = "email", placeholder = T("ContactUs.Email.Hint")})
+                            @Html.RequiredHint()
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </div>
+
+                        <div class="inputs">
+                            @Html.LabelFor(model => model.Enquiry)
+                            @Html.TextAreaFor(model => model.Enquiry, new {@class = "enquiry", placeholder = T("ContactUs.Enquiry.Hint")})
+                            @Html.RequiredHint()
+                            @Html.ValidationMessageFor(model => model.Enquiry)
+                        </div>
+                        @if (Model.DisplayCaptcha)
+                        {
+                            <div class="captcha-box">
+                                @Html.Raw(Html.GenerateCaptcha())
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="buttons" style="margin-bottom: 35px;">
+                    <input type="submit" name="send-email" class="button-1 contact-us-button" value="@T("ContactUs.Button")"/>
+                </div>
+
+            </form>
+        }
+        <div class="mapouter" style="text-align: right;height:500px;width:100%;max-width:950px; margin: 0 auto;">
+            <div class="gmap_canvas" style="overflow: hidden;background: none !important;height:500px;width:100%;max-width:980px;">
+                <iframe style="width: 100%;max-width:980px;height:500px;" id="gmap_canvas" src="https://maps.google.com/maps?q=7975%20N%20Central%20Dr%2C%20Lewis%20Center%2C%20OH%2043035&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                <a href="https://www.embedgooglemap.net"></a>
+            </div>
+        </div>
+</div>
+</div>

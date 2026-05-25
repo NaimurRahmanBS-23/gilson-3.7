@@ -1,0 +1,55 @@
+﻿/* GLOBAL STYLES */
+
+.product-details-page .full-description,
+.product-details-page .product-specs-box, 
+.product-details-page .product-reviews-overview, 
+.product-details-page .product-no-reviews,
+.ui-tabs .product-specs-box .title {
+    display: none;
+}
+.ui-tabs .product-specs-box,
+.ui-tabs .product-reviews-page,
+.ui-tabs .full-description  {
+    display: block;
+}
+
+/* THEME STYLES */
+
+.product-essential {
+	margin-bottom: 20px;
+}
+.full-description, #common-questions {
+	margin-bottom: 0;
+    font-family: verdana,arial,helvetica,sans-serif;
+    color: #555;
+    font-size: 16px;
+    line-height: 1.5em;
+    text-align: left;
+}
+    .full-description a {
+        font-size: 15px;
+    }
+.product-specs-box {
+    margin-bottom: 0;
+    font-family: verdana,arial,helvetica,sans-serif;
+    color: #555;
+    font-size: 1.2em;
+    line-height: 1.5em;
+    text-align: left;
+}
+.product-specs-box .data-table {
+	margin-bottom: 10px;
+}
+
+    .product-specs-box .data-table caption {
+        background-color: #eee;
+        font-weight:700;
+    }
+
+.product-reviews-page .message-error{
+    margin:0;
+}
+
+.spec-name{
+    font-weight:700;
+}

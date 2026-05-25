@@ -1,0 +1,24 @@
+28.11.2017 21:38:28
+Feed - Google
+product.count=3723, duration=00:01:05.9054003
+
+28.11.2017 15:48:07
+Feed - Google
+product.count=3723, duration=00:01:02.7965301
+
+27.11.2017 22:16:54
+Feed - Google
+product.count=3723, duration=00:01:16.8487515
+
+21.11.2017 23:04:45
+Feed - Google
+product.count=3729, duration=00:14:01.2152591
+
+21.11.2017 22:32:33
+Feed - Google
+product.count=101, duration=00:00:23.2673132
+
+21.11.2017 22:30:47
+Feed - Google
+product.count=101, duration=00:00:27.2519121
+

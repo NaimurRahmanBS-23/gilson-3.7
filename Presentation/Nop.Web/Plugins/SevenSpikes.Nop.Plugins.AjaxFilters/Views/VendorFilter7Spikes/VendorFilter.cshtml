@@ -1,0 +1,74 @@
+﻿@** Copyright 2015 Seven Spikes Ltd. All rights reserved. (http://www.nop-templates.com)
+    * http://www.nop-templates.com/t/licensinginfo
+*@
+
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Common
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Domain
+@using SevenSpikes.Nop.Plugins.AjaxFilters.Models.VendorFilter
+
+@model VendorFilterModel7Spikes
+
+@{
+    Html.AddScriptParts("~/Plugins/SevenSpikes.Nop.Plugins.AjaxFilters/Scripts/VendorFilter.min.js");
+
+    string toggleStateClass = "toggleControl";
+    string toggleStateStyles = "";
+    if (Model.NopAjaxFiltersSettings.CloseVendorsFilterBox == true)
+    {
+        toggleStateClass = "toggleControl closed";
+        toggleStateStyles = "display: none;";
+    }
+
+    Func<int, HelperResult> vendorOptionsHtml =
+        @<text>
+            @foreach (VendorFilterItem vendorFilterItem in Model.VendorFilterItems)
+            {
+                string filterItemCssClass = "filterItemUnselected";
+
+                if (vendorFilterItem.FilterItemState == FilterItemState.Checked)
+                {
+                    filterItemCssClass = "filterItemSelected";
+                }
+
+                <li>
+                    <a class="@filterItemCssClass" data-option-id="@vendorFilterItem.Id">@vendorFilterItem.Name</a>
+                </li>
+            }
+        </text>;
+}
+
+<div class="block filter-block vendorFilterPanel7Spikes">
+    <div class="title">
+        <a class="@toggleStateClass">@T("Vendors")</a>
+        <a class="clearFilterOptions">@T("SevenSpikes.NopAjaxFilters.Client.Common.Clear")</a>
+    </div>
+    @if (Model.NopAjaxFiltersSettings.FiltersUIMode == FiltersUIMode.UseCheckboxes)
+    {
+        <div class="filtersGroupPanel" style="@toggleStateStyles">
+            <ul class="checkbox-list">
+                @vendorOptionsHtml(0)
+            </ul>
+        </div>
+    }
+    else if (Model.NopAjaxFiltersSettings.FiltersUIMode == FiltersUIMode.UseDropdowns)
+    {
+        <div class="filtersGroupPanel filtersDropDownPanel" style="@toggleStateStyles">
+            <div id="vendorFiltersDropDown" class="filtersDropDown">
+                <div class="filters-select-wrap">
+                    <p class="filters-select-text"></p>
+                </div>
+                <ul class="filters-select-dropdown">
+                    <li class="selected">
+                        <a class="allFilterDropDownOptions">@T("SevenSpikes.NopAjaxFilters.Client.Common.All")</a>
+                    </li>
+                    @vendorOptionsHtml(0)
+                </ul>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#vendorFiltersDropDown").jDropDown();
+            });
+        </script>
+    }
+</div>

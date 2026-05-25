@@ -1,0 +1,73 @@
+﻿@model CustomerOrderListModel
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+
+    //title
+    Html.AddTitleParts("Orders - My Gilson");
+}
+@using Nop.Web.Models.Customer
+@using Nop.Web.Models.Order;
+@section left
+{
+    @Html.Action("CustomerNavigation", "Customer", new { selectedTabId = CustomerNavigationEnum.Orders })
+}
+<div class="page account-page order-list-page">
+    <div class="page-title">
+        <h1>@T("Account.CustomerOrders")</h1>
+    </div>
+    <div class="page-body">
+        <div class="order-statuses">
+            <div class="title">
+                <strong>Orders by status: </strong>
+            </div>
+            <ul>
+                <li><a href="/order/history?status=1" style="font-weight:700;@if (string.IsNullOrEmpty(Request.QueryString["status"]) || Request.QueryString["status"] == "1"){<text>text-decoration:underline;</text>}">Pending Orders</a></li>
+                <li><a href="/order/history?status=2" style="font-weight:700;@if (Request.QueryString["status"] == "2"){<text>text-decoration:underline;</text>}">Open Order</a></li>
+                <li><a href="/order/history?status=3" style="font-weight:700;@if (Request.QueryString["status"] == "3"){<text>text-decoration:underline;</text>}">Completed Orders</a></li>
+            </ul>
+        </div>
+
+        @if (Model.Orders.Count > 0)
+        {
+            <div class="order-list">
+                @foreach (var order in Model.Orders)
+                {
+                    <div class="section order-item">
+                        <div class="title">
+                            <strong>@(order.OrderStatus == "Pending" ? "Web Order ID: " + order.Id : "Order #: " + order.GPOrderNumber)</strong>
+                        </div>
+                        <ul class="info">
+                            <li>Order Status: <span class="order-status @order.OrderStatusEnum.ToString().ToLowerInvariant()">@order.OrderStatus</span></li>
+                            <li>Order Date: <span class="order-date">@order.CreatedOn.ToString("MM/dd/yyyy")</span></li>
+                            <li>Order Total: <span class="order-total">@order.OrderTotal</span></li>
+                        </ul>
+                        <div class="buttons">
+                            @if (order.IsReturnRequestAllowed)
+                            {
+                                <input type="button" value="@T("Account.CustomerOrders.ReturnItems")" class="button-2 return-items-button" onclick="setLocation('@Url.RouteUrl("ReturnRequest", new {orderId = order.Id})')" />
+                            }
+                            <input type="button" value="Details" class="button-2 order-details-button" onclick="setLocation('/orderdetails/@(order.OrderStatus == "Pending" ? order.Id.ToString() : order.GPOrderNumber + (order.OrderStatus == "Open" ? "?status=2" : "?status=3"))')" />
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-data">
+                @if (string.IsNullOrEmpty(Request.QueryString["status"]) || Request.QueryString["status"] == "1")
+                {
+                    <p><h2>No Pending orders found.</h2></p>
+                }
+                else if (Request.QueryString["status"] == "2")
+                {
+                    <p><h2>No Open orders found.</h2></p>
+                }
+                else if (Request.QueryString["status"] == "3")
+                {
+                    <p><h2>No Completed orders found.</h2></p>
+                }
+            </div>
+        }
+    </div>
+</div>

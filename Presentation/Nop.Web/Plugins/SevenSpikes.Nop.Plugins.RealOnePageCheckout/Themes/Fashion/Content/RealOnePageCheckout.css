@@ -1,0 +1,723 @@
+input.ng-invalid.ng-dirty,
+textarea.ng-invalid.ng-dirty, 
+.has-error {
+    border: 1px solid #ff0000 !important;
+}
+.panel-group .panel .section{
+    border:none;
+    margin: 0 0 10px !important;
+    padding: 0 !important; 
+}
+.panel-group .section.estimate-shipping{
+    border: none;
+    background: none;
+}
+.panel-group .section.coupon-box,
+.panel-group .section.giftcard-box {
+    background: #ececec;
+    margin-bottom: 15px;
+}
+
+.fieldset .title, .section .title {
+    margin: 0;
+    padding: 10px;
+    font-size:16px;
+    font-weight:normal;
+}
+
+.billing-address-panel .section-body,
+.shipping-address-panel .section-body,
+.estimate-shipping-panel .section-body {
+    background: #ececec;
+    margin-bottom: 15px;
+    padding: 15px;
+    font-size: 15px;
+}
+.billing-address-panel .form-fields,
+.shipping-address-panel .form-fields {
+    background: none;
+    border: 0;
+    padding: 0;
+}
+.billing-address-panel .inputs label,
+.shipping-address-panel .inputs label{
+    display: inline-block;
+    font-weight: bold;
+    min-width:120px;
+    max-width: 300px;
+    white-space:nowrap;
+}
+.billing-address-panel .inputs input,
+.billing-address-panel .inputs select,
+.shipping-address-panel .inputs select,
+.shipping-address-panel .inputs input{
+    height: 32px;
+    padding: 0 5px;
+    width:300px;
+}
+.estimate-shipping .shipping-options, .shipping-results {
+    background: none;
+    border: none;
+    padding: 0;
+}
+.pick-up-in-store{
+    border:none;
+}
+.ropc .panel .estimate-shipping {
+    padding:0 0 15px;
+}
+.ropc .panel .estimate-shipping .section-body{
+    padding:15px;
+}
+.ropc .panel .shipping-options label{
+    width:100%;
+    max-width:300px;
+}
+.ropc .panel .inputs{
+    margin: 0 auto 10px;
+    max-width: 100%;
+    overflow: visible;
+    position: relative;
+    width: 300px;
+}
+.ropc .shipping-options .inputs{
+    max-width:95%;
+    width:300px;
+    margin:0 auto 10px;
+    overflow:visible;
+}
+.ropc .panel .inputs > span{
+    float:none;
+    margin:0;
+}
+.ropc .panel .shipping-options select{
+    width:300px;
+    max-width:100%;
+    float:none;
+}
+.ropc .panel .shipping-options input{
+    max-width:100%;
+    width:300px;
+    line-height:30px;
+    padding:0 5px;
+}
+.estimate-shipping .shipping-options .inputs > span {
+    position: absolute;
+    right: -8px;
+    top:34px;
+}
+.inputs .required{
+    position:absolute;
+    right:-8px;
+}     
+.panel-group-left .choose-address {
+    margin: 0 0 30px;
+}
+select {
+    max-width: 100%;
+    width:300px;
+    height: 32px;
+}
+.ropc table .quantity select{
+    width:40px;
+    height:36px;
+    border:1px solid #d6d6d6;
+}
+.estimate-shipping .hint {
+    margin: 0 0 10px;
+}
+.inputs span.ng-binding {
+    font-size: 12px;
+    display: block;
+    color: #c00;
+    margin: 5px 0 0;
+}
+.estimate-shipping .buttons {
+    margin: 20px 0 0;
+    text-align:center;
+}
+.estimate-shipping button {
+    font-size: 11px;
+    border: 0;
+    border-radius: 0;
+    background: #999;
+    height: 33px;
+    width:auto;
+    padding: 0 10px;
+    display: inline-block;
+	border: 1px solid #bbb;
+	border-top: 1px solid #ccc;
+	box-shadow: inset 0 1px 0 #fff;
+	background: #eee; /* Old browsers */
+	background: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eeeeee), color-stop(100%, #cccccc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc', GradientType=0 ); /* IE6-9 */
+	color: #666;
+	text-shadow: 1px 1px 0 #eee;
+	cursor: pointer;
+}
+.estimate-shipping button[disabled] {
+    opacity: .5;
+    cursor: default;
+}
+.estimate-shipping button:hover{
+    border-bottom: 1px solid #ccc;
+	box-shadow: inset 0 1px 0 #eee;
+	background: #ccc; /* Old browsers */
+	background: -moz-linear-gradient(top, #cccccc 0%, #eeeeee 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #cccccc), color-stop(100%, #eeeeee)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #cccccc 0%, #eeeeee 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #cccccc 0%, #eeeeee 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #cccccc 0%, #eeeeee 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #cccccc 0%, #eeeeee 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#eeeeee', GradientType=0 ); /* IE6-9 */
+}
+.estimate-shipping button[disabled]:hover{
+    box-shadow: inset 0 1px 0 #fff;
+    background: #eee; /* Old browsers */
+	background: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eeeeee), color-stop(100%, #cccccc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc', GradientType=0 ); /* IE6-9 */
+}
+.shipping-results {
+    margin: 15px 0 0;
+    padding:15px;
+    text-align: left;
+}
+
+.shipping-method .section-body,
+.payment-method .section-body,
+.checkout-attributes .section-body {
+    background: #ececec;
+    margin-bottom: 15px;
+    padding: 15px;
+    font-size: 15px;
+}
+.checkout-page .payment-info .info{
+}
+.shipping-method .method-list,
+.payment-method .method-list {
+    margin: 0;
+    padding:10px;
+}
+.shipping-method .method-list li,
+.payment-method .method-list li {
+	margin: 10px 0;
+	display: block;
+	width: auto !important;
+	padding: 0 !important;
+}
+.payment-method .use-reward-points {
+	margin: 0;
+	padding: 10px;
+}
+.payment-method .payment-logo {
+    display: inline-block;
+    padding: 0 !important;
+    margin: 0 15px 0 0 !important;
+}
+.payment-method .payment-details {
+    display: inline-block !important;
+    min-width: 0;
+}
+.shipping-method .method-name {
+    padding: 0;
+    background: none !important;
+}
+.payment-info {
+    margin: 0;
+}
+.payment-info .info {
+    padding: 0;
+}
+.payment-info .info p {
+	text-align: left;
+}
+
+.footable td .td-title{
+    display:none;
+}
+
+.cart td.quantity input {
+    height: 32px;
+    text-align:center;
+}
+
+.attribute-list > li {
+    border: 0;
+    display: block;
+    padding: 0;
+    margin: 0 0 10px;
+}
+.attribute-list .hidden {
+    display: none;
+}
+.attribute-name{
+    margin:0 0 20px;
+}
+.attribute-values .option-list label{
+    padding:10px 0;
+    display:inline-block;
+}
+.coupon-box-panel,
+.giftcard-box-panel{
+    /*max-width:370px;*/
+    margin:0 auto;
+} 
+.coupon-box-panel .section-body,
+.giftcard-box-panel .section-body {
+    /*border-top: 1px solid #e6e6e6;*/
+    /*background-color: #f9f9f9;*/
+    padding: 15px 5px;    
+}
+.coupon-box-panel .section-title.title,
+.giftcard-box-panel .section-title.title{
+    margin:0;
+}
+.coupon-box-panel .hint,
+.giftcard-box-panel .hint {
+    margin: 0 0 10px;
+}
+.coupon-box-panel .coupon-code,
+.giftcard-box-panel .coupon-code {
+    display: inline-block;
+    width:300px;
+    max-width:100%;
+}
+.coupon-box-panel input[type="text"],
+.giftcard-box-panel input[type="text"] {
+    float: left;
+    height: 32px;
+    padding:5px;
+    margin:0 0 2px;
+}
+.coupon-box-panel .coupon-code button,
+.giftcard-box-panel .coupon-code button {
+    font-size: 11px;
+    border: 0;
+    border-radius: 0;
+    background: #999;
+    height: 32px;
+    width:auto;
+    padding: 0 10px;
+    display: inline-block;
+	border: 1px solid #bbb;
+	border-top: 1px solid #ccc;
+	box-shadow: inset 0 1px 0 #fff;
+	background: #eee; /* Old browsers */
+	background: -moz-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eeeeee), color-stop(100%, #cccccc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #eeeeee 0%, #cccccc 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc', GradientType=0 ); /* IE6-9 */
+	color: #666;
+	text-shadow: 1px 1px 0 #eee;
+	cursor: pointer;
+}
+.coupon-box-panel .coupon-code button:hover,
+.giftcard-box-panel .coupon-code button:hover {
+    border-bottom: 1px solid #ccc;
+	box-shadow: inset 0 1px 0 #eee;
+	background: #ccc; /* Old browsers */
+	background: -moz-linear-gradient(top, #cccccc 0%, #eeeeee 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #cccccc), color-stop(100%, #eeeeee)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #cccccc 0%, #eeeeee 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #cccccc 0%, #eeeeee 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #cccccc 0%, #eeeeee 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #cccccc 0%, #eeeeee 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#eeeeee', GradientType=0 ); /* IE6-9 */
+}
+.coupon-box-panel .message,
+.giftcard-box-panel .message {
+    margin: 5px 0 0;
+    color: #c00;
+    font-size: 12px;
+}
+.coupon-box-panel .current-code {
+    margin: 5px 0 0;
+}
+
+.order-totals-panel {
+    max-width: 370px;
+    margin: 0 auto 20px;
+}
+.checkout-page .total-info {
+    background: #ececec;
+    padding: 15px;
+    color: #000;
+}
+.checkout-page .product-price{
+    font-size:12px;
+    font-weight:normal;
+}
+.coupon-box-panel .current-code button,
+.coupon-box-panel .current-code span,
+.total-info button {
+    display: inline-block;
+    vertical-align: middle;
+}
+.coupon-box-panel .current-code button,
+.total-info button {
+    width: 16px;
+    height: 16px;
+    background: #f9f9f9 url(delete.png) no-repeat center;
+    border: 0;
+    font-size: 0;
+}
+.total-info button {
+    margin-right: -10px;
+    position: relative;
+    z-index: 1;
+}
+.error-list {
+    color: #c00;
+    margin: 0 0 20px;
+}
+.checkout-page .buttons{
+    text-align:center;
+}
+.complete-button button {
+    display: inline-block;
+    width: auto;
+	border: 1px solid #111;
+	border-top: 1px solid #444;
+	box-shadow: inset 0 1px 0 #777;
+	background: #666; /* Old browsers */
+	background: -moz-linear-gradient(top, #666666 0%, #111111 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #666666), color-stop(100%, #111111)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #666666 0%, #111111 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #666666 0%, #111111 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #666666 0%, #111111 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #666666 0%, #111111 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#666666', endColorstr='#111111', GradientType=0 ); /* IE6-9 */
+	padding: 5px 10px;
+	font-weight: bold;
+	color: #fff;
+	text-transform: uppercase;
+	cursor: pointer;
+    text-shadow:none;
+}
+.complete-button button:hover{
+    box-shadow: inset 0 1px 0 #555;
+	background: #111; /* Old browsers */
+	background: -moz-linear-gradient(top, #111111 0%, #666666 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #111111), color-stop(100%, #666666)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #111111 0%, #666666 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #111111 0%, #666666 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #111111 0%, #666666 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #111111 0%, #666666 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#111111', endColorstr='#666666', GradientType=0 ); /* IE6-9 */
+
+}
+.order-summary-content .section-body{
+    margin-left:1px;
+    background: #ececec;
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+@media all and (max-width: 430px) {
+
+    .coupon-box-panel input[type="text"],
+    .giftcard-box-panel input[type="text"],
+    .coupon-box-panel .coupon-code button,
+    .giftcard-box-panel .coupon-code button {
+        width: 100%;
+    }
+
+}
+
+@media all and (max-width: 480px) {
+
+    .cart {
+        margin: 0 0 30px;
+    }
+    .order-totals-panel{
+        max-width:100%;
+    }
+    .coupon-box-panel input[type="text"],
+    .giftcard-box-panel input[type="text"], 
+    .coupon-box-panel .coupon-code button,
+    .giftcard-box-panel .coupon-code button{
+        float: none;
+        width:300px;
+    }
+    
+}
+
+@media all and (max-width: 768px) {
+    .section-body {
+        display: none;
+        margin-bottom: 15px;
+    }
+    .section .title {
+        color: #fff;
+        background-color: #000;
+        background-image: url('filterGroupToggleOff.png'), url('filterGroupToggleOff.png');
+        background-repeat: no-repeat, no-repeat;
+        background-position: 3% center, 97% center;
+    }
+}
+
+@media all and (max-width: 980px) {
+
+    .cart colgroup,
+    .cart thead, 
+    .cart .sku {
+        display: none;
+    }
+    .cart tr {
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        border-bottom: 1px solid #ccc;
+    }
+    .cart td,
+    .cart td.product {
+        display: block;
+        width: auto !important;
+        text-align: center;
+        border-bottom: none;
+    }
+    .cart td.subtotal,
+    .cart td.quantity {
+        border-top: none;
+    }
+    .cart td.subtotal {
+        height: 30px;
+    }
+    .cart td.quantity {
+        padding: 10px;
+    }
+
+}
+
+@media all and (min-width: 481px) {
+    
+    .cart tr {
+        margin-bottom: 2px;
+    }
+    .billing-address-panel .inputs label, 
+    .shipping-address-panel .inputs label{
+        width:41%;
+        min-width:0;
+        line-height:32px;
+        text-align:left;
+    }
+    .billing-address-panel .inputs input, 
+    .billing-address-panel .inputs select, 
+    .shipping-address-panel .inputs select, 
+    .shipping-address-panel .inputs input{
+        width:55%;
+        margin:0;
+    }
+    .billing-address-panel .form-fields,
+    .shipping-address-panel .form-fields{
+        width:300px;
+        max-width:100%;
+        margin:0 auto;
+    }
+    .coupon-box-panel input[type="text"],
+    .giftcard-box-panel input[type="text"]{
+        width:200px;
+    } 
+    .coupon-box-panel .coupon-code button, 
+    .giftcard-box-panel .coupon-code button{
+        width:95px;
+        overflow:hidden;
+    }
+
+}
+
+@media all and (min-width: 560px) and (max-width: 980px){
+
+    .cart tr {
+        float: left;
+        width: 49.6%;
+        margin: 0 0.2% 2px;
+    }
+    .cart tr:nth-child(2n+1) {
+        clear: both;
+    }
+    .cart td.product {
+        height: 45px;
+    }
+}
+@media all and (min-width: 769px) {
+    .ropc .section-body {
+        display: block !important;
+    }
+    .fieldset .title, .section .title {
+        text-align: center;
+        padding: 5px;
+    }
+    .shipping-method .method-list, 
+    .payment-method .method-list {
+        text-align: left;
+    }
+    .coupon-box-panel input[type="text"], 
+    .giftcard-box-panel input[type="text"] {
+        width: 236px;
+    }
+    .coupon-box-panel .section-title.title, 
+    .giftcard-box-panel .section-title.title{
+        text-align:left;
+    }
+    .coupon-box-panel .section-body, 
+    .giftcard-box-panel .section-body{
+        padding: 0;
+    }
+    .coupon-box-panel .coupon-code, 
+    .giftcard-box-panel .coupon-code{
+        width:100%;
+    }
+    .coupon-box-panel .coupon-code button, 
+    .giftcard-box-panel .coupon-code button{
+        width:110px;
+        overflow:hidden;
+        margin:0 0 0 5px;
+    }
+    .ropc .coupon-box-panel, 
+    .ropc .giftcard-box-panel {
+        width: 100%;
+        margin: -15px 0 15px;
+    }
+    .ropc .coupon-box-panel .section.coupon-box, 
+    .ropc .giftcard-box-panel .section.giftcard-box {
+        padding: 15px !important;
+    }
+    .payment-info .info td:first-child {
+        text-align: left !important;
+        margin: 0 0 10px !important;
+        padding-right: 10px;
+    }
+    .order-confirm {
+        text-align: center;
+    }
+
+}
+
+@media all and (min-width: 981px) {
+	
+	.ropc .panel-group-left {
+		width: 33%;
+	}
+	.ropc .panel-group-right-top,
+	.ropc .panel-group-right-middle,
+	.ropc .panel-group-right-bottom {
+		float: right;
+		width: 65%;
+	}
+	.cart .sku {
+		display: none;
+	}
+    .inputs > * {
+        margin:0;
+    }
+    .inputs > input[type='text']{
+        margin:0 10px 0 0;
+    }
+	.inputs > select{
+        width:136px;
+        padding:5px;
+        font-size:13px;
+    }
+    .inputs label {
+        display: block;
+        text-align: left;
+        margin: 0 0 5px;
+        width: auto;
+        font-size:11px;
+        font-weight:bold;
+    }
+    .billing-address-panel .inputs label, 
+    .shipping-address-panel .inputs label{
+        width:35%;
+    }
+	.billing-address-panel .inputs input, 
+    .billing-address-panel .inputs select, 
+    .shipping-address-panel .inputs select, 
+    .shipping-address-panel .inputs input{
+        margin:0 0 0 5px;
+        padding:0;
+        min-width:0;
+        max-width:none;
+        width:175px;
+    }
+	.pick-up-in-store .options{
+        margin:0 0 5px;
+    }
+	.ropc .panel .shipping-options input{
+        max-width:95%;
+    }
+	.payment-info .info tr {
+        text-align: left;
+        display: block;
+        margin: 0 0 5px;
+    }
+    .cart {
+        margin: 0 0 30px;
+    }
+	.td-title {
+        display: none !important;
+    }
+    .remove-product {
+        cursor: pointer;
+        border: none;
+        background: none;
+    }
+    .cart .product {
+        min-width: 0;
+    }
+	.footable-first-column .item-count {
+        display: none;
+    }
+	.ropc .giftcard-box-panel,
+    .ropc .coupon-box-panel{
+        width:49.2%;
+    }
+	.coupon-box-panel input[type="text"], 
+    .giftcard-box-panel input[type="text"] {
+        width: 145px;
+        height:20px;
+    }
+	.order-totals-panel {
+        max-width:none;
+        width:100%;
+        text-align: right;
+        float: right;
+    }
+    .terms-of-service {
+        padding: 0 !important;
+    }
+    .order-confirm,
+    .terms-of-service,
+    .complete-button {
+        clear: both;
+        text-align: right !important;
+    }  
+
+
+}
+
+/*@media all and (min-width: 1367px) {
+
+    .coupon-box-panel input[type="text"], 
+    .giftcard-box-panel input[type="text"], 
+    .coupon-box-panel .coupon-code button, 
+    .giftcard-box-panel .coupon-code button {
+        width: auto;
+    }
+
+}*/

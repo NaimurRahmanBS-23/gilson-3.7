@@ -1,0 +1,8 @@
+﻿@model IList<ProductOverviewModel>
+@using Nop.Web.Models.Catalog;
+@{  /*HACK: MSS - Exclude Verification Services using Product Ids*/
+    var productIds = new[] { 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943 };
+    var filtered = Model.Where(i => !productIds.Contains(i.Id));
+    //var filtered = Model.Where(i => (i.Name.ToLower().Contains("sieve") || i.Name.ToLower().Contains("tray")) && !i.Name.ToLower().Contains("verification"));
+}
+@if (filtered.Any()){<div class="related-products-grid product-grid"><div class="title"><strong id="rptitle">@T("Products.RelatedProducts")</strong></div><script language="javascript">var ap=[];if($('.full-description:contains("Accessories:")').length>0){ap.push('Accessories');}if($('.full-description:contains("Parts:")').length>0){ap.push('Parts');}if(ap.length>0){$('#rptitle').text(ap.join().replace(/,/g," / "));}</script><div class="item-grid">@foreach (var item in filtered){<div class="item-box">@Html.Partial("_ProductBox", item, new ViewDataDictionary { { "DoNotUseH2Tag", 1 } })</div>}</div></div>}

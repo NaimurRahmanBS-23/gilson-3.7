@@ -1,0 +1,220 @@
+﻿@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedRecModel
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+    <table class="adminContent">
+    @if (Model.Id > 0)
+    {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Id):
+            </td>
+            <td class="adminData">
+                @Model.Id.ToString()
+                @Html.ValidationMessageFor(model => model.Id)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.TypeFeedName):
+            </td>
+            <td class="adminData">
+                @Html.HiddenFor(model => model.TypeFeedId)
+                @Model.TypeFeedName
+                @Html.ValidationMessageFor(model => model.TypeFeedId)
+            </td>
+        </tr>  
+    }
+    else
+    {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.TypeFeedName):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.TypeFeedId, Model.AvailableTypeFeeds)
+                @Html.ValidationMessageFor(model => model.TypeFeedId)
+            </td>
+        </tr>   
+    }
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Name):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+        </tr>  
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AdminComment):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.AdminComment)
+                @Html.ValidationMessageFor(model => model.AdminComment)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ExportFileName):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.ExportFileName)
+                @Html.ValidationMessageFor(model => model.ExportFileName)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.UseStaticFileName):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.UseStaticFileName)
+                @Html.ValidationMessageFor(model => model.UseStaticFileName)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Compression):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Compression)
+                @Html.ValidationMessageFor(model => model.Compression)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.StoreName):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.StoreId, Model.AvailableStores)
+                @Html.ValidationMessageFor(model => model.StoreId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.LanguageName):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.LanguageId, Model.AvailableLanguages)
+                @Html.ValidationMessageFor(model => model.LanguageId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.CurrencyId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.CurrencyId, Model.AvailableCurrencies)
+                @Html.ValidationMessageFor(model => model.CurrencyId)
+            </td>
+        </tr>
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        @if (Model.showMerchantId)
+        {
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.MerchantId):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.MerchantId)
+                    @Html.ValidationMessageFor(model => model.MerchantId)
+                </td>
+            </tr>
+        }
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PriceMarkup):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PriceMarkup)
+                @Html.ValidationMessageFor(model => model.PriceMarkup)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ProductPictureSize):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.ProductPictureSize)
+                @Html.ValidationMessageFor(model => model.ProductPictureSize)
+            </td>
+        </tr>
+        @if (Model.AvailableDefaultMapCategories.Count > 1)
+        {
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.DefaultMapCategory):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.DefaultMapCategory, Model.AvailableDefaultMapCategories, new { style = "width:600px;" })
+                    @Html.ValidationMessageFor(model => model.DefaultMapCategory)
+                </td>
+            </tr>
+        }
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.IsActive):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.IsActive)
+                @Html.ValidationMessageFor(model => model.IsActive)
+            </td>
+        </tr>
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        @if (Model.IsRunning)
+        { 
+            <tr>
+                <td class="adminTitle">
+                </td>
+                <td class="adminData">
+                    <div  style="color:red">@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.Running")</div>
+                </td>
+           </tr>
+        }
+        @if (Model.FeedFile!=null)
+        {
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(m => m.FeedFile):
+                </td>
+                <td class="adminData">
+                    (@Model.FeedFile.Type) <a href="@Model.FeedFile.FileUrl" target="_blank">@Model.FeedFile.FileUrl</a>
+                </td>
+            </tr>
+        }
+        @if (Model.ZipFile!=null)
+        {
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(m => m.ZipFile):
+                </td>
+                <td class="adminData">
+                    (@Model.ZipFile.Type) <a href="@Model.ZipFile.FileUrl" target="_blank">@Model.ZipFile.FileUrl</a>
+                </td>
+            </tr>
+        }
+        @if (Model.ReportFile!=null)
+        {
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(m => m.ReportFile):
+                </td>
+                <td class="adminData">
+                    (@Model.ReportFile.Type) <a href="@Model.ReportFile.FileUrl" target="_blank">@Model.ReportFile.FileUrl</a>
+                </td>
+            </tr>
+        }
+    </table>

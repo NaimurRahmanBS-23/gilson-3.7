@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SupportedWidgetZones>
+  <WidgetZone>nitro_logo</WidgetZone>
+  <WidgetZone>head_html_tag_after_css_files_nitro</WidgetZone>
+  <WidgetZone>home_page_manufacturers_nitro</WidgetZone>
+</SupportedWidgetZones>

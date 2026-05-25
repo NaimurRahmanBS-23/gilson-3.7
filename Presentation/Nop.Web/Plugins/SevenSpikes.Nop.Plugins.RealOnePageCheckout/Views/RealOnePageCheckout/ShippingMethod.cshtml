@@ -1,0 +1,87 @@
+﻿<div class="section shipping-method" ng-controller="ShippingMethodsController as vm" ng-show="vm.configData.isVisible">
+
+    @Html.Partial("_AjaxLoader", "shipping-methods-loader")
+
+    <div class="section-title title">
+        <strong>{{title}}</strong>
+    </div>
+
+    <div class="section-body">
+
+        @Html.Widget("op_checkout_shipping_method_top")
+        
+        <div style="margin-bottom: 20px;"><strong>We make every effort to ship orders as quickly as possible. A Customer Service Specialist will email you within 24 business hours with estimated delivery times.</strong></div>
+
+        <div id="multiple-locations" style="margin-bottom: 20px;" ng-show="vm.shippingData.notifyCustomerAboutShippingFromMultipleLocations">Your shopping cart contains items that ship from multiple locations. <span id="require-freight" style="display: none;">Some items are large and require motor freight.</span> These items will arrive separately.</div>
+
+        <ul class="method-list">
+            <li ng-repeat="shipping in vm.shippingData.shippingMethods track by $index">
+                <div class="method-name">
+                    <div class="shipping-details">
+                        <input ng-model="vm.shippingData.selectedShippingMethod" id="shippingmethod_{{$index}}" class="shipping-method-radio" type="radio" name="shippingmethod" ng-value="shipping"/>
+                        <label ng-if="shipping.name.indexOf('Collect') == 0" for="shippingmethod_{{$index}}" class="shipping-method-name">Collect (TBD)</label>
+                        <label ng-if="shipping.name.indexOf('Hawaii') == 0 || shipping.name.indexOf('International') == 0" for="shippingmethod_{{$index}}" class="shipping-method-name">{{shipping.name}} (TBD)</label>
+                        <label ng-if="shipping.name.indexOf('Hawaii') == -1 && shipping.name.indexOf('International') == -1 && shipping.name.indexOf('Collect') == -1" for="shippingmethod_{{$index}}" class="shipping-method-name">{{shipping | prepareName: '@T("Checkout.SelectShippingMethod.MethodAndFee")'}}</label>
+                    </div>
+                </div>
+                <div class="method-description" ng-bind-html="vm.renderShippingDescription(shipping.description)" ng-show="shipping.description.length > 0"></div>
+            </li>
+            <li ng-repeat="warning in vm.shippingData.warnings">
+                <div ng-if="warning.indexOf('retry') != -1" class="message-error">
+                    <p style="margin-bottom: 10px;">The system encountered a problem retrieving shipping rates.</p>
+                    <p style="margin-bottom: 10px;"><span style="text-decoration: underline;">Please verify your shipping information</span> and click the button below to retry.
+                    </p>
+                    <div style="margin-bottom: 10px;"><input id="retry-shipping-methods" type="button" value="Click Here To Retry" class="button-1"/>
+                    </div>
+                    <p style="color: #555; font-weight: 700;">If you continue to receive this message, <a href="/contact-us" target="_blank" style="text-decoration: underline;">click here to contact us for assistance</a>.
+                    </p>
+                </div>
+                <div ng-if="warning.indexOf('retry') == -1" class="message-error">{{warning}}</div>
+            </li>
+        </ul>
+
+        @Html.Widget("op_checkout_shipping_method_bottom")
+    </div>
+    <script language="javascript">
+        var smc=0;
+        $(document).ready(function () {
+            $(".method-list").livequery(function () {
+                if (smc===0) {
+                    smc=1;
+                    var smcInterval = setInterval(function () {
+                        if ($('.shipping-method-name').length > 0) {
+                            if ($('.shipping-method-name:contains("Freight")').length > 0) {
+                                $('#lift-gate').removeClass('ng-hide');
+                                $('#require-freight').show();
+                            } else {
+                                $('#lift-gate').addClass('ng-hide');
+                                $('#require-freight').hide();
+                            }
+                            if ($('.shipping-method-name:contains("Collect")').prev('.shipping-method-radio')
+                                .prop('checked')) {
+                                $("#collect-shipping").removeClass('ng-hide');
+                            } else {
+                                $("#collect-shipping").addClass('ng-hide');
+                            }
+
+                            if ($("#billingStateProvince").val() == 9) {
+                                if ($("#terms-of-service").prop('checked') == true) { $("#terms-of-service").click(); }
+                                $(".terms-of-service").show();
+                            }
+                            else {
+                                if ($("#terms-of-service").prop('checked') == false) { $("#terms-of-service").click(); }
+                                $(".terms-of-service").hide();
+                            }
+
+                            clearInterval(smcInterval);
+                        } else {
+                            $('#lift-gate').addClass('ng-hide');
+                            $('#require-freight').hide();
+                            $("#collect-shipping").addClass('ng-hide');
+                        }
+                    }, 1000);
+                }
+            });
+        });
+    </script>
+</div>

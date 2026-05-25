@@ -1,0 +1,8 @@
+﻿@model Nop.Plugin.Tax.AvaTax.Models.ConfigurationModel
+@using Nop.Web.Framework;
+@using Nop.Web.Framework.UI;
+@{
+    Layout = "_AdminLayout.cshtml";
+    ViewBag.Title = "Avatax";
+}                
+@Html.Partial("~/Plugins/Tax.AvaTax/Views/AvaTax/Configure.cshtml", Model)

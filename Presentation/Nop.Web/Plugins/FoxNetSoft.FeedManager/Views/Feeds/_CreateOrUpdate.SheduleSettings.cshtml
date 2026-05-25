@@ -1,0 +1,92 @@
+﻿@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedRecModel
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+<style>
+    td.shedulerow {
+        vertical-align: top;
+    }
+    ul.shedulelist {
+        list-style: outside none none;
+        padding-left: 0;
+    }
+    ul.shedulelist.floated {
+        width: 560px;
+    }
+    ul.shedulelist li.selected {
+        background-color: #fff9c8;
+        border-color: #afafaf;
+    }
+    ul.shedulelist.floated li {
+        float: left;
+        margin-right: 5px !important;
+        width: 80px;
+    }
+    ul.shedulelist li {
+        background-color: #efefef;
+        border: 1px solid #cfcfcf;
+        margin: 2px;
+        padding: 2px 3px;
+        position: relative;
+        width: 280px;
+    }
+    ul.shedulelist li input{
+        vertical-align: middle;
+    }
+</style>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("ul.shedulelist input").click(toggleSheduleCheckBox);
+                toggleSheduleCheckBox();
+            });
+
+            function toggleSheduleCheckBox() {
+                if ($(this).is(':checked')) {
+                    $(this).parent().addClass("selected");
+                }
+                else {
+                    $(this).parent().removeClass("selected");
+                }
+            }
+        </script>     
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SheduleSettings.Enabled):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.SheduleSettings.Enabled)
+                @Html.ValidationMessageFor(model => model.SheduleSettings.Enabled)
+            </td>
+        </tr>
+        <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+        <tr>
+            <td class="shedulerow" style="width:280px">
+                 <ul class="shedulelist">
+                   @foreach (var dayweek in Model.SheduleSettings.DayWeeks)
+                   {
+                      <li class="@(dayweek.Selected?"selected":"")">
+                         <input id="shedulesettings_dayweek_@(dayweek.Value)" type="checkbox" name="shedulesettings_dayweek" value="@dayweek.Value" checked="@dayweek.Selected"/>
+                         <label for="shedulesettings_dayweek_@(dayweek.Value)">@dayweek.Text</label>
+                      </li>
+                   }
+                 </ul>
+            </td>
+            <td class="shedulerow">
+               Times are expressed in UTC (Coordinated Universal Time)<br />
+               <ul class="shedulelist floated">
+               @foreach (var time in Model.SheduleSettings.Times)
+               {                                    
+                  <li class="@(time.Selected?"selected":"")">
+                     <input id="shedulesettings_time_@(time.Value)" type="checkbox" name="shedulesettings_time" value="@time.Value" checked="@time.Selected"/>
+                     <label for="shedulesettings_time_@(time.Value)">@time.Text</label>
+                  </li>
+               }
+               </ul>
+            </td>
+        </tr>
+     </table>
+

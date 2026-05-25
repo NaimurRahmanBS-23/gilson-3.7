@@ -1,0 +1,382 @@
+﻿@model OrderDetailsModel
+@using Nop.Web.Models.Order
+@{
+    if (Model.IsPartial)
+    {
+        Layout = "";
+    }
+    else
+    {
+        Layout = !Model.PrintMode ? "~/Views/Shared/_ColumnsOne.cshtml" : "~/Views/Shared/_Print.cshtml";
+        //title
+        Html.AddTitleParts(T("Order.OrderInformation").Text);
+    }
+}
+@if (Model.PrintMode)
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.print();
+        });
+    </script>
+}
+<div class="page order-details-page">
+@if (!Model.PrintMode)
+{
+    <div class="page-title">
+        <h1>@T("Order.OrderInformation")</h1>
+        @if (Model.OrderStatus == "Pending" || Model.CatalogOnly)
+        {
+            <a href="@Url.RouteUrl("PrintOrderDetails", new {orderId = Model.Id})" target="_blank" class="button-2 print-order-button">@T("Order.Print")</a>
+        }
+        else
+        {
+            <a href="@Url.RouteUrl("PrintOrderDetails", new {orderId = Model.GilsonOrderNumber})" target="_blank" class="button-2 print-order-button">@T("Order.Print")</a>
+        }
+        @if (!Model.IsPartial)
+        {
+            var status = "";
+            if (!string.IsNullOrEmpty(Request.QueryString["status"]))
+            {
+                status = "?status=" + Request.QueryString["status"];
+            }
+            <a href="/order/history/@status" class="button-2">Return to Orders</a>
+        }
+    </div>
+}
+<div class="page-body">
+@Html.Widget("orderdetails_page_top", Model.Id)
+<div class="order-overview">
+    <div class="order-number">
+        @if (Model.OrderStatus == "Pending" || Model.CatalogOnly)
+        {
+            <strong>Web Order ID: @Model.Id</strong>
+        }
+        else
+        {
+            <strong>Order #: @Model.GilsonOrderNumber</strong>
+        }
+    </div>
+    <div class="order-details"><span>Order Date: @Model.CreatedOn.ToString("D")</span></div>
+    <div class="order-total">Order Status: @Model.OrderStatus</div>
+    <div class="order-total">Order Total: <strong>@Model.OrderTotal</strong></div>
+    @if (!string.IsNullOrWhiteSpace(Model.GilsonCustomerNumber))
+    {
+        <div class="order-details"><span>Customer #: @Model.GilsonCustomerNumber</span></div>
+    }
+    @Html.Widget("orderdetails_page_overview", Model.Id)
+</div>
+<div class="order-details-area">
+    <table>
+        <tbody>
+        <tr>
+            @if (!Model.CatalogOnly)
+            {
+                <td>
+                    <ul class="billing-info">
+                        @if (Model.TrialDownloadOnly)
+                        {
+                            <li class="title"><strong>Customer Information</strong></li>    
+                        }
+                        else
+                        {
+                            <li class="title"><strong>Billing Address</strong></li>    
+                        }
+                        <li class="name">@Model.BillingAddress.FirstName @Model.BillingAddress.LastName</li>
+                        @if (!String.IsNullOrEmpty(Model.BillingAddress.Company))
+                        {
+                            <li class="company">@Model.BillingAddress.Company</li>
+                        }
+                        @if (Model.BillingAddress.StreetAddressEnabled)
+                        {
+                            <li class="address1">@Model.BillingAddress.Address1</li>
+                        }
+                        @if (!String.IsNullOrEmpty(Model.BillingAddress.Address2))
+                        {
+                            <li class="address2">@Model.BillingAddress.Address2</li>
+                        }
+                        <li class="city-state-zip">@Model.BillingAddress.City, @Model.BillingAddress.StateProvinceName @Model.BillingAddress.ZipPostalCode</li>
+                        @if (!String.IsNullOrEmpty(Model.BillingAddress.CountryName))
+                        {
+                            <li class="country">@Model.BillingAddress.CountryName</li>
+                        }
+
+                        @if ((Model.BillingAddress.PhoneEnabled && !String.IsNullOrEmpty(Model.BillingAddress.PhoneNumber)) || (Model.BillingAddress.FaxEnabled && !String.IsNullOrEmpty(Model.BillingAddress.FaxNumber)))
+                        {
+                            if (Model.TrialDownloadOnly)
+                            {
+                                <li class="title"><strong>Contact Information</strong></li>
+                            }
+                            else
+                            {
+                                <li class="title"><strong>Billing Contact Information</strong></li>
+                            }
+                            <li class="email">@T("Order.Email"): @Model.BillingAddress.Email</li>
+                            <li class="phone">@T("Order.Phone"): @Model.BillingAddress.PhoneNumber</li>
+                        }
+
+                        @if (!String.IsNullOrEmpty(Model.PaymentMethod))
+                        {
+                            <li class="title"><strong>@T("Order.Payment")</strong></li>
+                            <li class="payment-method">
+                                <span class="label">@T("Order.Payment.Method"): </span>
+                                <span class="value">@Model.PaymentMethod</span>
+                            </li>
+                        }
+                    </ul>
+                </td>
+            }
+            @if (Model.IsShippable)
+            {
+                <td>
+                    <ul class="shipping-info">
+                        <li class="title"><strong>@T("Order.ShippingAddress")</strong></li>
+                        <li class="name">@Model.ShippingAddress.FirstName @Model.ShippingAddress.LastName</li>
+                        @if (Model.ShippingAddress.CompanyEnabled && !String.IsNullOrEmpty(Model.ShippingAddress.Company))
+                        {
+                            <li class="company">@Model.ShippingAddress.Company</li>
+                        }
+                        @if (Model.ShippingAddress.StreetAddressEnabled)
+                        {
+                            <li class="address1">@Model.ShippingAddress.Address1</li>
+                        }
+                        @if (Model.ShippingAddress.StreetAddress2Enabled && !String.IsNullOrEmpty(Model.ShippingAddress.Address2))
+                        {
+                            <li class="address2">@Model.ShippingAddress.Address2</li>
+                        }
+                        <li class="city-state-zip">@Model.ShippingAddress.City, @Model.ShippingAddress.StateProvinceName @Model.ShippingAddress.ZipPostalCode</li>
+                        <li class="country">@Model.ShippingAddress.CountryName</li>
+
+                        @if ((Model.ShippingAddress.PhoneEnabled && !String.IsNullOrEmpty(Model.ShippingAddress.PhoneNumber)) || (Model.ShippingAddress.FaxEnabled && !String.IsNullOrEmpty(Model.ShippingAddress.FaxNumber)))
+                        {
+                            <li class="title"><strong>Shipping Contact Information</strong></li>
+                            <li class="email">@T("Order.Email"): @Model.ShippingAddress.Email</li>
+                            <li class="phone">@T("Order.Phone"): @Model.ShippingAddress.PhoneNumber</li>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.ShippingMethod))
+                        {
+                            <li class="title"><strong>@T("Order.Shipping")</strong></li>
+                            <li class="shipping-method">
+                                <span class="label">@T("Order.Shipping.Name"): </span>
+                                <span class="value">@Model.ShippingMethod</span>
+                            </li>
+                        }
+                    </ul>
+                </td>
+            }
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+@if (Model.Items.Count > 0)
+{
+    var invoices = Model.Items.Any(i => i.InvoiceNumber != null);
+    @Html.Widget("orderdetails_page_beforeproducts", Model.Id)
+    <div class="section products">
+        <div class="table-wrapper">
+            <table class="data-table">
+                <colgroup>
+                    <col />
+                    @if (invoices)
+                    {
+                        <col width="1" />
+                    }
+                    <col width="1" />
+                    <col />
+                    <col width="1" />
+                    <col width="1" />
+                    <col width="1" />
+                </colgroup>
+                <thead>
+                <tr>
+                    <th><span class="item-count">#</span></th>
+                    @if (invoices)
+                    {
+                        <th data-hide="w410, w480, w580">Invoice #</th>
+                    }
+                    <th class="sku" data-hide="w410, w480, w580, w768">Model</th>
+                    <th class="name">Item</th>
+                    <th class="price" data-hide="w410, w480">Price</th>
+                    <th class="quantity" data-hide="w410, w480">Qty</th>
+                    <th class="total">Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                @{var counter = 0;}
+                @foreach (var item in Model.Items)
+                {
+                    counter++;
+                    <tr>
+                        <td><span class="item-count">@counter</span></td>
+                        @if (invoices)
+                        {
+                            <td class="invoice">
+                                @if (!string.IsNullOrEmpty(item.InvoiceNumber))
+                                {
+                                    <a href="/invoicedetails/@(item.InvoiceNumber)">@item.InvoiceNumber</a>
+                                }
+                            </td>
+                        }
+                        <td class="sku">
+                            <span class="sku-number">@item.Sku</span>
+                        </td>
+                        <td class="item-name">
+                            @if (string.IsNullOrWhiteSpace(item.ProductSeName))
+                            {
+                                <span>@item.ProductName</span>
+                            }
+                            else
+                            {
+                                <a class="go-to-page" href="@Url.RouteUrl("Product", new {SeName = item.ProductSeName})">@item.ProductName</a>
+                            }
+                            @if (item.DownloadId > 0)
+                            {
+                                <div class="download">
+                                    <br />
+                                    <a href="@Url.RouteUrl("GetDownload", new {orderItemId = item.OrderItemGuid})">(Click here to download)</a>
+                                </div>
+                            }
+                            @if (!String.IsNullOrEmpty(item.AttributeInfo))
+                            {
+                                <div class="attributes">
+                                    @Html.Raw(item.AttributeInfo)
+                                </div>
+                            }
+                            @Html.Widget("orderdetails_product_line", item.Id)
+                        </td>
+                        <td class="unit-price">
+                            <label class="td-title">@T("Order.Product(s).Price"):</label>
+                            <span class="product-unit-price">@item.UnitPrice</span>
+                        </td>
+                        <td class="quantity">
+                            <label class="td-title">@T("Order.Product(s).Quantity"):</label>
+                            <span class="product-quantity">@item.Quantity</span>
+                        </td>
+                        <td class="total">
+                            <label class="td-title">@T("Order.Product(s).Total"):</label>
+                            <span class="product-subtotal">@item.SubTotal</span>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        @Html.Widget("orderdetails_page_afterproducts", Model.Id)
+    </div>
+}
+<div class="section totals">
+    <div class="total-info">
+        <table class="cart-total">
+            <tbody>
+            <tr>
+                <td class="cart-total-left">
+                    <label>@T("Order.SubTotal"):</label>
+                </td>
+                <td class="cart-total-right">
+                    <span>@Model.OrderSubtotal</span>
+                </td>
+            </tr>
+            @if (!string.IsNullOrEmpty(Model.OrderSubTotalDiscount))
+            {
+                <tr>
+                    <td class="cart-total-left">
+                        <label>@T("Order.SubTotalDiscount"):</label>
+                    </td>
+                    <td class="cart-total-right">
+                        <span>@Model.OrderSubTotalDiscount</span>
+                    </td>
+                </tr>
+            }
+            @if (Model.IsShippable)
+            {
+                <tr>
+                    <td class="cart-total-left">
+                        <label>@T("Order.Shipping"):</label>
+                    </td>
+                    <td class="cart-total-right">
+                        <span>@Model.OrderShipping</span>
+                    </td>
+                </tr>
+            }
+            @if (!string.IsNullOrEmpty(Model.PaymentMethodAdditionalFee))
+            {
+                <tr>
+                    <td class="cart-total-left">
+                        <label>@T("Order.PaymentMethodAdditionalFee"):</label>
+                    </td>
+                    <td class="cart-total-right">
+                        <span>@Model.PaymentMethodAdditionalFee</span>
+                    </td>
+                </tr>
+            }
+            @if (Model.DisplayTaxRates && Model.TaxRates.Count > 0)
+            {
+                foreach (var taxRate in Model.TaxRates)
+                {
+                    <tr>
+                        <td class="cart-total-left">
+                            <label>@string.Format(T("Order.TaxRateLine").Text, taxRate.Rate):</label>
+                        </td>
+                        <td class="cart-total-right">
+                            <span>@taxRate.Value</span>
+                        </td>
+                    </tr>
+                }
+            }
+            @if (Model.DisplayTax)
+            {
+                <tr>
+                    <td class="cart-total-left">
+                        <label>@T("Order.Tax"):</label>
+                    </td>
+                    <td class="cart-total-right">
+                        <span>@Model.Tax</span>
+                    </td>
+                </tr>
+            }
+            @if (!string.IsNullOrEmpty(Model.OrderTotalDiscount))
+            {
+                <tr>
+                    <td class="cart-total-left">
+                        <label>@T("Order.TotalDiscount"):</label>
+                    </td>
+                    <td class="cart-total-right">
+                        <span>@Model.OrderTotalDiscount</span>
+                    </td>
+                </tr>
+            }
+            @if (Model.RedeemedRewardPoints > 0)
+            {
+                <tr>
+                    <td class="cart-total-left">
+                        <label>@string.Format(T("Order.RewardPoints").Text, Model.RedeemedRewardPoints):</label>
+                    </td>
+                    <td class="cart-total-right">
+                        <span>@Model.RedeemedRewardPointsAmount</span>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td class="cart-total-left">
+                    <label>@T("Order.OrderTotal"):</label>
+                </td>
+                <td class="cart-total-right">
+                    <span><strong>@Model.OrderTotal</strong></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+@Html.Widget("orderdetails_page_bottom", Model.Id)
+</div>
+</div>
+
+@if (Model.IsPartial)
+{    
+    <script>gtag('event', 'conversion', {'send_to': 'AW-1020377540/68LsCKex5FkQxPPG5gM','value': @Model.OrderSubtotal.Replace("$","").Replace(",",""),'currency': 'USD','transaction_id': '@Model.Id'});</script>
+    @*var customerEmail = !string.IsNullOrEmpty(WorkContext.CurrentCustomer.Email) ? WorkContext.CurrentCustomer.Email : Model.BillingAddress.Email;    
+    <script type="text/javascript" src="//static.criteo.net/js/ld/ld.js" async="true"></script><script type="text/javascript">var deviceType = /iPad/.test(navigator.userAgent) ? "t" : /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Silk/.test(navigator.userAgent) ? "m" : "d";window.criteo_q = window.criteo_q || [];window.criteo_q.push({ event: "setAccount", account: 50375 },{ event: "setEmail", email: "@customerEmail" },{ event: "setSiteType", type: deviceType },{ event: "trackTransaction", id: "@Model.Id", item: [@{var lastItem = Model.Items.Last();foreach (var item in Model.Items){<text>{ id: "@item.ProductId", price: @item.UnitPrice.Replace("$","").Replace(",", ""), quantity: @item.Quantity }</text>if (!item.Equals(lastItem)){<text>,</text>}}}]});</script>*@
+}

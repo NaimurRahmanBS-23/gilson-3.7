@@ -1,0 +1,8 @@
+﻿Group: nopTools
+FriendlyName: nopTools Payment Director
+SystemName: NopTools.PaymentDirector
+Version: 1.18
+SupportedVersions: 3.70
+Author: nopTools
+DisplayOrder: 1
+FileName: Nop.Plugin.NopTools.PaymentDirector.dll

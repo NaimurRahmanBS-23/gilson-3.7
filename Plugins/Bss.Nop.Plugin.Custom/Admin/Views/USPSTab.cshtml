@@ -1,0 +1,42 @@
+﻿@using Nop.Web.Framework
+@model Bss.Nop.Plugin.Custom.Admin.Models.USPSTabModel
+<div class="clearfix">
+    <div class="col-md-6">
+        Can ship USPS?&nbsp;&nbsp;@Html.EditorFor(model => model.USPS)
+    </div>
+</div>
+<script type="text/javascript">
+    function saveUSPS() {
+ 
+    }
+
+    $(function() {
+ 
+        // Hook the save button at the top of the page
+        $("#USPS").click(function() {
+            var isChecked = 'False';
+            if ($(this).is(':checked')) {
+                isChecked = 'True';
+            } else {
+                isChecked = 'False';
+            }
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: '@(Url.RouteUrl("Bss.Nop.Plugin.Custom.Admin.SaveUSPSConfig"))',
+                data: {
+                    isUSPS: isChecked,
+                    productId: @Model.ProductId,
+                },
+                success: function(result) {
+                   
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    var json = $.parseJSON(xhr.responseText);
+                    alert(json.errorMessage);
+                }
+            });
+        });
+    });   
+</script>

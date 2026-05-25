@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFeedAttribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FeedAttribute>
+    <Id>1</Id>
+    <FeedCaption>merchant_ref</FeedCaption>
+    <FeedName>merchant_ref</FeedName>
+    <FieldNameCode>parentgroupedproductid</FieldNameCode>
+    <ConvertValues />
+    <CharsLimit></CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>2</Id>
+    <FeedCaption>Retailer Product ID</FeedCaption>
+    <FeedName>merchant_id</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>id</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>3</Id>
+    <FeedCaption>EAN code (or UPC) of product</FeedCaption>
+    <FeedName>upc_ean</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>gtin</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit>13</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>4</Id>
+    <FeedCaption>Manufacturer product ID</FeedCaption>
+    <FeedName>manufacturer_id</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>manufacturerpartnumber</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit>32</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>5</Id>
+    <FeedCaption>Offer page URL</FeedCaption>
+    <FeedName>product_url</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>url</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>6</Id>
+    <FeedCaption>Product image URL</FeedCaption>
+    <FeedName>image_url</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>picture</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit>255</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>7</Id>
+    <FeedCaption>Offer final sales price</FeedCaption>
+    <FeedName>price</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>price</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>8</Id>
+    <FeedCaption>Base price of product before promotion (Old price)</FeedCaption>
+    <FeedName>regular_price</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>oldprice</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>9</Id>
+    <FeedCaption>Shipping costs</FeedCaption>
+    <FeedName>shipping_cost</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode />
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>10</Id>
+    <FeedCaption>Specific and concise offer name</FeedCaption>
+    <FeedName>designation</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>name</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit>255</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>11</Id>
+    <FeedCaption>Detailed and complete offer description (with feature)</FeedCaption>
+    <FeedName>description</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>fulldescription</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <UseCDATA>true</UseCDATA>
+    <ActionId>2</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>12</Id>
+    <FeedCaption>Offer category (Breadcrumb)</FeedCaption>
+    <FeedName>category</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>categorybreadcrumb</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit>128</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>13</Id>
+    <FeedCaption>Product Brand</FeedCaption>
+    <FeedName>brand</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode>manufacturer</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit>40</CharsLimit>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>14</Id>
+    <FeedCaption>Product availability</FeedCaption>
+    <FeedName>in_stock</FeedName>
+    <FieldNameCode>stockstatus</FieldNameCode>
+    <ConvertValues>
+      <ConvertValue>
+        <Id>1</Id>
+        <OldValue>InStock</OldValue>
+        <NewValue>Y</NewValue>
+      </ConvertValue>
+      <ConvertValue>
+        <Id>2</Id>
+        <OldValue>OutOfStock</OldValue>
+        <NewValue>N</NewValue>
+      </ConvertValue>
+      <ConvertValue>
+        <Id>3</Id>
+        <OldValue>Preorder</OldValue>
+        <NewValue>R</NewValue>
+      </ConvertValue>
+    </ConvertValues>
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>15</Id>
+    <FeedCaption>Number of products in stock</FeedCaption>
+    <FeedName>availability</FeedName>
+    <Prefix />
+    <DefaultValue>0</DefaultValue>
+    <FieldNameCode>stockquantity</FieldNameCode>
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>16</Id>
+    <FeedCaption>Delivery time</FeedCaption>
+    <FeedName>stock_detail</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode />
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>17</Id>
+    <FeedCaption>Product unit price</FeedCaption>
+    <FeedName>unit_price</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode />
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>18</Id>
+    <FeedCaption>Product’s margin (tax not included)</FeedCaption>
+    <FeedName>merchant_margin</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode />
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>19</Id>
+    <FeedCaption>Ecotax amount</FeedCaption>
+    <FeedName>ecotax</FeedName>
+    <Prefix />
+    <DefaultValue />
+    <FieldNameCode />
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>true</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>20</Id>
+    <FeedCaption>Product visible or not</FeedCaption>
+    <FeedName>item_display</FeedName>
+    <Prefix />
+    <DefaultValue>1</DefaultValue>
+    <FieldNameCode />
+    <Suffix />
+    <ConvertValues />
+    <CharsLimit />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+  <FeedAttribute>
+    <Id>21</Id>
+    <FeedCaption>Condition</FeedCaption>
+    <FeedName>condition</FeedName>
+    <DefaultValue>0</DefaultValue>
+    <FieldNameCode />
+    <Required>false</Required>
+    <IgnoreNullOrEmpty>false</IgnoreNullOrEmpty>
+    <ActionId>0</ActionId>
+    <AdvancedField>true</AdvancedField>
+  </FeedAttribute>
+</ArrayOfFeedAttribute>

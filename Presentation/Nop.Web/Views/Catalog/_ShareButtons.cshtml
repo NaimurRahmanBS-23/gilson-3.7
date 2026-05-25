@@ -1,0 +1,9 @@
+﻿@model string
+
+@if (!String.IsNullOrWhiteSpace(Model))
+{
+    var socialShareButtons = Model.Replace("{PAGEURLTOLIKE}", Request.Url.ToString());
+    <div class="share-buttons">
+       @Html.Raw(socialShareButtons)
+    </div>
+}

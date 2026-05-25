@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Language Name="English">
+  <LocaleResource Name="SevenSpikes.NitroTheme">
+    <Value>Nop Nitro Theme</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Admin.Settings">
+    <Value>Settings</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Admin.Settings.ThemeSettings">
+    <Value>Nitro Theme Settings</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Admin.Settings.ThemeSettings.Preset">
+    <Value>Preset</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Admin.Settings.ThemeSettings.Preset.Hint">
+    <Value>Choose your color preset of the theme.</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Admin.Settings.ThemeSettings.ShowHomePageManufacturers">
+    <Value>Show manufacturers on home page</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Admin.Settings.ThemeSettings.ShowHomePageManufacturers.Hint">
+    <Value>If enabled all manufacturers will be shown on the bottom of the home page</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Admin.Settings.ThemeSettings.AssociatedProductsViewMode">
+    <Value>Associated products view mode</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Admin.Settings.ThemeSettings.AssociatedProductsViewMode.Hint">
+    <Value>Choose whether you want to display the associated products for a grouped product on the products page in grid or in list</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Common.ItemBoxBuyButton">
+    <Value>Buy now</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Common.FAQ">
+    <Value>Frequently Asked Questions</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Common.Help">
+    <Value>Help</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Common.GoTo">
+    <Value>Go to...</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Common.GoToPage">
+    <Value>Product's page</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Footer.Phone.Text">
+    <Value>Need Assistance?</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Footer.Phone.Number">
+    <Value>Call +123 4567890</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Footer.Payment.Text1">
+    <Value>Your details are safe!</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Footer.Payment.Text2">
+    <Value>100% secure payment</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Footer.Lists.Title1">
+    <Value>Company Info</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Footer.Lists.Title2">
+    <Value>Customer Services</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Footer.Lists.Title3">
+    <Value>Our Offers</Value>
+  </LocaleResource>
+  <LocaleResource Name="SevenSpikes.Themes.Nitro.Footer.Lists.Title4">
+    <Value>My Account</Value>
+  </LocaleResource>
+  <LocaleResource Name="shoppingcart.headerquantity">
+    <Value>{0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="wishlist.headerquantity">
+    <Value>{0}</Value>
+  </LocaleResource>
+</Language>

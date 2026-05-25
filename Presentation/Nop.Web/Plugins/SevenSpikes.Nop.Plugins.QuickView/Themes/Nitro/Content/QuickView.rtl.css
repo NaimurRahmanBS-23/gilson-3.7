@@ -1,0 +1,25 @@
+﻿/********* START BUTTON *********/
+
+.quick-view-button {
+	float: right;
+	padding: 12px 40px 12px 0 !important;
+	border-right: 0;
+	border-left: 1px solid #fff;
+	background-position: right center;
+}
+.quick-view-button:hover{
+	padding: 12px 40px 12px 12px !important;
+}
+.quick-view-button a {
+	text-align: right;
+}
+
+/********** KENDO SETTINGS *********/
+
+.quickView .k-window-titlebar.k-header .k-window-actions {
+	left: 26px;
+	right: auto;
+}
+.quickViewWindow .rental-attributes dd {
+	margin: 0 0 0 10px !important;
+}

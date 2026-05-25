@@ -1,0 +1,100 @@
+﻿@model ProductsByTagModel
+@using System.Diagnostics
+@using Nop.Core.Domain.Seo
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+
+    //var ua = Request.UserAgent == null ? "" : Request.UserAgent.ToLower();
+    //if (!ua.Contains("sajaribot"))
+    //{
+    //    //NOINDEX except for Sajari
+    //    Html.AddMetaKeywordParts("NOINDEX");
+    //}
+
+    //title
+    Html.AddTitleParts(string.Format(T("PageTitle.ProductsByTag").Text, Model.TagName));
+    Html.AddMetaDescriptionParts(String.Format(T("Products.Tags.ProductsTaggedWith").Text, Model.TagName) + ": A list of Gilson products that meet " + Model.TagName + " standard.");
+
+    Html.AddHeadCustomParts("<meta property=\"Breadcrumb\" data-sj-field=\"breadcrumbTitle\" content=\"Home\"/>");
+    Html.AddHeadCustomParts("<meta property=\"Breadcrumb\" data-sj-field=\"breadcrumbURL\" content=\"/\"/>");
+    Html.AddHeadCustomParts("<meta property=\"Breadcrumb\" data-sj-field=\"breadcrumbTitle\" content=\"Standards\"/>");
+    Html.AddHeadCustomParts("<meta property=\"Breadcrumb\" data-sj-field=\"breadcrumbURL\" content=\"/standards/all\"/>");
+
+    Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"article\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + string.Format(T("PageTitle.ProductsByTag").Text, Model.TagName) + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + string.Format(T("Products.Tags.ProductsTaggedWith").Text, Model.TagName) + ": A list of Gilson products that meet " + Model.TagName + " standard." + "\" />");
+
+    Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"https://www.globalgilson.com/content/images/gilson_no_image.jpg\" />");
+
+    //canonical URL
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var productsByTagUrl = Url.RouteUrl("ProductsByTag", new { productTagId = Model.Id, SeName = Model.TagSeName }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(productsByTagUrl);
+    }
+}
+<div class="page product-tag-page">
+    <div class="page-title">
+        <h1>@String.Format(T("Products.Tags.ProductsTaggedWith").Text, Model.TagName)</h1>
+    </div>
+    <div class="page-body">
+        @Html.Widget("productsbytag_top", Model.Id)
+
+
+        @*@Html.Action("TopicBlock", "Topic", new { systemName = Model.TagName + " (TOP)" })*@
+
+
+        @if (Model.Products.Count > 0)
+        {
+            @Html.Partial("_CatalogSelectors", Model.PagingFilteringContext, new ViewDataDictionary())
+        }
+        @Html.Widget("productsbytag_before_product_list", Model.Id)
+        @if (Model.Products.Count > 0)
+        {
+            if (Model.PagingFilteringContext.ViewMode == "list")
+            {
+                @*list mode*@
+                <div class="product-list">
+                    <div class="item-grid">
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="item-box">
+                                @Html.Partial("_ProductBoxList", product)
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                @*grid mode*@
+                <div class="product-grid">
+                    <div class="item-grid">
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="item-box">
+                                @Html.Partial("_ProductBox", product)
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        @{
+            var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+        }
+        @if (!pager.IsEmpty())
+        {
+            <div class="pager">
+                @pager
+            </div>
+        }
+
+        @*@Html.Action("TopicBlock", "Topic", new { systemName = Model.TagName + " (BOTTOM)" })*@
+
+        @Html.Widget("productsbytag_bottom", Model.Id)
+    </div>
+</div>

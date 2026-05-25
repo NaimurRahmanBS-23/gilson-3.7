@@ -1,0 +1,414 @@
+﻿@model FoxNetSoft.Plugin.Feed.Manager.Models.FeedRecModel
+@using FoxNetSoft.Plugin.Feed.Manager.Models
+@using Nop.Web.Framework
+@using Nop.Web.Framework.Kendoui
+@using Nop.Core.Events
+@using Nop.Web.Framework.Events
+@using Nop.Core.Infrastructure
+@using FoxNetSoft.Plugin.Feed.Manager.Domain
+@if (Model.Id > 0)
+{
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#@Html.FieldIdFor(model => model.ExportGrouped)").click(toggleSkipMainProduct);
+                $("#@Html.FieldIdFor(model => model.ExportProductCombinations)").click(toggleSkipMainProduct);
+                toggleSkipMainProduct();
+            });
+
+            function toggleSkipMainProduct() {
+                if ($('#@Html.FieldIdFor(model => model.ExportGrouped)').is(':checked') || $('#@Html.FieldIdFor(model => model.ExportProductCombinations)').is(':checked')) {
+                    $('#pnlSkipMainProduct').show();
+                }
+                else {
+                    $('#pnlSkipMainProduct').hide();
+                }
+        }
+        </script>
+   <table class="adminContent">
+        <tr>
+            <td colspan="2">
+               <table class="adminContent">
+                <tr>
+                    <td class="adminTitle">
+                        @Html.NopLabelFor(model => model.DoNotExportNewProducts):
+                    </td>
+                    <td class="adminData">
+                        @Html.EditorFor(model => model.DoNotExportNewProducts)
+                        @Html.ValidationMessageFor(model => model.DoNotExportNewProducts)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="adminTitle">
+                        @Html.NopLabelFor(model => model.ExportGrouped):
+                    </td>
+                    <td class="adminData">
+                        @Html.EditorFor(model => model.ExportGrouped)
+                        @Html.ValidationMessageFor(model => model.ExportGrouped)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="adminTitle">
+                        @Html.NopLabelFor(model => model.ExportProductCombinations):
+                    </td>
+                    <td class="adminData">
+                        @Html.EditorFor(model => model.ExportProductCombinations)
+                        @Html.ValidationMessageFor(model => model.ExportProductCombinations)
+                    </td>
+                </tr>
+                <tr id="pnlSkipMainProduct">
+                    <td class="adminTitle">
+                        @Html.NopLabelFor(model => model.SkipMainProduct):
+                    </td>
+                    <td class="adminData">
+                        @Html.EditorFor(model => model.SkipMainProduct)
+                        @Html.ValidationMessageFor(model => model.SkipMainProduct)
+                    </td>
+                </tr>
+             </table>
+           </td>
+      </tr>
+      @if (Model.ExportMethod == TypeFeedAdjustment.Google)
+      {
+          <tr>
+              <td colspan="2">
+                <input type="submit" name="copyfromfroogle" class="k-button" value="@T("Admin.FoxNetSoft.Plugin.Feed.Manager.Feed.CopyFromFroogle")" />
+              </td>
+          </tr>
+      } 
+      <tr class="adminSeparator">
+            <td colspan="2">
+                <hr />
+            </td>
+        </tr>
+       <tr>
+            <td colspan="2">
+                <div id="pnlProductFilter">
+                    <div style="width:73%;float:right">
+                                <div class="title">
+                                    <b>@T("Admin.Catalog.Categories.Manage")</b>
+                                 </div>
+                            <div id="categoryfilter-grid"></div>
+                            <br />
+                                <div class="title">
+                                    <b>@T("Admin.Catalog.Products.Manage")</b>
+                                 </div>
+                            <div id="productfilter-grid"></div>
+                    <script>
+                        $(document).ready(function () {
+                            $("#categoryfilter-grid").kendoGrid({
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: "@Html.Raw(Url.Action("CategoryFilterList", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"feedId" , Model.Id} }))",
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: addAntiForgeryToken
+                                    },
+                                    destroy: {
+                                        url: "@Html.Raw(Url.Action("CategoryFilterDelete", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"feedId" , Model.Id} }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                }
+                            },
+                                schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors",
+                                model: {
+                                        id: "Id"
+                                }
+                                },
+                            requestEnd: function (e) {
+                                if (e.type == "destroy") {
+                                    this.read();
+                                }
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                            pageable: {
+                            refresh: true,
+                            numeric: false,
+                            previousNext: false,
+                            info: false
+                            },
+                        editable: {
+                                confirmation: false,
+                                mode: "inline"
+                        },
+                        scrollable: false,
+                            columns: [
+                               {
+                                   field: "Published",
+                                   title: "@T("Admin.Catalog.Categories.Fields.Published")",
+                            width: 80,
+                        headerAttributes: { style: "text-align:center" },
+                        attributes: { style: "text-align:center" },
+                        template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=Published#.gif" />'
+                        }, {
+                            field: "CategoryName",
+                            title: "@T("Admin.Catalog.Categories.Fields.Name")",
+                            headerAttributes: { style: "text-align:center" },
+                            template: '<a href="@Url.Content("~/Admin/Category/Edit/")#=CategoryId#"> #=CategoryName# </a>',
+                            width: 500
+                        },
+                                    @if (Model.AvailableDefaultMapCategories.Count>1)
+                        {
+                            <text>
+                            {
+                                field: "CategoryMap",
+                                title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.CategoryMap")",
+                            width: 400,
+                            },
+                        </text>
+                        }
+                        {
+                            field: "TypeActiveId",
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.TypeActive")",
+                            width: 80,
+                            template: "#:TypeActiveValue#"
+                        }, {
+                        field: "DefaultValuesXML",
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.DefaulValues")",
+                        width: 400,
+                        template: "#=DefaultValuesHTML#",
+                        encoded: false
+                        }, {
+                            field: "Id",
+                            title: "@T("Admin.Common.Edit")",
+                            width: 100,
+                            template: "<input type='submit' value='@T("Admin.Common.Edit")' onclick=\"javascript:OpenWindow('@Url.Content("~/Admin/Feeds/ProductFilterValuesEditPopup")?feedId=#=FeedId#&productId=#=ProductId#&categoryId=#=CategoryId#&feedProductId=#=FeedProductId#&feedCategoryId=#=FeedCategoryId#&btnId=btnRefreshCategory&formId=feed-form', 800, 450, true); return false;\" class='k-button' />"
+                        }, {
+                        command: { name: "destroy", text: "@T("Admin.Common.Delete")" },
+                        title: "@T("Admin.Common.Delete")",
+                        width: 110
+                        }]
+                        });
+
+
+                        $("#productfilter-grid").kendoGrid({
+                            dataSource: {
+                                type: "json",
+                                transport: {
+                                    read: {
+                                        url: "@Html.Raw(Url.Action("ProductFilterList", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"feedId" , Model.Id} }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                },
+                                destroy: {
+                                    url: "@Html.Raw(Url.Action("ProductFilterDelete", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"feedId" , Model.Id} }))",
+                                type: "POST",
+                                dataType: "json",
+                                data: addAntiForgeryToken
+                            }
+                        },
+                            schema: {
+                            data: "Data",
+                            total: "Total",
+                            errors: "Errors",
+                            model: {
+                                    id: "Id"
+                            }
+                            },
+                        requestEnd: function (e) {
+                            if (e.type == "destroy") {
+                                this.read();
+                            }
+                        },
+                        error: function (e) {
+                            display_kendoui_grid_error(e);
+                            // Cancel the changes
+                            this.cancelChanges();
+                        },
+                        serverPaging: true,
+                            serverFiltering: true,
+                        serverSorting: true
+                        },
+                        pageable: {
+                                refresh: true,
+                                numeric: false,
+                                previousNext: false,
+                                info: false
+                        },
+                        editable: {
+                                confirmation: false,
+                                mode: "inline"
+                        },
+                        scrollable: false,
+                            columns: [
+                                {
+                                    field: "Published",
+                                    title: "@T("Admin.Catalog.Products.Fields.Published")",
+                            width: 80,
+                        headerAttributes: { style: "text-align:center" },
+                        attributes: { style: "text-align:center" },
+                        template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=Published#.gif" />'
+                        },
+                        {
+                            field: "ProductName",
+                            title: "@T("Admin.Catalog.Products.Fields.Name")",
+                            headerAttributes: { style: "text-align:center" },
+                            template: '<a href="@Url.Content("~/Admin/Product/Edit/")#=ProductId#"> #=ProductName# </a>',
+                            width: 500
+                        },
+                                    @if (Model.EnableASIN)
+                        {
+                            <text>
+                            {
+                                field: "ASIN",
+                                title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.ASIN")",
+                            width: 100,
+                            },
+                        </text>
+                        }
+                                    @if (Model.EnableEPID)
+                        {
+                            <text>
+                            {
+                                field: "EPID",
+                                title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.EPID")",
+                            width: 100,
+                            },
+                        </text>
+                        }
+                                    @if (Model.AvailableDefaultMapCategories.Count>1)
+                        {
+                            <text>
+                            {
+                                field: "CategoryMap",
+                                title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.CategoryMap")",
+                            width: 400,
+                            },
+                        </text>
+                        }
+                        {
+                            field: "TypeActiveId",
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.TypeActive")",
+                            width: 80,
+                            template: "#:TypeActiveValue#"
+                        }, {
+                        field: "DefaultValuesXML",
+                            title: "@T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.Fields.DefaulValues")",
+                        width: 400,
+                        template: "#=DefaultValuesHTML#",
+                        encoded: false
+                        }, {
+                            field: "Id",
+                            title: "@T("Admin.Common.Edit")",
+                            width: 100,
+                            template: "<input type='submit' value='@T("Admin.Common.Edit")' onclick=\"javascript:OpenWindow('@Url.Content("~/Admin/Feeds/ProductFilterValuesEditPopup")?feedId=#=FeedId#&productId=#=ProductId#&categoryId=#=CategoryId#&feedProductId=#=FeedProductId#&feedCategoryId=#=FeedCategoryId#&btnId=btnRefreshProduct&formId=feed-form', 800, 450, true); return false;\" class='k-button' />"
+                        }, {
+                        command: { name: "destroy", text: "@T("Admin.Common.Delete")" },
+                        title: "@T("Admin.Common.Delete")",
+                        width: 110
+                        }]
+                        });
+                        });
+
+                    </script>
+                    </div>
+                    <div style="width:25%;float:left;">
+                        <table class="adminContent">
+                            <tr>
+                                <td>
+    <div class="k-top">
+        <span class="k-in" onclick="fnsFeedTreeRefresh(0); return false;">
+        <img class="k-image" src="/Administration/Content/images/ico-content.png" alt="">
+            Root
+        </span>
+    </div>
+                                    <div id="category-treeview"></div>
+
+                                    <script>
+                                        categories = new kendo.data.HierarchicalDataSource({
+                                            transport: {
+                                                read: {
+                                                    url: "@Html.Raw(Url.Action("TreeLoadChildren", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"feedId" , Model.Id} }))",
+                                                type: "POST",
+                                                dataType: "json",
+                                                data: addAntiForgeryToken
+                                            }
+                                        },
+                                            schema: {
+                                            model: {
+                                                        id: "id",
+                                                        hasChildren: "hasChildren"
+                                            }
+                                            }
+                                        });
+
+                                        $(document).ready(function () {
+                                            $("#category-treeview").kendoTreeView({
+                                                dataSource: categories,
+                                                dataTextField: "Name",
+                                                select: function (e) {
+                                                    var dataItem = this.dataItem(e.node);
+                                                    var categoryId = dataItem.id;
+                                                    fnsFeedTreeRefresh(categoryId);
+                                                }
+                                            });
+                                        });
+
+                                        function fnsFeedTreeRefresh(categoryId) {
+                                            var kendoGridUrlCategory = "@Html.Raw(Url.Action("CategoryFilterList", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"feedId" , Model.Id} }))";
+                                            var kendoGridUrlProduct = "@Html.Raw(Url.Action("ProductFilterList", "Feeds", new RouteValueDictionary { { "Namespaces", "FoxNetSoft.Plugin.Feed.Manager.Controllers" }, { "area", "Admin" }, {"feedId" , Model.Id} }))";
+
+                                            var gridcategory = $("#categoryfilter-grid").data("kendoGrid");
+                                            gridcategory.dataSource.transport.options.read.url = kendoGridUrlCategory + "&categoryId=" + categoryId;
+                                            gridcategory.dataSource.read();
+
+                                            var gridproduct = $("#productfilter-grid").data("kendoGrid");
+                                            gridproduct.dataSource.transport.options.read.url = kendoGridUrlProduct + "&categoryId=" + categoryId;
+                                            gridproduct.dataSource.read();
+                                            if (categoryId == 0) {
+                                                $("#category-treeview span.k-state-selected").each(function () {
+                                                    $(this).removeClass("k-state-selected")
+                                                });
+                                            }
+
+                                        }
+                                    </script>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+           <td width="100%">
+                        <input type="submit" id="btnRefreshCategory" name="btnRefreshCategory" style="display: none" />
+                        <input type="submit" id="btnRefreshProduct" name="btnRefreshProduct" style="display: none" />
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                $('#btnRefreshCategory').click(function () {
+                                    //refresh grid
+                                    $("#categoryfilter-grid").data('kendoGrid').dataSource.read();
+                                    //return false to don't reload a page
+                                    return false;
+                                });
+                                $('#btnRefreshProduct').click(function () {
+                                    //refresh grid
+                                    $("#productfilter-grid").data('kendoGrid').dataSource.read();
+                                    //return false to don't reload a page
+                                    return false;
+                                });
+                            });
+                        </script>
+            </td>
+        </tr>
+    </table>
+}
+else
+{
+    @T("Admin.FoxNetSoft.Plugin.Feed.Manager.ProductFilter.SaveBeforeEdit")
+}

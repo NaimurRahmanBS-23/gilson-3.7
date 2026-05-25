@@ -1,0 +1,122 @@
+﻿@using Nop.Core
+@using Nop.Core.Domain.Customers
+@using Nop.Core.Infrastructure
+@{
+    int debounceTime = 1000;
+    var isRegisteredCustomer = EngineContext.Current.Resolve<IWorkContext>().CurrentCustomer.IsRegistered();
+}
+
+<div class="section shipping-address" ng-controller="ShippingAddressController as vm" ng-show="vm.configData.isVisible">
+
+    @Html.Partial("_AjaxLoader", "shipping-address-loader")
+
+    <div class="section-title title">
+        <strong>{{title}}</strong>
+    </div>
+
+    <div class="section-body">
+
+        @Html.Widget("op_checkout_shipping_address_top")
+        @Html.Widget("op_checkout_shipping_address_middle")
+
+        <div class="form-fields" ng-form="shippingForm">
+            @if (isRegisteredCustomer)
+            {
+                <div class="choose-address">
+                    <label><strong>Saved Addresses <a href="/customer/addresses" title="Click here to update your saved addresses." style="text-decoration: underline;"> ( update )</a></strong></label>
+                    <select id="shipping-addresses" ng-model="vm.shippingData.selectedShippingAddress" ng-model-options="{ updateOn: 'default change' }" ng-options="address.customProperties.fullAddress for address in vm.shippingData.addresses track by address.id">
+                        <option value="" ng-if="false"></option>
+                    </select>
+                </div>
+
+                @*<div class="choose-address">
+                    <div class="inputs">
+                        <label><strong><a href="/customer/addresses" title="Click here to manage your address book.">Saved Addresses:</a></strong></label>
+                        <select ng-model="vm.shippingData.selectedShippingAddress" ng-model-options="{ updateOn: 'default change' }" ng-options="address.customAddressAttributes[0].defaultValue | addressName: address for address in vm.shippingData.addresses track by address.id">
+                            <option value="" ng-if="false"></option>
+                        </select>
+                    </div>
+                </div>*@
+                <div style="display: none;">
+                    <div class="inputs" ng-repeat="attribute in vm.shippingData.selectedShippingAddress.customAddressAttributes">
+                        <div ng-switch="attribute.attributeControlType">
+                            <label for="shipping_address_attribute_{{attribute.id}}"><strong>{{attribute.name}}:</strong></label>
+                            <input ng-switch-when="TextBox" name="shipping_address_attribute_{{attribute.id}}" type="text" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-model="vm.modelsData[attribute.id].textBoxModel" ng-value="vm.modelsData[attribute.id].textBoxModel" class="textbox" id="shipping_address_attribute_{{attribute.id}}" ng-required="vm.configData.isVisible && attribute.isRequired" placeholder="Enter a name for this shipping address" title="This is used in the above dropdown list for quick selection." data-hj-whitelist />
+                            <span ng-show="attribute.isRequired" class="required">*</span>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div style="margin-top: 25px;">
+                <div class="inputs">
+                    <label for="shippingFirstName">@T("Address.Fields.FirstName"):</label>
+                    <input type="text" ng-trim="false" ng-required="vm.requiredFields['firstName']" id="shippingFirstName" name="shippingFirstName" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : shippingForm['shippingFirstName'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.shippingData.selectedShippingAddress.firstName" value="{{vm.shippingData.selectedShippingAddress.firstName}}" data-hj-whitelist />
+                    <span class="required">*</span>
+                </div>
+                <div class="inputs">
+                    <label for="shippingLastName">@T("Address.Fields.LastName"):</label>
+                    <input type="text" ng-trim="false" ng-required="vm.requiredFields['lastName']" id="shippingLastName" name="shippingLastName" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : shippingForm['shippingLastName'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.shippingData.selectedShippingAddress.lastName" value="{{vm.shippingData.selectedShippingAddress.lastName}}" data-hj-whitelist />
+                    <span class="required">*</span>
+                </div>
+                <div class="inputs" ng-hide="vm.shippingData.settings.companyEnabled === false">
+                    <label for="shippingCompany">@T("Address.Fields.Company"):</label>
+                    <input type="text" id="shippingCompany" name="shippingCompany" ng-trim="false" ng-required="vm.requiredFields['company']" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : shippingForm['shippingCompany'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.shippingData.selectedShippingAddress.company" value="{{vm.shippingData.selectedShippingAddress.company}}" data-hj-whitelist />
+                    <span ng-show="vm.shippingData.settings.companyRequired" class="required">*</span>
+                </div>
+                
+                <div class="inputs" ng-hide="vm.shippingData.settings.countryEnabled === false">
+                    <label for="shippingCountry">@T("Address.Fields.Country"):</label>
+                    <select id="shippingCountry" name="shippingCountry" ng-required="vm.requiredFields['country']" ng-model-options="{ updateOn: 'default change' }" ng-class="{'has-error' : shippingForm['shippingCountry'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.shippingData.selectedShippingAddress.country" ng-options="country.text for country in vm.shippingData.countries track by country.value">
+                        <option value="" ng-if="false"></option>
+                    </select>
+                    <span ng-show="vm.shippingData.settings.countryEnabled" class="required">*</span>
+                </div>
+
+                <div class="inputs" ng-hide="vm.shippingData.settings.streetAddressEnabled === false">
+                    <label for="shippingAddress1">@T("Address.Fields.Address1"):</label>
+                    <input type="text" id="shippingAddress1" name="shippingAddress1" ng-trim="false" ng-required="vm.requiredFields['address1']" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-model="vm.shippingData.selectedShippingAddress.address1" ng-class="{'has-error' : shippingForm['shippingAddress1'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" value="{{vm.shippingData.selectedShippingAddress.address1}}" data-hj-whitelist />
+                    <span ng-show="vm.shippingData.settings.streetAddressRequired" class="required">*</span>
+                </div>
+                <div class="inputs" ng-hide="vm.shippingData.settings.streetAddress2Enabled === false">
+                    <label for="shippingAddress1">@T("Address.Fields.Address2"):</label>
+                    <input type="text" id="shippingAddress2" ng-trim="false" ng-required="vm.requiredFields['address2']" name="shippingAddress2" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : shippingForm['shippingAddress2'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.shippingData.selectedShippingAddress.address2" value="{{vm.shippingData.selectedShippingAddress.address2}}" data-hj-whitelist />
+                    <span ng-show="vm.shippingData.settings.streetAddress2Required" class="required">*</span>
+                </div>
+                <div class="inputs" ng-hide="vm.shippingData.settings.cityEnabled === false">
+                    <label for="shippingCity">@T("Address.Fields.City"):</label>
+                    <input type="text" id="shippingCity" name="shippingCity" ng-trim="false" ng-required="vm.requiredFields['city']" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : shippingForm['shippingCity'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.shippingData.selectedShippingAddress.city" value="{{vm.shippingData.selectedShippingAddress.city}}" data-hj-whitelist />
+                    <span ng-show="vm.shippingData.settings.cityRequired" class="required">*</span>
+                </div>
+                <div class="inputs" ng-hide="vm.shippingData.settings.countryEnabled === false || vm.shippingData.settings.stateProvinceEnabled === false">
+                    <label for="shippingStateProvince">@T("Address.Fields.StateProvince"):</label>
+                    <select ng-model="vm.shippingData.selectedShippingAddress.stateProvince" ng-required="vm.requiredFields['stateProvince']" id="shippingStateProvince" ng-model-options="{ updateOn: 'default change' }" ng-class="{'has-error' : shippingForm['shippingStateProvince'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" name="shippingStateProvince" ng-options="state.text for state in vm.shippingData.states track by state.value">
+                        <option value="" ng-if="false"></option>
+                    </select>
+                    <span ng-show="vm.shippingData.settings.stateProvinceEnabled" class="required">*</span>
+                </div>
+                <div class="inputs" ng-hide="vm.shippingData.settings.zipPostalCodeEnabled === false">
+                    <label for="shippingZipPostalCode">@T("Address.Fields.ZipPostalCode"):</label>
+                    <input type="text" id="shippingZipPostalCode" ng-trim="false" ng-required="vm.requiredFields['zipPostalCode']" name="shippingZipPostalCode" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : shippingForm['shippingZipPostalCode'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.shippingData.selectedShippingAddress.zipPostalCode" value="{{vm.shippingData.selectedShippingAddress.zipPostalCode}}" data-hj-whitelist />
+                    <span ng-show="vm.shippingData.settings.zipPostalCodeRequired" class="required">*</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <div class="inputs">
+                    <label><strong>Shipping Contact Information:</strong></label>
+                    <label for="shippingPhoneNumber">@T("Address.Fields.Email"):</label>
+                    <input type="text" id="shippingEmail" name="shippingEmail" ng-required="vm.requiredFields['email']" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : shippingForm['shippingEmail'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.shippingData.selectedShippingAddress.email" value="{{vm.shippingData.selectedShippingAddress.email}}" data-hj-whitelist />
+                    <span class="required">*</span>
+                </div>
+
+                <div class="inputs" ng-hide="vm.shippingData.settings.phoneEnabled === false">
+                    <label for="shippingPhoneNumber">@T("Address.Fields.PhoneNumber"):</label>
+                    <input type="text" id="shippingPhoneNumber" ng-required="vm.requiredFields['phoneNumber']" name="shippingPhoneNumber" ng-model-options="{ updateOn: 'default blur', debounce: {'default': @debounceTime, 'blur': 0} }" ng-class="{'has-error' : shippingForm['shippingPhoneNumber'].$invalid && shippingForm.$$parentForm.sySubmitted, 'required' : field.required}" ng-model="vm.shippingData.selectedShippingAddress.phoneNumber" value="{{vm.shippingData.selectedShippingAddress.phoneNumber}}" data-hj-whitelist />
+                    <span ng-show="vm.shippingData.settings.phoneRequired" class="required">*</span>
+                </div>
+            </div>
+        </div>
+
+        @Html.Widget("op_checkout_shipping_address_bottom")
+    </div>
+</div>

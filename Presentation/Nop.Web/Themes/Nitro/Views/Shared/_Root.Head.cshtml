@@ -1,0 +1,92 @@
+﻿@using Nop.Core;
+@using Nop.Core.Domain.Common;
+@using Nop.Core.Infrastructure;
+@using Nop.Services.Configuration;
+@{
+    var displayMiniProfiler = EngineContext.Current.Resolve<Nop.Core.Domain.StoreInformationSettings>().DisplayMiniProfilerInPublicStore;
+
+    Html.AppendScriptParts("~/Scripts/public.ajaxcart.js");
+    Html.AppendScriptParts(ResourceLocation.Foot, "~/Scripts/public.common.js");
+    Html.AppendScriptParts("~/Scripts/jquery-migrate-1.2.1.min.js");
+    Html.AppendScriptParts(ResourceLocation.Foot, "~/Scripts/jquery-ui-1.10.3.custom.min.js");
+    Html.AppendScriptParts(ResourceLocation.Foot, "~/Scripts/jquery.validate.unobtrusive.min.js");
+    Html.AppendScriptParts(ResourceLocation.Foot, "~/Scripts/jquery.validate.min.js");
+    Html.AppendScriptParts("~/Scripts/jquery-1.10.2.min.js");
+
+    //X-UA-Compatible tag
+    var commonSettings = EngineContext.Current.Resolve<CommonSettings>();
+    if (commonSettings.RenderXuaCompatible)
+    {
+        Html.AppendHeadCustomParts(string.Format("<meta http-equiv=\"X-UA-Compatible\" content=\"{0}\"/>", commonSettings.XuaCompatibleValue));
+    }
+    var browser = Request.Browser;
+    if (browser.Browser == "IE" && browser.MajorVersion == 8)
+    {
+        Html.AppendHeadCustomParts("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>");
+    }
+
+    var isAndroid23Class = "notAndroid23";
+    if (!string.IsNullOrWhiteSpace(Request.UserAgent) && Request.UserAgent.IndexOf("Android 2.", StringComparison.InvariantCultureIgnoreCase) > 0)
+    {
+        isAndroid23Class = "android23";
+    }
+}
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>@Html.NopTitle(true)</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    @if (Html.NopMetaKeywords().ToString() == "NOINDEX")
+    {
+        //HACK: Customization - MSS - Reuse NopMetaKeywords for NOINDEX
+        <meta name="robots" content="noindex" />
+    }
+    else
+    {
+        //Use metakeywords for Sajari
+        if (!MvcHtmlString.IsNullOrEmpty(Html.NopMetaKeywords()))
+        {
+            var ua = Request.UserAgent == null ? "" : Request.UserAgent.ToLower();
+            if (ua.Contains("sajaribot"))
+            {
+                <meta name="keywords" content="@(Html.NopMetaKeywords())" />
+            }
+        }
+    }
+    <meta name="google-site-verification" content="DxjDRXRCyKbHRwy1TK25rz9HgKpORj4oau3ZzpB-JAA" />
+    <meta name="msvalidate.01" content="C6B89AB8372128F8F2ED7C61D4312C11" />
+    <meta name="p:domain_verify" content="a753915ebae82f8b3997dc561fdef2a8" />
+    @if (!string.IsNullOrWhiteSpace(Html.NopMetaDescription().ToString()))
+    {
+        <meta name="description" content="@(Html.NopMetaDescription())" />
+    }
+    <meta name="generator" content="nopCommerce" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+    @Html.NopHeadCustom()
+    @Html.Partial("Head")
+    @Html.NopCssFiles(this.Url, ResourceLocation.Head)
+    <link rel="shortcut icon" href="https://www.globalgilson.com/favicon.ico" type="image/x-icon" /> @*@Html.Action("Favicon", "Common")*@
+    @Html.NopCanonicalUrls()
+    @Html.Action("RssHeaderLink", "News")
+    @Html.Action("RssHeaderLink", "Blog")
+    @Html.NopScripts(this.Url, ResourceLocation.Head)
+
+    @Html.Widget("head_html_tag")
+    @* <== Google code for Analytics tracking *@
+    @*<script src="https://www.googletagmanager.com/gtag/js?id=AW-1020377540" async></script>
+    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'AW-1020377540');</script>
+    <script>(function (h, o, t, j, a, r) { h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) }; h._hjSettings = { hjid: 244730, hjsv: 5 }; a = o.getElementsByTagName('head')[0]; r = o.createElement('script'); r.async = 1; r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv; a.appendChild(r); })(window, document, '//static.hotjar.com/c/hotjar-', '.js?sv=');</script>
+    <script type="text/javascript">var _sj = _sj || []; _sj.push(['project', '1518648110770120928']); _sj.push(['collection', 'globalgilson-com']); (function () { var sj = document.createElement('script'); sj.type = 'text/javascript'; sj.async = true; sj.src = '//cdn.sajari.com/js/sj.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sj, s); })();</script>*@
+    
+    @if (displayMiniProfiler)
+    {@StackExchange.Profiling.MiniProfiler.RenderIncludes()}
+    <!--Powered by nopCommerce - http://www.nopCommerce.com-->
+</head>
+<body class="@isAndroid23Class">
+    @RenderBody()
+    <div id="goToTop" class="goToTop"></div>
+    @Html.NopScripts(this.Url, ResourceLocation.Foot)
+    @Html.NopCssFiles(this.Url, ResourceLocation.Foot)
+    @*<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5941b935647d4c05" defer></script>*@
+</body>
+</html>

@@ -1,0 +1,185 @@
+﻿@model SitemapModel
+@using Nop.Web.Models.Common;
+@{
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Sitemap").Text);
+
+    var sieving = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Sieving" }).ToString()
+        .Replace("<a href=\"/sieve-analysis-equipment\">Sieving</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var sieveShakers = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Sieve-Shakers" }).ToString()
+        .Replace("<a href=\"/sieve-shakers\">Sieve Shakers</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var screening = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Screening" }).ToString()
+        .Replace("<a href=\"/screening\">Screening</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var samplingDividing = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Sampling-Dividing" }).ToString()
+        .Replace("<a href=\"/sampling-dividing\">Sampling &amp; Dividing</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var aggregates = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Aggregates" }).ToString()
+        .Replace("<a href=\"/aggregate-testing-equipment\">Aggregates</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var asphalt = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Asphalt" }).ToString()
+        .Replace("<a href=\"/asphalt-testing-equipment\">Asphalt</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var concrete = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Concrete" }).ToString()
+        .Replace("<a href=\"/concrete-testing-equipment\">Concrete</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var soils = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Soils" }).ToString()
+        .Replace("<a href=\"/soil-testing-equipment\">Soils</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var ovensFurnaces = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Ovens-Furnaces" }).ToString()
+        .Replace("<a href=\"/ovens-and-furnaces\">Ovens &amp; Furnaces</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var crushersPulverizersMills = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Crushers-Pulverizers-Mills" }).ToString()
+        .Replace("<a href=\"/crushers-pulverizers-mills\">Crushers, Pulverizers &amp; Mills</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var temperatureHumidity = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Temperature-Humidity" }).ToString()
+        .Replace("<a href=\"/temperature-humidity\">Temperature &amp; Humidity</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var pansToolsGlassware = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Pans-Tools-Glassware" }).ToString()
+        .Replace("<a href=\"/pans-tools-glassware\">Pans, Tools &amp; Glassware</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+    var scalesBalances = Html.Action("TopicBlock", "Topic", new { systemName = "LHM-Scales-Balances" }).ToString()
+        .Replace("<a href=\"/scales-balances\">Scales &amp; Balances</a>", "")
+        .Replace(" class=\"lhm-item\"", "");
+}
+<div class="page sitemap-page">
+    <div class="page-title">
+        <h1>@T("Sitemap")</h1>
+    </div>
+    <div class="page-body">
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/sieve-analysis-equipment">Sieving</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(sieving)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/sieve-shakers">Sieve Shakers</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@sieveShakers)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/screening">Screening</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@screening)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/sampling-dividing">Sampling &amp; Dividing</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@samplingDividing)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/aggregate-testing-equipment">Aggregates</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@aggregates)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/asphalt-testing-equipment">Asphalt</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@asphalt)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/concrete-testing-equipment">Concrete</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@concrete)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/soil-testing-equipment">Soils</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@soils)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/ovens-and-furnaces">Ovens &amp; Furnaces</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@ovensFurnaces)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/crushers-pulverizers-mills">Crushers, Pulverizers &amp; Mills</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@crushersPulverizersMills)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/temperature-humidity">Temperature &amp; Humidity</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@temperatureHumidity)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/pans-tools-glassware">Pans, Tools &amp; Glassware</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@pansToolsGlassware)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="entity">
+            <div class="entity-title">
+                <h2><a href="/scales-balances">Scales &amp; Balances</a></h2>
+            </div>
+            <div class="entity-body">
+                <ul>
+                    <li>@Html.Raw(@scalesBalances)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

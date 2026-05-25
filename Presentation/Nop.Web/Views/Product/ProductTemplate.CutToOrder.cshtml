@@ -1,0 +1,217 @@
+﻿@model ProductDetailsModel
+@using Nop.Core
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Services.Localization;
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    //Attachments
+    var productdetailsAttachements = Html.Widget("productdetails_attachments").ToHtmlString();
+
+    //Attachments CSS
+    if (productdetailsAttachements.Contains("attachment")){Html.AddCssFileParts("~/Themes/Nitro/Content/css/Attachments.css");}
+
+    Html.AddScriptParts("~/Themes/Nitro/Content/scripts/ProductTemplate.CutToOrder.js");
+    Html.AddScriptParts("~/Themes/Nitro/Content/scripts/jquery.formatCurrency-1.4.0.min.js");
+
+    var seoSettings = EngineContext.Current.Resolve<SeoSettings>();
+    //canonical URL
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var productUrl = Url.RouteUrl("Product", new { SeName = Model.SeName }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(productUrl);
+    }
+
+    Html.AddHeadCustomParts("<meta property=\"Products\" data-sj-field=\"category\" content=\"Products\" />");
+    Html.AddHeadCustomParts("<meta property=\"productmodel\" data-sj-field=\"productmodel\" content=\"" + Model.Sku + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"productprice\" data-sj-field=\"productprice\" content=\"" + Model.ProductPrice.Price + "\" />");
+
+    //open graph META tags
+    if (seoSettings.OpenGraphMetaTags)
+    {
+        var storeName = EngineContext.Current.Resolve<IStoreContext>().CurrentStore.GetLocalized(x => x.Name);
+        Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"product\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + Html.Encode(Model.MetaDescription) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:site_name\" content=\"" + Html.Encode(storeName) + "\" />");
+    }
+
+    //Twitter META tags
+    if (seoSettings.TwitterMetaTags)
+    {
+        var storeName = EngineContext.Current.Resolve<IStoreContext>().CurrentStore.GetLocalized(x => x.Name);
+        Html.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"summary\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"" + Html.Encode(storeName) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:description\" content=\"" + Html.Encode(Model.MetaDescription) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+    }
+}
+
+<div itemscope itemtype="http://schema.org/Product">
+    <div class="page-title"><h1 itemprop="name">@Model.Name</h1></div>
+    
+    @Html.Partial("_ProductBreadcrumb", Model.Breadcrumb)
+    @Html.Widget("productdetails_after_breadcrumb", Model.Id)
+    @Html.Partial("_ShareButton", Model)
+    <div class="page product-details-page">
+        <div class="page-body">
+            @Html.Widget("productdetails_top", Model.Id)
+            @using (Html.BeginRouteForm("Product", new { SeName = Model.SeName }, FormMethod.Post, new { id = "product-details-form" }))
+            {
+                <div data-productid="@Model.Id">
+                    <div class="overview">
+                        @Html.Partial("_Discontinued", Model)
+
+                        @if (!String.IsNullOrEmpty(Model.ShortDescription))
+                        {
+                            <div class="short-description">
+                                @Html.Raw(Model.ShortDescription)
+                            </div>
+                        }
+
+                        @Html.Widget("productdetails_overview_top", Model.Id)
+
+                        @Html.Partial("_SKU_Man_GTIN_Ven", Model)
+
+                        @if (!Model.AddToCart.DisableWishlistButton && !Model.DisplayDiscontinuedMessage)
+                        {
+                            <div class="attributes">
+                                <dl>
+                                    <dt>
+                                        <label class="text-prompt">Cut Dimensions, L x W, in:</label>
+                                        <span class="required">*</span>
+                                    </dt>
+                                    <dd>
+                                        <input id="length@(Model.Id)" name="length@(Model.Id)" type="number" min="1" max="99" class="qty-input" style="border: solid 1px #999;outline: none;" /> X
+                                        <input id="width@(Model.Id)" name="width@(Model.Id)" type="number" min="1" max="99" class="qty-input" style="border: solid 1px #999;outline: none;" />
+                                    </dd>
+                                    <dt>
+                                        <label class="text-prompt">Piece Qty:</label>
+                                        <span class="required">*</span>
+                                    </dt>
+                                    <dd>
+                                        <input id="pieceqty@(Model.Id)" name="pieceqty@(Model.Id)" type="number" min="1" max="99" class="qty-input" style="border: solid 1px #999; outline: none;" />
+                                    </dd>
+                                    <dt>
+                                        <label class="text-prompt">Sq Ft:</label>
+                                    </dt>
+                                    <dd style="margin-top: 7px;">
+                                        <span class="sq-ft"></span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        }
+
+                        @if (Model.DisplayDiscontinuedMessage)
+                        {
+                            <div class="itemprop-price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                                <span itemprop="availability">Discontinued</span>
+                                <span itemprop="priceCurrency" content="@Model.ProductPrice.CurrencyCode">$</span>
+                                <span class="product-price" itemprop="price">0.00</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                                @if (Model.ProductPrice.CallForPrice)
+                                {
+                                    <div class="product-price call-for-price"><span>@T("Products.CallForPrice")</span></div>
+                                }
+                                else
+                                {
+                                    if (!string.IsNullOrWhiteSpace(Model.ProductPrice.OldPrice))
+                                    {
+                                        <div><span class="label">List Price/Sq Ft: </span><span>@Model.ProductPrice.OldPrice</span></div>
+                                            <div><span class="label">Dealer Price/Sq Ft: </span><span id="price@(Model.Id)" class="product-price" itemprop="price">@Model.ProductPrice.Price</span></div>
+                                    }
+                                    else
+                                    {
+                                        <div><span class="label">Price/Sq Ft: </span><span id="price@(Model.Id)" class="product-price" itemprop="price">@Model.ProductPrice.Price</span></div>
+                                    }
+                                    <div><span class="label">Total Price: </span><span id="tp@(Model.Id)"></span></div>
+                                    if (!string.IsNullOrEmpty(Model.ProductPrice.CurrencyCode))
+                                    {
+                                        <meta itemprop="priceCurrency" content="@Model.ProductPrice.CurrencyCode" />
+                                    }
+                                }
+                            </div>
+                        }
+
+                        @if (!Model.AddToCart.DisableWishlistButton && !Model.DisplayDiscontinuedMessage)
+                        {
+                            <div class="add-to-cart">
+                                <div class="add-to-cart-panel">
+                                    <label class="qty-label" for="qty@(Model.Id)">Qty:</label>
+                                    <input class="qty-input" id="qty@(Model.Id)" name="qty@(Model.Id)" type="number" value="1" readonly="readonly">
+
+                                    <input type="button" id="add-to-cart-button" class="button-1 add-to-cart-button" value="Add To Cart" />
+                                </div>
+                            </div>
+
+                                <div class="buttons">
+                                    @Html.Widget("productdetails_inside_overview_buttons_before", Model.Id)
+                                    @Html.Partial("_CompareProductsButton", Model)
+                                    @Html.Partial("_ProductEmailAFriendButton", Model)
+                                    @Html.Partial("_ProductAddToWishlistButton", Model.AddToCart)
+                                    @Html.Widget("productdetails_inside_overview_buttons_after", Model.Id)
+                                </div>
+                        }
+                        
+                        @if (productdetailsAttachements.Contains("attachment"))
+                        {
+                            <div class="file-attachments">
+                                <div class="title">Product Files</div>
+                                <div class="attachments-content">
+                                    <div class="attachment-category">
+                                        @Html.Raw(productdetailsAttachements.Replace(".pdf", ".pdf?v=" + DateTime.Now.ToString("yyyyMMddHHmmssfff")))
+                                    </div>
+                                </div>
+                            </div>
+                        } 
+                        
+                        @Html.Widget("productdetails_overview_bottom", Model.Id)
+                    </div>
+
+                    <div class="product-essential">
+                        @Html.Widget("productdetails_before_pictures", Model.Id)
+
+                        @{
+                            var cloudZoom = Html.Widget("sevenspikes_cloud_zoom");
+                        }
+                        @if (!MvcHtmlString.IsNullOrEmpty(cloudZoom))
+                        {
+                            @cloudZoom
+                        }
+                        else
+                        {
+                            @Html.Partial("_ProductDetailsPictures", Model)
+                        }
+
+                        @Html.Widget("productdetails_after_pictures", Model.Id)
+                    </div>
+                    @Html.Widget("productdetails_before_collateral", Model.Id)
+                    <div class="product-collateral">
+                        @Html.Partial("_ProductTierPrices", Model.TierPrices)
+                        @Html.Partial("_ProductSpecifications", Model.ProductSpecifications)
+                        @Html.Partial("_ProductTags", Model.ProductTags)
+                        @Html.Action("RelatedProducts", "Product", new {productId = Model.Id})
+                        @Html.Action("ProductsAlsoPurchased", "Product", new {productId = Model.Id})
+                    </div>
+                </div>
+            }
+            @Html.Widget("productdetails_bottom", Model.Id)
+        </div>
+    </div>
+</div>
+@{var customerEmail = !string.IsNullOrEmpty(WorkContext.CurrentCustomer.Email) ? WorkContext.CurrentCustomer.Email : string.Empty;}
+<script type="text/javascript" src="//static.criteo.net/js/ld/ld.js" async="true"></script><script type="text/javascript">var deviceType = /iPad/.test(navigator.userAgent) ? "t" : /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Silk/.test(navigator.userAgent) ? "m" : "d"; window.criteo_q = window.criteo_q || []; window.criteo_q.push({ event: "setAccount", account: 50375 }, { event: "setEmail", email: "@customerEmail" }, { event: "setSiteType", type: deviceType }, { event: "viewItem", item: "@Model.Id" });</script>

@@ -1,0 +1,8 @@
+﻿Group: Bayshore Solutions
+FriendlyName: Bayshore Custom
+SystemName: Bayshore.Custom
+Version: 1.00
+SupportedVersions: 3.70
+Author: Bayshore Solutions
+DisplayOrder: 1
+FileName: Bss.Nop.Plugin.Custom.dll

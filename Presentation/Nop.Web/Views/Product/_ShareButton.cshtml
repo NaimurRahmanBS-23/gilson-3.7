@@ -1,0 +1,10 @@
+﻿@model ProductDetailsModel
+@using Nop.Web.Models.Catalog;
+
+@if (!String.IsNullOrWhiteSpace(Model.PageShareCode))
+{
+    var socialShareButtons = Model.PageShareCode.Replace("{PAGEURLTOLIKE}", Request.Url.ToString());
+    <div class="product-share-button">
+        @Html.Raw(socialShareButtons)
+    </div>
+}

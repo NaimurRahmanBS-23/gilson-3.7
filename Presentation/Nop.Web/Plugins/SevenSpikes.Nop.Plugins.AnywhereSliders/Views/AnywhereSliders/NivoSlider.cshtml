@@ -1,0 +1,57 @@
+﻿@using Nop.Core;
+@using Nop.Core.Infrastructure
+@using SevenSpikes.Nop.Plugins.AnywhereSliders.Models.Nivo
+@using SevenSpikes.Nop.Plugins.AnywhereSliders.Models.Sliders
+@using System.Text.RegularExpressions
+@using iTextSharp.text.pdf
+@model NivoModel
+@{Layout = null; var skin = Model.Settings.Theme ?? string.Empty; var showCaptionsClass = Model.Settings.ShowCaption ? string.Empty : "no-captions";}@helper RenderSliderLine(string pictureUrl, string text, string alt, bool haveLink, string link)
+{if (!string.IsNullOrEmpty(pictureUrl))
+    {
+        var loading = text=="eager" ? "eager" : "lazy";
+        if (string.IsNullOrWhiteSpace(alt)) { alt = "slider image"; }
+        if (haveLink && !string.IsNullOrEmpty(link))
+        {
+            var newWindow = ""; if (!string.IsNullOrEmpty(text)) { if (text.Contains("{{NEW WINDOW}}")) { newWindow = "target=\"blank\""; } }<a href="@link" @newWindow><img loading="@loading" src="@pictureUrl" data-thumb="@pictureUrl" alt="@alt" /></a>}
+        else
+        {
+            <img loading="@loading" src="@pictureUrl" data-thumb="@pictureUrl" alt="@alt" />
+        }
+    }}@helper RenderSingleSliderImageLine(SliderImageModel sliderImage)
+{var alt = String.IsNullOrEmpty(sliderImage.Alt) ? "banner" : sliderImage.Alt; var strippedDisplayText = sliderImage.DisplayText; if (!string.IsNullOrEmpty(strippedDisplayText)) { strippedDisplayText = Regex.Replace(strippedDisplayText, @"<[^>]*(>|$)", String.Empty); }
+    if (Model.Settings.Links && !String.IsNullOrEmpty(sliderImage.Url))
+    {
+        var newWindow = ""; if (!string.IsNullOrEmpty(strippedDisplayText)) { if (strippedDisplayText.Contains("{{NEW WINDOW}}")) { newWindow = "target=\"blank\""; } }<a href="@sliderImage.Url" @newWindow><img loading="eager" class="nivo-main-image" src="@sliderImage.PicturePath" alt="@alt" /></a>}
+    else
+    {
+        <img loading="lazy" class="nivo-main-image" src="@sliderImage.PicturePath" alt="@alt" title="@strippedDisplayText" />
+    }
+    <div class="nivo-caption" style="display: block;">@Html.Raw(sliderImage.DisplayText)</div>    }@if (Model.SliderImages != null && Model.SliderImages.Count > 0)
+    {
+        if (Request.Browser.Browser == "IE" && Request.Browser.MajorVersion == 8) { Html.AppendCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Styles/nivo/ie8-fix.css"); }
+        Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Styles/nivo/nivo-slider.css"); Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Themes/" + Model.Theme + "/Content/nivo/nivo.css"); var imagesString = string.Empty; foreach (var sliderImage1 in Model.SliderImages) { imagesString += RenderSliderLine(sliderImage1.PicturePath, sliderImage1.DisplayText, sliderImage1.Alt, Model.Settings.Links, sliderImage1.Url); }
+        imagesString = imagesString.Replace(Environment.NewLine, string.Empty).Trim();
+        <div class="slider-wrapper anywhere-sliders-nivo-slider theme-@skin @showCaptionsClass" data-imagesCount="@Model.SliderImages.Count" data-sliderHtmlElementId="@Model.SliderHtmlElementId" data-imagesString="@imagesString" data-effect="@Model.Settings.Effect" data-slices="@Model.Settings.Slices" data-boxCols="@Model.Settings.BoxCols" data-boxRows="@Model.Settings.BoxRows" data-animSpeed="@Model.Settings.AnimationSpeed" data-pauseTime="@Model.Settings.AutoSlideInterval" data-directionNav="@Model.Settings.EnableDirectionNavigation.ToString().ToLowerInvariant()" data-controlNav="@Model.Settings.EnableControlNavigation.ToString().ToLowerInvariant()" data-controlNavThumbs="@Model.Settings.EnableControlNavigationThumbs.ToString().ToLowerInvariant()" data-pauseOnHover="@Model.Settings.PauseOnHover.ToString().ToLowerInvariant()" data-prevText="@Model.Settings.PrevText" data-nextText="@Model.Settings.NextText" height="480">
+            @if (Model.SliderImages.Count == 1)
+            {@RenderSingleSliderImageLine(Model.SliderImages[0])}
+        else
+        {
+            Html.AddScriptParts(ResourceLocation.Foot, "~/Plugins/SevenSpikes.Core/Scripts/swipeEvents.min.js"); Html.AddScriptParts(ResourceLocation.Foot, "~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Scripts/nivo/jquery.nivo.slider.js"); if (Model.Settings.RandomStart) { Random r = new Random(); int randomIndex = r.Next(0, Model.SliderImages.Count - 1); var randomStartSlideModels = new List<SliderImageModel>(); randomStartSlideModels.AddRange(Model.SliderImages.Skip(randomIndex)); randomStartSlideModels.AddRange(Model.SliderImages.Take(randomIndex)); Model.SliderImages = randomStartSlideModels; }
+            <div id="@Model.SliderHtmlElementId" class="nivoSlider">@RenderSingleSliderImageLine(Model.SliderImages[0])</div>}
+        </div>Html.AddScriptParts(ResourceLocation.Foot, "~/Plugins/SevenSpikes.Nop.Plugins.AnywhereSliders/Scripts/AnywhereSliders.js");
+    }
+
+
+
+
+    @*var loading = text="eager" ? "loading=\"eager\"" : "loading=\"lazy\"";
+        if (string.IsNullOrWhiteSpace(alt)) { alt = "slider image"; }
+        if (haveLink && !string.IsNullOrEmpty(link))
+        {
+            var newWindow = ""; if (!string.IsNullOrEmpty(text)) { if (text.Contains("{{NEW WINDOW}}")) { newWindow = "target=\"blank\""; } }
+            <a href="@link" @newWindow>
+              <img @loading src="@pictureUrl" data-thumb="@pictureUrl" alt="@alt" /></a>}
+        else
+        {
+            <img @loading src="@pictureUrl" data-thumb="@pictureUrl" alt="@alt" />
+        }*@

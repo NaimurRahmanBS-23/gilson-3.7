@@ -1,0 +1,5 @@
+﻿@model IList<CategoryModel>
+@using Nop.Core.Domain.Common;
+@using Nop.Core.Infrastructure;
+@using Nop.Web.Models.Catalog;
+@{var currentCategory = (ViewBag.CurrentCategory != null) ? ViewBag.CurrentCategory.ToString() : "";}<div class="breadcrumb"><ul itemscope itemtype="http://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="@Url.RouteUrl("HomePage")" itemprop="item" data-sj-field="breadcrumbURL" data-sj-value="/"><span itemprop="name" data-sj-field="breadcrumbTitle">Home</span></a><meta itemprop="position" content="1" /></li>@{short bc = 2; foreach (var category in Model){if (currentCategory == category.Name){<li><strong class="current-item">@currentCategory</strong></li>}else{<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="@Url.RouteUrl("Category", new {category.SeName})" itemprop="item" data-sj-field="breadcrumbURL" data-sj-value="@Url.RouteUrl("Category", new {category.SeName})"><span itemprop="name" data-sj-field="breadcrumbTitle">@category.Name</span></a><meta itemprop="position" content="@bc" /></li>}bc++;}}</ul></div>

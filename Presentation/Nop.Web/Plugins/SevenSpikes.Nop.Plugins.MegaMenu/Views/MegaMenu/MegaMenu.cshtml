@@ -1,0 +1,86 @@
+﻿@model SevenSpikes.Nop.Plugins.MegaMenu.Models.MegaMenuModel
+@{Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.MegaMenu/Themes/" + Model.Theme + "/Content/MegaMenu.css");
+    var supportRtl = this.ShouldUseRtlTheme();
+    if (supportRtl) { Html.AddCssFileParts("~/Plugins/SevenSpikes.Nop.Plugins.MegaMenu/Themes/" + Model.Theme + "/Content/MegaMenu.rtl.css"); }
+    Html.AddScriptParts(ResourceLocation.Foot, "~/Plugins/SevenSpikes.Nop.Plugins.MegaMenu/Scripts/jquery.lazyload.min.js");
+    Html.AddScriptParts(ResourceLocation.Foot, "~/Plugins/SevenSpikes.Core/Scripts/SevenSpikesExtensions.min.js");
+    Html.AddScriptParts(ResourceLocation.Foot, "~/Plugins/SevenSpikes.Nop.Plugins.MegaMenu/Scripts/MegaMenu.min.js");}
+<input type="hidden" value="@supportRtl.ToString().ToLowerInvariant()" id="isRtlEnabled" />
+<ul class="mega-menu" data-enableClickForDropDown="@Model.Settings.EnableClickForDropdown.ToString().ToLowerInvariant()">@RenderMegaMenu(isMegaMenuResponsive: false)</ul>
+<div class="menu-title">
+    <span>@T("SevenSpikes.MegaMenu.ResponsiveMenuTitle")</span>
+</div>
+<ul class="mega-menu-responsive">@RenderMegaMenu(isMegaMenuResponsive: true)</ul>
+
+@helper RenderMegaMenu(bool isMegaMenuResponsive)
+{@( isMegaMenuResponsive ? Html.Action("GetCategoriesResponsive", "MegaMenu", Model.Categories) : Html.Action("GetCategories", "MegaMenu", Model.Categories))
+    <li><a href="@Url.RouteUrl("CustomerInfo")">My Account</a></li>
+    <li><a href="/Content/Images/uploaded/pdf/product-catalogs/pdf-viewer/2021/index.html?reload=1591207903917#page=1" target="_blank">Gilson Catalog</a></li>
+    <li><a href="/news">News</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/gilson-videos">Videos</a></li>
+    <li>
+        <a href="/contact-us">Contact Us</a>@if (!isMegaMenuResponsive)
+        {
+            <div class="dropdown">
+                <div class="topic-wrapper">
+                    <p>
+                        <strong>Phone</strong>
+                    </p>
+                    <p>
+                        <a href="tel:+1-800-444-1508">800-444-1508</a>
+                    </p>
+                    <p>
+                        <strong>Fax</strong>
+                    </p>
+                    <p>800-255-5314</p>
+                    <p>
+                        <strong>Email</strong>
+                    </p>
+                    <p>
+                        <a href="mailto:customerservice@gilsonco.com">- US Sales</a>
+                    </p>
+                    <p>
+                        <a href="mailto:international@gilsonco.com">- International Sales</a>
+                    </p>
+                    <p>
+                        <a href="mailto:quotes@gilsonco.com">- Quotes</a>
+                    </p>
+                    <p>
+                        <a href="mailto:techsupport@gilsonco.com">- Technical Support</a>
+                    </p>
+                    <p>
+                        <a href="mailto:hr@gilsonco.com">- Human Resources</a>
+                    </p>
+                    <div style="margin-top: 15px; width: 135px; text-align: center;">
+                        <a href="https://home-c33.nice-incontact.com/incontact/chatclient/chatclient.aspx?poc=e441b03a-781f-49b4-b063-dc0320b162d7&bu=4598504" target="_blank"><img src="/Content/Images/uploaded/icons/smallLiveChat.png" alt="Live Chat" /></a>
+                    </div>
+                </div>
+            </div>
+        }
+    </li>
+    if (isMegaMenuResponsive)
+    {
+    <li>
+        <div class="social-sharing" style="padding: 20px 0; text-align: center;">
+            <ul>
+                <li>
+                    <a rel="me" target="_blank" class="facebook" href="https://www.facebook.com/GilsonCompany"></a>
+                </li>
+                <li>
+                    <a rel="me" target="_blank" class="instagram" href="https://www.instagram.com/gilsoncompanyinc"></a>
+                </li>
+                <li>
+                    <a rel="me" target="_blank" class="twitter" href="https://twitter.com/gilsoncompany"></a>
+                </li>
+                <li>
+                    <a rel="me" target="_blank" class="linkedin" href="https://www.linkedin.com/company/gilson-company-inc."></a>
+                </li>
+                <li>
+                    <a rel="me" target="_blank" class="youtube" href="https://www.youtube.com/user/GilsonCompanyInc"></a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    }
+}
