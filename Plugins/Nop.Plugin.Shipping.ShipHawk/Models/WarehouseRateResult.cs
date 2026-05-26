@@ -10,6 +10,12 @@ namespace Nop.Plugin.Shipping.ShipHawk.Models
         public string WarehouseCode { get; set; }
         public string WarehouseName { get; set; }
         public List<WarehouseRate> Rates { get; set; } = new List<WarehouseRate>();
+
+        /// <summary>
+        /// Debug information captured during parallel rate request.
+        /// Logged AFTER Task.WaitAll completes (sequential context).
+        /// </summary>
+        public RateRequestDebugInfo DebugInfo { get; set; }
     }
 
     /// <summary>

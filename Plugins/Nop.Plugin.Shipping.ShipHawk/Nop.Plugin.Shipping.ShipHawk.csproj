@@ -108,6 +108,7 @@
     <Compile Include="Infrastructure\EventConsumer.cs" />
     <Compile Include="Models\Api\ReferenceNumber.cs" />
     <Compile Include="Models\MergeRatesResult.cs" />
+    <Compile Include="Models\RateRequestDebugInfo.cs" />
     <Compile Include="Models\WarehouseRateResult.cs" />
     <Compile Include="Services\IShipHawkAddressService.cs" />
     <Compile Include="Services\IShipHawkService.cs" />

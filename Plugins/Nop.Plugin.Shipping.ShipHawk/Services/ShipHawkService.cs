@@ -295,19 +295,27 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
             return rateItems;
         }
 
-        private RateResponse SendRateRequest(RateRequest rateRequest)
+        /// <summary>
+        /// Sends a rate request to ShipHawk API.
+        /// CAPTURES debug info instead of logging to ensure thread-safety in parallel contexts.
+        /// Caller MUST log the returned debug info after Task.WaitAll completes.
+        /// </summary>
+        private RateResponse SendRateRequest(
+            RateRequest rateRequest,
+            string warehouseCode,
+            out RateRequestDebugInfo debugInfo)
         {
+            debugInfo = new RateRequestDebugInfo { WarehouseCode = warehouseCode };
+
             // Set TLS 1.2 for HTTPS connections (required by ShipHawk API)
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
             var requestUrl = _shipHawkSettings.ApiUrl + "/rates";
             var jsonContent = JsonConvert.SerializeObject(rateRequest);
 
-            if (_shipHawkSettings.Tracing)
-            {
-                _logger.Information("ShipHawk Rate Request URL: " + requestUrl);
-                _logger.Information("ShipHawk Rate Request Body: " + jsonContent);
-            }
+            // CAPTURE for later logging (instead of immediate logging)
+            debugInfo.RequestUrl = requestUrl;
+            debugInfo.RequestBody = jsonContent;
 
             using (var client = new WebClient())
             {
@@ -319,10 +327,8 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                 {
                     var responseContent = client.UploadString(requestUrl, "POST", jsonContent);
 
-                    if (_shipHawkSettings.Tracing)
-                    {
-                        _logger.Information("ShipHawk Rate Response: " + responseContent);
-                    }
+                    // CAPTURE response for later logging
+                    debugInfo.ResponseJson = responseContent;
 
                     return JsonConvert.DeserializeObject<RateResponse>(responseContent);
                 }
@@ -335,14 +341,17 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                         {
                             var errorResponse = reader.ReadToEnd();
                             errorMessage += " - " + errorResponse;
-                            if (_shipHawkSettings.Tracing)
-                            {
-                                _logger.Information("ShipHawk Rate Error Response: " + errorResponse);
-                            }
+
+                            // CAPTURE error response for later logging
+                            debugInfo.ErrorResponse = errorResponse;
                         }
                     }
-                    _logger.Error(errorMessage, ex);
-                    return new RateResponse { Error = "The system encountered a problem retrieving shipping rates. Please verify your shipping information." };
+
+                    // CAPTURE exception for later logging (ALWAYS logged, not gated by Tracing)
+                    debugInfo.Exception = ex;
+                    debugInfo.ErrorMessage = "The system encountered a problem retrieving shipping rates. Please verify your shipping information.";
+
+                    return new RateResponse { Error = errorMessage };
                 }
             }
         }
@@ -414,6 +423,48 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                 return false;
             var normalized = carrier.ToLowerInvariant();
             return normalized.Contains("freight") || normalized.Contains("ltl");
+        }
+
+        /// <summary>
+        /// Logs debug information captured during parallel rate requests.
+        /// Called SEQUENTIALLY after Task.WaitAll - thread-safe database access.
+        /// Tracing-gated logs only fire when Tracing is enabled.
+        /// Error logs ALWAYS fire (not gated by Tracing).
+        /// </summary>
+        private void LogDebugInfo(RateRequestDebugInfo debugInfo)
+        {
+            if (debugInfo == null || !debugInfo.HasContent)
+                return;
+
+            var warehousePrefix = debugInfo.WarehouseCode != null
+                ? "[" + debugInfo.WarehouseCode + "] "
+                : "";
+
+            // Tracing-gated logging (request/response details)
+            if (_shipHawkSettings.Tracing)
+            {
+                if (!string.IsNullOrEmpty(debugInfo.RequestUrl))
+                    _logger.Information("ShipHawk " + warehousePrefix + "Rate Request URL: " + debugInfo.RequestUrl);
+
+                if (!string.IsNullOrEmpty(debugInfo.RequestBody))
+                    _logger.Information("ShipHawk " + warehousePrefix + "Rate Request Body: " + debugInfo.RequestBody);
+
+                if (!string.IsNullOrEmpty(debugInfo.ResponseJson))
+                    _logger.Information("ShipHawk " + warehousePrefix + "Rate Response: " + debugInfo.ResponseJson);
+
+                if (!string.IsNullOrEmpty(debugInfo.ErrorResponse))
+                    _logger.Information("ShipHawk " + warehousePrefix + "Rate Error Response: " + debugInfo.ErrorResponse);
+            }
+
+            // ALWAYS log errors (not gated by Tracing) - this preserves original error logging behavior
+            if (debugInfo.Exception != null)
+            {
+                var errorMessage = warehousePrefix + "ShipHawk rate request failed: " + debugInfo.Exception.Message;
+                if (!string.IsNullOrEmpty(debugInfo.ErrorResponse))
+                    errorMessage += " - " + debugInfo.ErrorResponse;
+
+                _logger.Error(errorMessage, debugInfo.Exception);
+            }
         }
 
         /// <summary>
@@ -780,10 +831,13 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
 
                     rateTasks.Add(System.Threading.Tasks.Task.Run(() =>
                     {
-                        var rateResponse = SendRateRequest(rateRequest);
+                        // Thread-safe: SendRateRequest captures debug info instead of logging
+                        RateRequestDebugInfo debugInfo;
+                        var rateResponse = SendRateRequest(rateRequest, warehouse.Name, out debugInfo);
 
+                        decimal tempPrice;
                         var validRates = rateResponse.Rates?
-                            .Where(r => !string.IsNullOrEmpty(r.Price) && decimal.TryParse(r.Price, out _))
+                            .Where(r => !string.IsNullOrEmpty(r.Price) && decimal.TryParse(r.Price, out tempPrice))
                             .Where(r => !excludedCarriers.Contains(r.CarrierCode?.ToLowerInvariant() ?? r.Carrier?.ToLowerInvariant() ?? ""))
                             .ToList() ?? new List<Rate>();
 
@@ -799,16 +853,22 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                                 Price = ParseRatePrice(r.Price),
                                 RateId = r.Id,
                                 ServiceDays = r.ServiceDays
-                            }).ToList()
+                            }).ToList(),
+                            DebugInfo = debugInfo  // Captured for post-parallel logging
                         };
                     }));
                 }
 
                 System.Threading.Tasks.Task.WaitAll(rateTasks.ToArray());
 
+                // SEQUENTIAL LOGGING - Thread-safe because we're now outside parallel context
                 foreach (var task in rateTasks)
                 {
                     var whResult = task.Result;
+
+                    // Log debug info captured during parallel execution
+                    LogDebugInfo(whResult.DebugInfo);
+
                     if (whResult.Rates.Any())
                     {
                         warehouseRateResults.Add(whResult);
