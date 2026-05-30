@@ -50,13 +50,26 @@
                     smc=1;
                     var smcInterval = setInterval(function () {
                         if ($('.shipping-method-name').length > 0) {
-                            if ($('.shipping-method-name:contains("Freight")').length > 0) {
+                            // Liftgate fix: Check both names AND descriptions for freight/LTL (case-insensitive)
+                            // This handles Scenario B "Gilson Best" where description contains freight info
+                            var freightFound = false;
+                            $('.shipping-method-name').each(function() {
+                                var t = $(this).text().toLowerCase();
+                                if (t.indexOf('freight') >= 0 || t.indexOf('ltl') >= 0) freightFound = true;
+                            });
+                            $('.method-description').each(function() {
+                                var h = $(this).html().toLowerCase();
+                                if (h.indexOf('freight') >= 0 || h.indexOf('ltl') >= 0) freightFound = true;
+                            });
+                            if (freightFound) {
                                 $('#lift-gate').removeClass('ng-hide');
                                 $('#require-freight').show();
                             } else {
                                 $('#lift-gate').addClass('ng-hide');
                                 $('#require-freight').hide();
                             }
+
+                            // Collect Shipping detection (unchanged)
                             if ($('.shipping-method-name:contains("Collect")').prev('.shipping-method-radio')
                                 .prop('checked')) {
                                 $("#collect-shipping").removeClass('ng-hide');
@@ -64,6 +77,7 @@
                                 $("#collect-shipping").addClass('ng-hide');
                             }
 
+                            // Terms of Service for California (unchanged)
                             if ($("#billingStateProvince").val() == 9) {
                                 if ($("#terms-of-service").prop('checked') == true) { $("#terms-of-service").click(); }
                                 $(".terms-of-service").show();

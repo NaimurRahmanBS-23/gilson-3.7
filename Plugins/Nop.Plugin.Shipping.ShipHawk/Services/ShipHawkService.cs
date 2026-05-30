@@ -483,10 +483,11 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
 
         /// <summary>
         /// Generates cache key for rate response caching.
-        /// Format: ShipHawk_{customerId}_{destinationZip}_{cartHash}
+        /// Format: ShipHawk_{customerId}_{destinationZip}_{cartHash}_{liftgate}
         /// Requirement (Section 8.1): Prevents redundant API calls during checkout session.
+        /// Fix: Include liftgate value to invalidate cache when liftgate changes.
         /// </summary>
-        private string GenerateCacheKey(GetShippingOptionRequest request)
+        private string GenerateCacheKey(GetShippingOptionRequest request, bool needsLiftgate)
         {
             var cartHash = GenerateMd5Hash(
                 request.Items.OrderBy(i => i.ShoppingCartItem.ProductId)
@@ -498,7 +499,8 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                     })
                     .Aggregate("", (a, b) => a + b + "|"));
 
-            var key = $"ShipHawk_{request.Customer?.Id ?? 0}_{request.ShippingAddress?.ZipPostalCode}_{cartHash}";
+            // Include liftgate requirement in cache key to invalidate when liftgate changes
+            var key = $"ShipHawk_{request.Customer?.Id ?? 0}_{request.ShippingAddress?.ZipPostalCode}_{cartHash}_{needsLiftgate}";
             return key;
         }
 
@@ -740,9 +742,11 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                 // PHASE 4: CHECK CACHE FIRST
                 // Section 8: Rate response caching to handle redundant GetShippingOptions calls
                 // Fix: Store RateDetails alongside response for order notes preservation
+                // Fix: Include liftgate in cache key to invalidate when liftgate changes
                 // ========================================
                 // Generate cache key (needed for both cache read and write)
-                var cacheKey = GenerateCacheKey(shippingOptionRequest);
+                // Pass needsLiftgate to ensure cache key includes liftgate requirement
+                var cacheKey = GenerateCacheKey(shippingOptionRequest, needsLiftgate);
                 
                 // Skip cache if caching is disabled
                 if (_shipHawkSettings.EnableCaching)
