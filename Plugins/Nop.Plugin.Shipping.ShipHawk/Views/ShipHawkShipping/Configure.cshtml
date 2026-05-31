@@ -172,6 +172,24 @@
         </tr>
         <tr>
             <td class="adminTitle">
+                @Html.NopLabelFor(model => model.MultiWarehouseMessage):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.MultiWarehouseMessage)
+                @Html.ValidationMessageFor(model => model.MultiWarehouseMessage)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FreightMessage):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FreightMessage)
+                @Html.ValidationMessageFor(model => model.FreightMessage)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
                 @Html.NopLabelFor(model => model.CacheDurationMinutes):
             </td>
             <td class="adminData">

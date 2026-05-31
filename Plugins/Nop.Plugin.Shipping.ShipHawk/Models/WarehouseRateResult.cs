@@ -12,6 +12,12 @@ namespace Nop.Plugin.Shipping.ShipHawk.Models
         public List<WarehouseRate> Rates { get; set; } = new List<WarehouseRate>();
 
         /// <summary>
+        /// SKU items that were included in this warehouse rate request.
+        /// Used for SKU-level order note breakdown for NetSuite.
+        /// </summary>
+        public List<SkuItemInfo> SkuItems { get; set; } = new List<SkuItemInfo>();
+
+        /// <summary>
         /// Debug information captured during parallel rate request.
         /// Logged AFTER Task.WaitAll completes (sequential context).
         /// </summary>

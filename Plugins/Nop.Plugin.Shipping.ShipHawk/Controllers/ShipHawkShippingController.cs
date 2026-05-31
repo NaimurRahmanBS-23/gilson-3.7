@@ -47,11 +47,13 @@ namespace Nop.Plugin.Shipping.ShipHawk.Controllers
                 HideTransitTime = _shipHawkSettings.HideTransitTime,
                 SortByPrice = _shipHawkSettings.SortByPrice,
                 ApplyRules = _shipHawkSettings.ApplyRules,
-                BlendedRateLabel = _shipHawkSettings.BlendedRateLabel ?? "Gilson Best",
+                BlendedRateLabel = _shipHawkSettings.BlendedRateLabel ?? ShipHawkDefaults.DefaultBlendedRateLabel,
                 EnableCaching = _shipHawkSettings.EnableCaching,
                 CacheDurationMinutes = _shipHawkSettings.CacheDurationMinutes > 0 ? _shipHawkSettings.CacheDurationMinutes : 5,
                 LiftGateCheckoutAttributeId = _shipHawkSettings.LiftGateCheckoutAttributeId,
-                Tracing = _shipHawkSettings.Tracing
+                Tracing = _shipHawkSettings.Tracing,
+                MultiWarehouseMessage = _shipHawkSettings.MultiWarehouseMessage ?? ShipHawkDefaults.DefaultMultiWarehouseMessage,
+                FreightMessage = _shipHawkSettings.FreightMessage ?? ShipHawkDefaults.DefaultFreightMessage
             };
 
             var checkoutAttributes = _checkoutAttributeService.GetAllCheckoutAttributes();
@@ -91,11 +93,13 @@ namespace Nop.Plugin.Shipping.ShipHawk.Controllers
             _shipHawkSettings.HideTransitTime = model.HideTransitTime;
             _shipHawkSettings.SortByPrice = model.SortByPrice;
             _shipHawkSettings.ApplyRules = model.ApplyRules;
-            _shipHawkSettings.BlendedRateLabel = model.BlendedRateLabel ?? "Gilson Best";
+            _shipHawkSettings.BlendedRateLabel = model.BlendedRateLabel ?? ShipHawkDefaults.DefaultBlendedRateLabel;
             _shipHawkSettings.EnableCaching = model.EnableCaching;
             _shipHawkSettings.CacheDurationMinutes = model.CacheDurationMinutes > 0 ? model.CacheDurationMinutes : 5;
             _shipHawkSettings.LiftGateCheckoutAttributeId = model.LiftGateCheckoutAttributeId;
             _shipHawkSettings.Tracing = model.Tracing;
+            _shipHawkSettings.MultiWarehouseMessage = model.MultiWarehouseMessage;
+            _shipHawkSettings.FreightMessage = model.FreightMessage;
 
             _settingService.SaveSetting(_shipHawkSettings);
 

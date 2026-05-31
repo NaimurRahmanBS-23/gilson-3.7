@@ -92,18 +92,55 @@ namespace Nop.Plugin.Shipping.ShipHawk.Infrastructure
             {
                 var detail = JsonConvert.DeserializeObject<ShipHawkRateDetail>(detailJson);
 
-                if (detail?.WarehouseBreakdowns == null || !detail.WarehouseBreakdowns.Any())
-                    return;
+                if (detail?.SkuWarehouseBreakdowns == null || !detail.SkuWarehouseBreakdowns.Any())
+                {
+                    // Fallback to legacy format if SKU breakdowns not available
+                    if (detail?.WarehouseBreakdowns != null && detail.WarehouseBreakdowns.Any())
+                    {
+                        var noteLines = detail.WarehouseBreakdowns
+                            .Select(b => "- " + b.WarehouseCode + ": " + b.ServiceName + " - $" + b.Rate.ToString("F2"));
+                        var legacyNote = "ShipHawk Rate Detail (selected: " + detail.ServiceName + "):\n" +
+                                   string.Join("\n", noteLines);
 
-                var noteLines = detail.WarehouseBreakdowns
-                    .Select(b => "- " + b.WarehouseCode + ": " + b.ServiceName + " - $" + b.Rate.ToString("F2"));
-                var note = "ShipHawk Rate Detail (selected: " + detail.ServiceName + "):\n" +
-                           string.Join("\n", noteLines);
+                        order.OrderNotes.Add(new OrderNote
+                        {
+                            OrderId = order.Id,
+                            Note = legacyNote,
+                            DisplayToCustomer = false,
+                            CreatedOnUtc = DateTime.UtcNow
+                        });
+                        _orderService.UpdateOrder(order);
+                    }
+                    return;
+                }
+
+                // Build SKU-level order note for NetSuite order recreation
+                var noteBuilder = new System.Text.StringBuilder();
+                noteBuilder.AppendLine("ShipHawk Rate Detail (selected: " + detail.ServiceName + "):");
+                noteBuilder.AppendLine();
+
+                foreach (var skuBreakdown in detail.SkuWarehouseBreakdowns)
+                {
+                    noteBuilder.AppendLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    noteBuilder.AppendLine("WAREHOUSE: " + skuBreakdown.WarehouseCode);
+                    noteBuilder.AppendLine("Carrier: " + (skuBreakdown.Carrier ?? "N/A") + " | Service: " + skuBreakdown.ServiceName + " | Rate: $" + skuBreakdown.Rate.ToString("F2"));
+                    noteBuilder.AppendLine("SKUs:");
+
+                    foreach (var sku in skuBreakdown.Skus)
+                    {
+                        noteBuilder.AppendLine("  • " + sku.Sku + " (" + sku.ProductName + ") - Qty: " + sku.Quantity + ", Weight: " + sku.Weight.ToString("F1") + " lb");
+                    }
+                }
+
+                noteBuilder.AppendLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                noteBuilder.AppendLine("Total Rate: $" + detail.TotalRate.ToString("F2") + " (before markup)");
+
+                var skuLevelNote = noteBuilder.ToString();
 
                 order.OrderNotes.Add(new OrderNote
                 {
                     OrderId = order.Id,
-                    Note = note,
+                    Note = skuLevelNote,
                     DisplayToCustomer = false,
                     CreatedOnUtc = DateTime.UtcNow
                 });

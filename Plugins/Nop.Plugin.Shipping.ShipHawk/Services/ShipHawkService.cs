@@ -529,6 +529,18 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                         WarehouseBreakdowns = new List<WarehouseRateBreakdown>
                         {
                             new WarehouseRateBreakdown { WarehouseCode = wh.WarehouseCode, ServiceName = rate.OriginalServiceName, Rate = rate.Price }
+                        },
+                        // SKU-level breakdown for NetSuite order recreation
+                        SkuWarehouseBreakdowns = new List<SkuWarehouseBreakdown>
+                        {
+                            new SkuWarehouseBreakdown
+                            {
+                                WarehouseCode = wh.WarehouseCode,
+                                Carrier = rate.Carrier,
+                                ServiceName = rate.OriginalServiceName,
+                                Rate = rate.Price,
+                                Skus = wh.SkuItems
+                            }
                         }
                     };
                 }
@@ -564,6 +576,24 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                         Description = null
                     });
 
+                    // Build SKU breakdowns for each warehouse that contributed to this rate
+                    var skuBreakdowns = new List<SkuWarehouseBreakdown>();
+                    foreach (var wh in warehouseResults)
+                    {
+                        var whRate = wh.Rates.FirstOrDefault(r => r.ServiceName.ToLowerInvariant() == serviceName);
+                        if (whRate != null)
+                        {
+                            skuBreakdowns.Add(new SkuWarehouseBreakdown
+                            {
+                                WarehouseCode = wh.WarehouseCode,
+                                Carrier = whRate.Carrier,
+                                ServiceName = whRate.OriginalServiceName,
+                                Rate = whRate.Price,
+                                Skus = wh.SkuItems
+                            });
+                        }
+                    }
+
                     result.RateDetails[originalName] = new ShipHawkRateDetail
                     {
                         ServiceName = originalName,
@@ -575,7 +605,8 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                                 WarehouseCode = warehouseResults.First(w => w.Rates.Contains(r)).WarehouseCode,
                                 ServiceName = r.OriginalServiceName,
                                 Rate = r.Price
-                            }).ToList()
+                            }).ToList(),
+                        SkuWarehouseBreakdowns = skuBreakdowns
                     };
                 }
             }
@@ -596,17 +627,59 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                     })
                     .ToList();
 
+                // Build SKU breakdowns for each warehouse
+                var skuBreakdowns = new List<SkuWarehouseBreakdown>();
+                foreach (var wh in warehouseResults)
+                {
+                    var whRate = wh.Rates.OrderBy(r => r.Price).FirstOrDefault();
+                    if (whRate != null)
+                    {
+                        skuBreakdowns.Add(new SkuWarehouseBreakdown
+                        {
+                            WarehouseCode = wh.WarehouseCode,
+                            Carrier = whRate.Carrier,
+                            ServiceName = whRate.OriginalServiceName,
+                            Rate = whRate.Price,
+                            Skus = wh.SkuItems
+                        });
+                    }
+                }
+
                 var totalRate = breakdowns.Sum(b => b.Rate);
-                var blendedLabel = _shipHawkSettings.BlendedRateLabel ?? "Gilson Best";
+                var blendedLabel = _shipHawkSettings.BlendedRateLabel ?? ShipHawkDefaults.DefaultBlendedRateLabel;
                 var hasFreight = selectedRates.Any(r => IsFreightCarrier(r.Carrier));
 
-                var descriptionBuilder = new StringBuilder("<ul>");
-                foreach (var b in breakdowns)
+                // ========================================
+                // DESCRIPTION FOR GILSON BEST (SCENARIO B)
+                // Two options based on settings:
+                // 1. If MultiWarehouseMessage configured → show informational message
+                // 2. If empty → fallback to breakdown HTML (backward compatible)
+                // Freight message appended if freight detected AND setting configured
+                // ========================================
+                var description = "";
+
+                if (!string.IsNullOrWhiteSpace(_shipHawkSettings.MultiWarehouseMessage))
                 {
-                    descriptionBuilder.Append("<li>" + b.WarehouseCode + ": " + b.ServiceName + " - $" + b.Rate.ToString("F2") + "</li>");
+                    // Use configured informational message
+                    description = "<p>" + _shipHawkSettings.MultiWarehouseMessage + "</p>";
                 }
-                descriptionBuilder.Append("</ul>");
-                var description = descriptionBuilder.ToString();
+                else
+                {
+                    // Fallback to original breakdown HTML (backward compatible)
+                    var descriptionBuilder = new StringBuilder("<ul>");
+                    foreach (var b in breakdowns)
+                    {
+                        descriptionBuilder.Append("<li>" + b.WarehouseCode + ": " + b.ServiceName + " - $" + b.Rate.ToString("F2") + "</li>");
+                    }
+                    descriptionBuilder.Append("</ul>");
+                    description = descriptionBuilder.ToString();
+                }
+
+                // Append freight message if freight carrier AND setting configured
+                if (hasFreight && !string.IsNullOrWhiteSpace(_shipHawkSettings.FreightMessage))
+                {
+                    description += "<p>" + _shipHawkSettings.FreightMessage + "</p>";
+                }
 
                 result.ShippingOptions.Add(new ShippingOption
                 {
@@ -620,7 +693,8 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                     ServiceName = blendedLabel,
                     TotalRate = totalRate,
                     HasFreightCarrier = hasFreight,
-                    WarehouseBreakdowns = breakdowns
+                    WarehouseBreakdowns = breakdowns,
+                    SkuWarehouseBreakdowns = skuBreakdowns
                 };
             }
 
@@ -666,6 +740,102 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                 }
 
                 var shippingAddress = shippingOptionRequest.ShippingAddress;
+
+                // ========================================
+                // PRE-API SPECIAL SCENARIO CHECKS
+                // These scenarios return special shipping options without calling ShipHawk API
+                // Matches BssShippingService pattern for consistency
+                // ========================================
+
+                // Scenario 2: International - Cannot rate international orders through ShipHawk
+                if (!string.IsNullOrWhiteSpace(shippingAddress.Country?.TwoLetterIsoCode))
+                {
+                    if (shippingAddress.Country.TwoLetterIsoCode != "US")
+                    {
+                        if (_shipHawkSettings.Tracing)
+                            _logger.Information("ShipHawk: International shipping detected - Country: " + shippingAddress.Country.TwoLetterIsoCode + " - Returning special International option");
+
+                        response.ShippingOptions.Add(new ShippingOption
+                        {
+                            Name = "International",
+                            Rate = 0,
+                            Description = "A customer service representative will contact you with a shipping quote."
+                        });
+                        response.ShippingFromMultipleLocations = false;
+                        return response;
+                    }
+                }
+                else
+                {
+                    response.AddError("Please enter your shipping address information.");
+                    return response;
+                }
+
+                // Scenario 3: CatalogOnly - USPS Bound Printed Material for catalog-only orders
+                var allCatalogItems = shippingOptionRequest.Items.All(i =>
+                {
+                    var product = _productService.GetProductById(i.ShoppingCartItem.ProductId);
+                    return product != null && product.Sku == "GILSON CATALOG";
+                });
+
+                if (allCatalogItems)
+                {
+                    if (_shipHawkSettings.Tracing)
+                        _logger.Information("ShipHawk: CatalogOnly order detected - Returning USPS Bound Printed Material option");
+
+                    response.ShippingOptions.Add(new ShippingOption
+                    {
+                        Name = "USPS Bound Printed Material",
+                        Rate = 0,
+                        Description = "Please allow 2-3 weeks for delivery."
+                    });
+                    response.ShippingFromMultipleLocations = false;
+                    return response;
+                }
+
+                // Scenario 4: DownloadableProduct - No shipping required
+                var allDownloadable = shippingOptionRequest.Items.All(i =>
+                {
+                    var product = _productService.GetProductById(i.ShoppingCartItem.ProductId);
+                    return product != null && product.IsDownload;
+                });
+
+                if (allDownloadable)
+                {
+                    if (_shipHawkSettings.Tracing)
+                        _logger.Information("ShipHawk: Downloadable products only - Returning special downloadable option");
+
+                    response.ShippingOptions.Add(new ShippingOption
+                    {
+                        Name = "Downloadable Product",
+                        Rate = 0,
+                        Description = "No shipping required for downloadable products."
+                    });
+                    response.ShippingFromMultipleLocations = false;
+                    return response;
+                }
+
+                // Scenario 5: FreeShipping - All items eligible for free shipping
+                var allFreeShipping = shippingOptionRequest.Items.All(i =>
+                {
+                    var product = _productService.GetProductById(i.ShoppingCartItem.ProductId);
+                    return product != null && product.IsFreeShipping;
+                });
+
+                if (allFreeShipping)
+                {
+                    if (_shipHawkSettings.Tracing)
+                        _logger.Information("ShipHawk: All items are free shipping - Returning free shipping option");
+
+                    response.ShippingOptions.Add(new ShippingOption
+                    {
+                        Name = "Free Shipping",
+                        Rate = 0,
+                        Description = "All shopping cart items are eligible for free shipping."
+                    });
+                    response.ShippingFromMultipleLocations = false;
+                    return response;
+                }
 
                 // Address validation
                 var validationResult = _shipHawkAddressService.ValidateAddressForCheckout(shippingAddress);
@@ -822,6 +992,23 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
 
                     var rateItems = BuildRateItems(items, warehouse.Name);
 
+                    // ========================================
+                    // SKU-LEVEL CAPTURE: Build SKU item list BEFORE parallel task
+                    // This allows us to show SKU, Warehouse, Carrier, Service, Rate in order notes
+                    // for NetSuite order recreation
+                    // ========================================
+                    var skuItems = items.Select(i =>
+                    {
+                        var product = _productService.GetProductById(i.ShoppingCartItem.ProductId);
+                        return new SkuItemInfo
+                        {
+                            Sku = product?.Sku ?? i.ShoppingCartItem.ProductId.ToString(),
+                            ProductName = product?.Name ?? "Unknown",
+                            Quantity = i.GetQuantity(),
+                            Weight = product?.Weight ?? 0
+                        };
+                    }).ToList();
+
                     var rateRequest = new RateRequest
                     {
                         Items = rateItems,
@@ -833,11 +1020,15 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                         ReferenceNumbers = referenceNumbers
                     };
 
+                    // Capture skuItems in closure for use inside Task.Run
+                    var capturedSkuItems = skuItems;
+                    var capturedWarehouseName = warehouse.Name;
+
                     rateTasks.Add(System.Threading.Tasks.Task.Run(() =>
                     {
                         // Thread-safe: SendRateRequest captures debug info instead of logging
                         RateRequestDebugInfo debugInfo;
-                        var rateResponse = SendRateRequest(rateRequest, warehouse.Name, out debugInfo);
+                        var rateResponse = SendRateRequest(rateRequest, capturedWarehouseName, out debugInfo);
 
                         decimal tempPrice;
                         var validRates = rateResponse.Rates?
@@ -847,8 +1038,8 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
 
                         return new WarehouseRateResult
                         {
-                            WarehouseCode = warehouse.Name,
-                            WarehouseName = warehouse.Name,
+                            WarehouseCode = capturedWarehouseName,
+                            WarehouseName = capturedWarehouseName,
                             Rates = validRates.Select(r => new WarehouseRate
                             {
                                 ServiceName = (r.RateDisplayName ?? (r.Carrier + " " + r.ServiceLevel).Trim()).ToLowerInvariant(),
@@ -858,6 +1049,7 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
                                 RateId = r.Id,
                                 ServiceDays = r.ServiceDays
                             }).ToList(),
+                            SkuItems = capturedSkuItems,  // SKU items for order note breakdown
                             DebugInfo = debugInfo  // Captured for post-parallel logging
                         };
                     }));
@@ -967,9 +1159,26 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
 
                 if (!response.ShippingOptions.Any() && !response.Errors.Any())
                 {
-                    response.AddError("The system encountered a problem retrieving shipping rates. Please verify your shipping information.");
+                    // HACK: Match BssShippingService error message for OPC retry button detection
+                    // OPC looks for "retry" keyword to show retry button
+                    response.AddError("The system encountered a problem retrieving shipping rates.  Please refresh to retry.");
                 }
-                
+
+                // ========================================
+                // SCENARIO 1: COLLECT SHIPPING OPTION
+                // Always added at end of shipping options (matches BssShippingService pattern)
+                // OPC displays checkout attributes for carrier/account when selected
+                // ========================================
+                if (response.ShippingOptions.Any())
+                {
+                    response.ShippingOptions.Add(new ShippingOption
+                    {
+                        Name = "Collect",
+                        Rate = 0,
+                        Description = "Have us ship with your account number."
+                    });
+                }
+
                 // Log the final response for debugging
                 if (_shipHawkSettings.Tracing)
                 {
@@ -986,7 +1195,9 @@ namespace Nop.Plugin.Shipping.ShipHawk.Services
             {
                 var errorMessage = "Error getting ShipHawk shipping rates: " + ex.Message;
                 _logger.Error(errorMessage, ex);
-                response.AddError("An error occurred while calculating shipping rates. Please try again.");
+                // HACK: Match BssShippingService error message for OPC retry button detection
+                // OPC looks for "retry" keyword to show retry button
+                response.AddError("An error occurred while calculating shipping rates.  Please refresh to retry.");
             }
 
             return response;

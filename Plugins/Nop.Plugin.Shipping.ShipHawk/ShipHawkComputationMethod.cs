@@ -128,6 +128,11 @@ namespace Nop.Plugin.Shipping.ShipHawk
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.LiftGateCheckoutAttributeId", "Lift Gate Checkout Attribute");
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.LiftGateCheckoutAttributeId.Hint", "Select the checkout attribute that customers use to indicate liftgate requirement. This attribute should have values like 'Yes' and 'No'. When 'Yes' is selected, ShipHawk will include destination_liftgate accessorial in rate requests.");
 
+            this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.MultiWarehouseMessage", "Multi-Warehouse Message");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.MultiWarehouseMessage.Hint", "Message shown for Gilson Best when shipping from multiple warehouses. If empty, falls back to breakdown HTML showing warehouse/service/rate details.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.FreightMessage", "Freight Message");
+            this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.FreightMessage.Hint", "Additional message shown when freight/LTL carrier is required. IMPORTANT: Must contain 'freight' or 'ltl' keyword for OPC liftgate detection to work.");
+
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.ShipHawk.Error.ApiKeyNotConfigured", "ShipHawk API key is not configured");
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.ShipHawk.Error.ApiUrlNotConfigured", "ShipHawk API URL is not configured");
             this.AddOrUpdatePluginLocaleResource("Plugins.Shipping.ShipHawk.Error.NoRatesAvailable", "No shipping rates available for this destination");
@@ -185,6 +190,11 @@ namespace Nop.Plugin.Shipping.ShipHawk
 
             this.DeletePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.LiftGateCheckoutAttributeId");
             this.DeletePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.LiftGateCheckoutAttributeId.Hint");
+
+            this.DeletePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.MultiWarehouseMessage");
+            this.DeletePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.MultiWarehouseMessage.Hint");
+            this.DeletePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.FreightMessage");
+            this.DeletePluginLocaleResource("Plugins.Shipping.ShipHawk.Fields.FreightMessage.Hint");
 
             this.DeletePluginLocaleResource("Plugins.Shipping.ShipHawk.Error.ApiKeyNotConfigured");
             this.DeletePluginLocaleResource("Plugins.Shipping.ShipHawk.Error.ApiUrlNotConfigured");
