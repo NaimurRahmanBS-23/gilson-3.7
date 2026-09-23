@@ -1,0 +1,39 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleTierModel
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = "~/Administration/Views/Shared/_AdminPopupLayout.cshtml";
+    ViewBag.Title = T("Admin.NopStation.DiscountManagerPlus.RuleTiers.AddNew").Text;
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+}
+@using (Html.BeginForm("RuleTierCreatePopup", "PromotionRule", pluginAdmin, FormMethod.Post, new { id = "tier-popup-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.PromotionRuleId)
+    @Html.HiddenFor(model => model.RuleTypeId)
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-promotions.png")" alt="" />
+            @T("Admin.NopStation.DiscountManagerPlus.RuleTiers.AddNew")
+        </div>
+        <div class="options">
+            @if (ViewBag.RefreshPage != true)
+            {
+                <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            }
+        </div>
+    </div>
+
+    if (ViewBag.RefreshPage == true)
+    {
+        <script type="text/javascript">
+            try { window.opener.refreshTiersGrid(); } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        @Html.ValidationSummary(false)
+        @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_RuleTierPopupFields.cshtml", Model)
+    }
+}

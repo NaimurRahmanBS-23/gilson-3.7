@@ -1,0 +1,415 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleConditionModel
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Infrastructure
+@using Nop.Plugin.Misc.DiscountManagerPlus.Domain
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = "~/Administration/Views/Shared/_AdminPopupLayout.cshtml";
+    var isEditMode = Model.Id > 0;
+    var popupTitle = isEditMode
+        ? T("Admin.NopStation.DiscountManagerPlus.RuleConditions.EditDetails").Text
+        : T("Admin.NopStation.DiscountManagerPlus.RuleConditions.AddNew").Text;
+    ViewBag.Title = popupTitle;
+    var formAction = isEditMode ? "RuleConditionEditPopup" : "RuleConditionCreatePopup";
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+    var requiredProductUrl = PluginAdminUrl.Combine(
+        Url.Action("RuleConditionSelectProductPopup", "PromotionRule", pluginAdmin),
+        "productIdInput=" + Html.FieldIdFor(model => model.RequiredProductId) + "&productNameInput=required-product-name&btnId=btnRefreshRequiredProduct");
+    var excludedProductUrl = PluginAdminUrl.Combine(
+        Url.Action("RuleConditionSelectProductPopup", "PromotionRule", pluginAdmin),
+        "productIdInput=" + Html.FieldIdFor(model => model.ExcludedProductId) + "&productNameInput=excluded-product-name&btnId=btnRefreshExcludedProduct");
+}
+@using (Html.BeginForm(formAction, "PromotionRule", pluginAdmin, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.PromotionRuleId)
+    @Html.HiddenFor(model => model.RuleTypeId)
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-promotions.png")" alt="" />
+            @popupTitle
+        </div>
+        <div class="options">
+            @if (ViewBag.RefreshPage != true)
+            {
+                <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            }
+        </div>
+    </div>
+
+    if (ViewBag.RefreshPage == true)
+    {
+        <script type="text/javascript">
+            try { window.opener.refreshConditionsGrid(); } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        @Html.ValidationSummary(false)
+        <table class="adminContent">
+            <tr id="condition-operator-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.ConditionOperatorId):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.ConditionOperatorId, Model.AvailableConditionOperators)
+                    @Html.ValidationMessageFor(model => model.ConditionOperatorId)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.ConditionGroup):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.ConditionGroup)
+                    @Html.ValidationMessageFor(model => model.ConditionGroup)
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.ParentConditionId):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.ParentConditionId, Model.AvailableParentConditions)
+                    @Html.ValidationMessageFor(model => model.ParentConditionId)
+                    <div>@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.ParentCondition.Hint")</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.LogicalOperatorId):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.LogicalOperatorId, Model.AvailableLogicalOperators)
+                    @Html.ValidationMessageFor(model => model.LogicalOperatorId)
+                </td>
+            </tr>
+            <tr id="condition-min-value-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.MinValue):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.MinValue)
+                    @Html.ValidationMessageFor(model => model.MinValue)
+                </td>
+            </tr>
+            <tr id="condition-max-value-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.MaxValue):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.MaxValue)
+                    @Html.ValidationMessageFor(model => model.MaxValue)
+                </td>
+            </tr>
+            <tr id="condition-required-product-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.RequiredProductId):
+                </td>
+                <td class="adminData">
+                    @Html.HiddenFor(model => model.RequiredProductId)
+                    <span id="required-product-name">@Model.RequiredProductName</span>
+                    @Html.ValidationMessageFor(model => model.RequiredProductId)
+                    <input type="button" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.Product.Choose")" onclick="javascript:OpenWindow('@Html.Raw(requiredProductUrl)', 800, 850, true); return false;" />
+                    <input type="button" id="required-product-name-remove" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.Product.Remove")" />
+                    <input type="submit" id="btnRefreshRequiredProduct" style="display:none" />
+                </td>
+            </tr>
+            <tr id="condition-excluded-product-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.ExcludedProductId):
+                </td>
+                <td class="adminData">
+                    @Html.HiddenFor(model => model.ExcludedProductId)
+                    <span id="excluded-product-name">@Model.ExcludedProductName</span>
+                    @Html.ValidationMessageFor(model => model.ExcludedProductId)
+                    <input type="button" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.Product.Choose")" onclick="javascript:OpenWindow('@Html.Raw(excludedProductUrl)', 800, 850, true); return false;" />
+                    <input type="button" id="excluded-product-name-remove" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.Product.Remove")" />
+                    <input type="submit" id="btnRefreshExcludedProduct" style="display:none" />
+                </td>
+            </tr>
+            <tr id="condition-source-restriction-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.ConditionRestrictionTypeId):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.ConditionRestrictionTypeId, Model.AvailableConditionRestrictionTypes)
+                    @Html.ValidationMessageFor(model => model.ConditionRestrictionTypeId)
+                </td>
+            </tr>
+            <tr id="condition-source-type-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.ConditionSourceTypeId):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.ConditionSourceTypeId, Model.AvailableConditionSourceTypes)
+                    @Html.ValidationMessageFor(model => model.ConditionSourceTypeId)
+                    <div>@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.ConditionSourceType.Hint")</div>
+                </td>
+            </tr>
+        </table>
+
+        @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/Shared/_ConditionSourceBuilder.cshtml", Model)
+
+        <table class="adminContent">
+            <tr id="condition-same-line-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.RequireSameLineMatch):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.RequireSameLineMatch)
+                    @Html.ValidationMessageFor(model => model.RequireSameLineMatch)
+                </td>
+            </tr>
+            <tr id="condition-quantity-min-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.QuantityMin):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.QuantityMin)
+                    @Html.ValidationMessageFor(model => model.QuantityMin)
+                    <div>@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.QuantityMin.Hint")</div>
+                </td>
+            </tr>
+            <tr id="condition-quantity-max-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.QuantityMax):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.QuantityMax)
+                    @Html.ValidationMessageFor(model => model.QuantityMax)
+                    <div>@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.QuantityMax.Hint")</div>
+                </td>
+            </tr>
+            <tr id="condition-attribute-match-mode-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.AttributeMatchModeId):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.AttributeMatchModeId, Model.AvailableAttributeMatchModes)
+                    @Html.ValidationMessageFor(model => model.AttributeMatchModeId)
+                </td>
+            </tr>
+            <tr id="condition-required-category-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.RequiredCategoryId):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.RequiredCategoryId, Model.AvailableCategories)
+                    @Html.ValidationMessageFor(model => model.RequiredCategoryId)
+                </td>
+            </tr>
+            <tr id="condition-required-vendor-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.RequiredVendorId):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.RequiredVendorId, Model.AvailableVendors)
+                    @Html.ValidationMessageFor(model => model.RequiredVendorId)
+                </td>
+            </tr>
+            <tr id="condition-required-role-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.RequiredCustomerRoleId):
+                </td>
+                <td class="adminData">
+                    @Html.DropDownListFor(model => model.RequiredCustomerRoleId, Model.AvailableCustomerRoles)
+                    @Html.ValidationMessageFor(model => model.RequiredCustomerRoleId)
+                </td>
+            </tr>
+            <tr id="condition-first-order-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.IsFirstOrderOnly):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.IsFirstOrderOnly)
+                    @Html.ValidationMessageFor(model => model.IsFirstOrderOnly)
+                </td>
+            </tr>
+            <tr id="condition-new-customer-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.IsNewCustomerOnly):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.IsNewCustomerOnly)
+                    @Html.ValidationMessageFor(model => model.IsNewCustomerOnly)
+                </td>
+            </tr>
+            <tr id="condition-country-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.RequiredCountryCodesCsv):
+                </td>
+                <td class="adminData">
+                    @Html.ListBoxFor(model => model.SelectedCountryCodes, Model.AvailableCountries)
+                    @Html.ValidationMessageFor(model => model.SelectedCountryCodes)
+                    <div>@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.RequiredCountryCodesCsv.Hint")</div>
+                </td>
+            </tr>
+            <tr id="condition-payment-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.RequiredPaymentMethodsCsv):
+                </td>
+                <td class="adminData">
+                    @Html.ListBoxFor(model => model.SelectedPaymentMethodSystemNames, Model.AvailablePaymentMethods)
+                    @Html.ValidationMessageFor(model => model.SelectedPaymentMethodSystemNames)
+                    <div>@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.RequiredPaymentMethodsCsv.Hint")</div>
+                </td>
+            </tr>
+            <tr id="condition-order-count-min-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.RequiredOrderCountMin):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.RequiredOrderCountMin)
+                    @Html.ValidationMessageFor(model => model.RequiredOrderCountMin)
+                    <div>@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.RequiredOrderCountMin.Hint")</div>
+                </td>
+            </tr>
+            <tr id="condition-order-count-max-row">
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.RequiredOrderCountMax):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.RequiredOrderCountMax)
+                    @Html.ValidationMessageFor(model => model.RequiredOrderCountMax)
+                    <div>@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.RequiredOrderCountMax.Hint")</div>
+                </td>
+            </tr>
+        </table>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                toggleConditionFields();
+                $('#@Html.FieldIdFor(model => model.ConditionOperatorId)').on('change', toggleConditionMaxValue);
+                $('#@Html.FieldIdFor(model => model.ConditionSourceTypeId)').on('change', toggleConditionSourceFields);
+                $('#@Html.FieldIdFor(model => model.ConditionSourceTypeId)').on('change', toggleContextualConditionRows);
+                $('#@Html.FieldIdFor(model => model.SelectedCountryCodes)').kendoMultiSelect({ filter: "contains" });
+                $('#@Html.FieldIdFor(model => model.SelectedPaymentMethodSystemNames)').kendoMultiSelect({ filter: "contains" });
+                toggleProductRemoveButtons();
+                toggleContextualConditionRows();
+
+                $('#required-product-name-remove').on('click', function () {
+                    clearSelectedProduct('#@Html.FieldIdFor(model => model.RequiredProductId)', '#required-product-name');
+                    toggleProductRemoveButtons();
+                    return false;
+                });
+
+                $('#excluded-product-name-remove').on('click', function () {
+                    clearSelectedProduct('#@Html.FieldIdFor(model => model.ExcludedProductId)', '#excluded-product-name');
+                    toggleProductRemoveButtons();
+                    return false;
+                });
+
+                $('#btnRefreshRequiredProduct, #btnRefreshExcludedProduct').on('click', function () {
+                    toggleProductRemoveButtons();
+                    toggleContextualConditionRows();
+                    return false;
+                });
+
+                $('#@Html.FieldIdFor(model => model.RequiredCategoryId), #@Html.FieldIdFor(model => model.RequiredVendorId)').on('change', toggleContextualConditionRows);
+            });
+
+            function clearSelectedProduct(idSelector, nameSelector) {
+                $(idSelector).val('');
+                $(nameSelector).text('');
+            }
+
+            function toggleProductRemoveButtons() {
+                var requiredId = parseInt($('#@Html.FieldIdFor(model => model.RequiredProductId)').val(), 10) || 0;
+                var excludedId = parseInt($('#@Html.FieldIdFor(model => model.ExcludedProductId)').val(), 10) || 0;
+
+                if (requiredId > 0) {
+                    $('#required-product-name-remove').show();
+                } else {
+                    $('#required-product-name-remove').hide();
+                }
+
+                if (excludedId > 0) {
+                    $('#excluded-product-name-remove').show();
+                } else {
+                    $('#excluded-product-name-remove').hide();
+                }
+            }
+
+            function toggleConditionFields() {
+                var ruleType = parseInt($('#@Html.FieldIdFor(model => model.RuleTypeId)').val(), 10) || 0;
+                var isSubtotalBased = ruleType === @((int)PromotionRuleType.SubtotalBased);
+                var supportsCartMetric = isSubtotalBased || ruleType === @((int)PromotionRuleType.CartCondition);
+                var supportsSourceConditions = !isSubtotalBased;
+
+                $('#condition-operator-row').toggle(supportsCartMetric);
+                $('#condition-min-value-row').toggle(supportsCartMetric);
+                $('#condition-required-product-row').toggle(supportsSourceConditions);
+                $('#condition-excluded-product-row').toggle(supportsSourceConditions);
+                toggleConditionSourceFields();
+
+                if (supportsCartMetric) {
+                    toggleConditionMaxValue();
+                    if (isSubtotalBased) {
+                        clearSelectedProduct('#@Html.FieldIdFor(model => model.RequiredProductId)', '#required-product-name');
+                        clearSelectedProduct('#@Html.FieldIdFor(model => model.ExcludedProductId)', '#excluded-product-name');
+                        toggleProductRemoveButtons();
+                    }
+                } else {
+                    $('#condition-max-value-row').hide();
+                    $('#@Html.FieldIdFor(model => model.MinValue)').val('0');
+                    $('#@Html.FieldIdFor(model => model.MaxValue)').val('0');
+                }
+
+                toggleContextualConditionRows();
+            }
+
+            function toggleConditionSourceFields() {
+                var ruleType = parseInt($('#@Html.FieldIdFor(model => model.RuleTypeId)').val(), 10) || 0;
+                var isSubtotalBased = ruleType === @((int)PromotionRuleType.SubtotalBased);
+                var sourceType = parseInt($('#@Html.FieldIdFor(model => model.ConditionSourceTypeId)').val(), 10) || 0;
+
+                $('#condition-source-restriction-row').toggle(!isSubtotalBased);
+                $('#condition-source-type-row').toggle(!isSubtotalBased);
+                $('#condition-source-builder-row').toggle(!isSubtotalBased && sourceType > 0);
+                $('#condition-quantity-min-row').toggle(!isSubtotalBased);
+                $('#condition-quantity-max-row').toggle(!isSubtotalBased);
+                $('#condition-attribute-match-mode-row').toggle(!isSubtotalBased && sourceType === @((int)ConditionSourceType.ProductAttributeValues));
+            }
+
+            function toggleContextualConditionRows() {
+                var ruleType = parseInt($('#@Html.FieldIdFor(model => model.RuleTypeId)').val(), 10) || 0;
+                var isSubtotalBased = ruleType === @((int)PromotionRuleType.SubtotalBased);
+                var sourceType = parseInt($('#@Html.FieldIdFor(model => model.ConditionSourceTypeId)').val(), 10) || 0;
+                var requiredProductId = parseInt($('#@Html.FieldIdFor(model => model.RequiredProductId)').val(), 10) || 0;
+                var excludedProductId = parseInt($('#@Html.FieldIdFor(model => model.ExcludedProductId)').val(), 10) || 0;
+                var requiredCategoryId = parseInt($('#@Html.FieldIdFor(model => model.RequiredCategoryId)').val(), 10) || 0;
+                var requiredVendorId = parseInt($('#@Html.FieldIdFor(model => model.RequiredVendorId)').val(), 10) || 0;
+                var hasLineScopedSource = sourceType === @((int)ConditionSourceType.Products) ||
+                    sourceType === @((int)ConditionSourceType.Categories) ||
+                    sourceType === @((int)ConditionSourceType.Manufacturers) ||
+                    sourceType === @((int)ConditionSourceType.Vendors) ||
+                    sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions) ||
+                    sourceType === @((int)ConditionSourceType.ProductAttributeValues) ||
+                    sourceType === @((int)ConditionSourceType.ExpiryDays);
+                var hasLineScopedCriteria = requiredProductId > 0 ||
+                    excludedProductId > 0 ||
+                    requiredCategoryId > 0 ||
+                    requiredVendorId > 0 ||
+                    hasLineScopedSource;
+
+                $('#condition-same-line-row').toggle(!isSubtotalBased && hasLineScopedCriteria);
+                if (isSubtotalBased || !hasLineScopedCriteria) {
+                    $('#@Html.FieldIdFor(model => model.RequireSameLineMatch)').prop('checked', false);
+                }
+            }
+
+            function toggleConditionMaxValue() {
+                var op = parseInt($('#@Html.FieldIdFor(model => model.ConditionOperatorId)').val(), 10) || 0;
+                var isBetween = op === @((int)ConditionOperator.Between);
+                $('#condition-max-value-row').toggle(isBetween);
+
+                if (!isBetween) {
+                    $('#@Html.FieldIdFor(model => model.MaxValue)').val('0');
+                }
+            }
+        </script>
+    }
+}

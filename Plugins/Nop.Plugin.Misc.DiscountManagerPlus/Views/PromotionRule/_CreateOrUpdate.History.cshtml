@@ -1,0 +1,91 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleUsageHistorySearchModel
+@using Nop.Core.Infrastructure
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+}
+
+@if (Model.UseParentDiscountHistory)
+{
+    <p>@string.Format(T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.ParentDiscount.Note").Text, Model.ParentDiscountName)</p>
+}
+
+<div id="rule-usage-history-grid"></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#rule-usage-history-grid").kendoGrid({
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: {
+                        url: "@Html.Raw(Url.Action("RuleUsageHistoryList", "PromotionRule", pluginAdmin))",
+                        type: "POST",
+                        dataType: "json",
+                        data: function () {
+                            return addAntiForgeryToken({ PromotionRuleId: @Model.PromotionRuleId });
+                        }
+                    }
+                },
+                schema: {
+                    data: "Data",
+                    total: "Total",
+                    errors: "Errors",
+                    model: {
+                        id: "Id",
+                        fields: {
+                            CreatedOn: { type: "date" }
+                        }
+                    }
+                },
+                error: function (e) {
+                    display_kendoui_grid_error(e);
+                    this.cancelChanges();
+                },
+                pageSize: @(defaultGridPageSize),
+                serverPaging: true,
+                serverFiltering: true,
+                serverSorting: true
+            },
+            pageable: {
+                refresh: true,
+                pageSizes: [@(gridPageSizes)]
+            },
+            editable: {
+                confirmation: false,
+                mode: "inline"
+            },
+            scrollable: false,
+            columns: [{
+                field: "CreatedOn",
+                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.CreatedOn")",
+                width: 180,
+                type: "date",
+                format: "{0:G}"
+            }, {
+                field: "CustomOrderNumber",
+                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.Order")",
+                width: 200,
+                template: '# if (OrderId > 0) { #<a href="@Url.Content("~/Admin/Order/Edit/")#=OrderId#">#=CustomOrderNumber# - @T("Admin.Common.View")</a># } else { ##=CustomOrderNumber## } #'
+            }, {
+                field: "CustomerEmail",
+                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.Customer")",
+                width: 220
+            }, {
+                field: "OrderTotal",
+                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.OrderTotal")",
+                width: 120
+            }, {
+                field: "DiscountAmountApplied",
+                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.Discount")",
+                width: 130
+            }, {
+                field: "HistorySource",
+                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.Source")",
+                width: 200
+            }]
+        });
+    });
+</script>

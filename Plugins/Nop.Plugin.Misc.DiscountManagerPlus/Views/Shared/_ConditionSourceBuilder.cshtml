@@ -1,0 +1,854 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleConditionModel
+@using System.Linq
+@using System.Web.Routing
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models
+@using Nop.Plugin.Misc.DiscountManagerPlus.Domain
+@using Nop.Web.Framework
+@{
+    var jsonSettings = new JsonSerializerSettings
+    {
+        ContractResolver = new CamelCasePropertyNamesContractResolver()
+    };
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+
+    object initialStateObj;
+    if (!string.IsNullOrWhiteSpace(Model.ConditionSourceBuilderJson))
+    {
+        try
+        {
+            initialStateObj = JsonConvert.DeserializeObject(Model.ConditionSourceBuilderJson);
+        }
+        catch
+        {
+            initialStateObj = new ConditionSourceBuilderStateModel
+            {
+                Rows = Model.SourceBuilderRows,
+                Tokens = Model.SelectedSourceTokens
+            };
+        }
+    }
+    else
+    {
+        initialStateObj = new ConditionSourceBuilderStateModel
+        {
+            Rows = Model.SourceBuilderRows,
+            Tokens = Model.SelectedSourceTokens
+        };
+    }
+
+    var specificationAttributeOptions = Model.AvailableSpecificationAttributes
+        .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+        .Select(x => new { value = x.Value, text = x.Text })
+        .ToList();
+    var productAttributeOptions = Model.AvailableProductAttributes
+        .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+        .Select(x => new { value = x.Value, text = x.Text })
+        .ToList();
+    var deviceTypeOptions = Model.AvailableSourceDeviceTypes
+        .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+        .Select(x => new { value = x.Value, text = x.Text })
+        .ToList();
+    var salesChannelOptions = Model.AvailableSourceSalesChannels
+        .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+        .Select(x => new { value = x.Value, text = x.Text })
+        .ToList();
+    var specificationOptionLookup = Model.AvailableSpecificationAttributeOptionsLookup
+        .ToDictionary(
+            x => x.Key.ToString(),
+            x => x.Value
+                .Where(y => !string.IsNullOrWhiteSpace(y.Value))
+                .Select(y => new { value = y.Value, text = y.Text })
+                .ToList());
+    var productAttributeValueLookup = Model.AvailableProductAttributeValuesLookup
+        .ToDictionary(
+            x => x.Key.ToString(),
+            x => x.Value
+                .Where(y => !string.IsNullOrWhiteSpace(y.Value))
+                .Select(y => new { value = y.Value, text = y.Text })
+                .ToList());
+}
+
+@Html.HiddenFor(model => model.ConditionSourceData)
+@Html.HiddenFor(model => model.ConditionSourceBuilderJson)
+@Html.HiddenFor(model => model.ConditionSourceBuilderTouched)
+
+<table class="adminContent" id="condition-source-builder-row">
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.ConditionSourceData):
+        </td>
+        <td class="adminData">
+            <div id="condition-source-builder-host"></div>
+            <div>
+                <strong>@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Preview")</strong>
+                <div id="condition-source-builder-preview"></div>
+            </div>
+            <div id="condition-source-builder-warning" style="display:none; color:red;"></div>
+            @Html.ValidationMessageFor(model => model.ConditionSourceData)
+            <div>@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.ConditionSourceData.Hint")</div>
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var sourceTypeInput = $('#@Html.FieldIdFor(model => model.ConditionSourceTypeId)');
+        var form = sourceTypeInput.closest('form');
+        var sourceDataInput = $('#@Html.FieldIdFor(model => model.ConditionSourceData)');
+        var builderJsonInput = $('#@Html.FieldIdFor(model => model.ConditionSourceBuilderJson)');
+        var builderTouchedInput = $('#@Html.FieldIdFor(model => model.ConditionSourceBuilderTouched)');
+        var builderHost = $('#condition-source-builder-host');
+        var previewHost = $('#condition-source-builder-preview');
+        var warningHost = $('#condition-source-builder-warning');
+        var initialStateRaw = @Html.Raw(JsonConvert.SerializeObject(initialStateObj, jsonSettings));
+        var texts = {
+            addRow: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.AddRow").Text)),
+            removeRow: @Html.Raw(JsonConvert.SerializeObject(T("Admin.Common.Remove").Text)),
+            noValues: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Empty").Text)),
+            emptyState: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.EmptyState").Text)),
+            anyProduct: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.AnyProduct").Text)),
+            legacyWarning: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.LegacyWarning").Text)),
+            entry: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Entry").Text)),
+            options: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Options").Text)),
+            entryPlaceholder: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Entry.Placeholder").Text)),
+            optionsPlaceholder: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Options.Placeholder").Text)),
+            tokensPlaceholder: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Tokens.Placeholder").Text)),
+            optionalPlaceholder: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.OptionalPlaceholder").Text)),
+            minQuantity: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.MinQuantity").Text)),
+            maxQuantity: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.MaxQuantity").Text)),
+            minDays: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.MinDays").Text)),
+            maxDays: @Html.Raw(JsonConvert.SerializeObject(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.MaxDays").Text))
+        };
+        var endpointUrls = {
+            products: @Html.Raw(JsonConvert.SerializeObject(Url.Action("SearchProducts", "PromotionRule", pluginAdmin))),
+            categories: @Html.Raw(JsonConvert.SerializeObject(Url.Action("SearchCategories", "PromotionRule", pluginAdmin))),
+            manufacturers: @Html.Raw(JsonConvert.SerializeObject(Url.Action("SearchManufacturers", "PromotionRule", pluginAdmin))),
+            vendors: @Html.Raw(JsonConvert.SerializeObject(Url.Action("SearchVendors", "PromotionRule", pluginAdmin)))
+        };
+        var optionSets = {
+            specificationAttributes: @Html.Raw(JsonConvert.SerializeObject(specificationAttributeOptions, jsonSettings)),
+            productAttributes: @Html.Raw(JsonConvert.SerializeObject(productAttributeOptions, jsonSettings)),
+            deviceTypes: @Html.Raw(JsonConvert.SerializeObject(deviceTypeOptions, jsonSettings)),
+            salesChannels: @Html.Raw(JsonConvert.SerializeObject(salesChannelOptions, jsonSettings)),
+            specificationOptionLookup: @Html.Raw(JsonConvert.SerializeObject(specificationOptionLookup, jsonSettings)),
+            productAttributeValueLookup: @Html.Raw(JsonConvert.SerializeObject(productAttributeValueLookup, jsonSettings))
+        };
+        var builderState = normalizeBuilderState(initialStateRaw);
+        var builderWarning = @Html.Raw(JsonConvert.SerializeObject(Model.ConditionSourceBuilderWarning ?? string.Empty));
+        var currentSourceType = parseInt(sourceTypeInput.val(), 10) || 0;
+
+        sourceTypeInput.on('change', function () {
+            var nextSourceType = parseInt($(this).val(), 10) || 0;
+            if (nextSourceType !== currentSourceType) {
+                currentSourceType = nextSourceType;
+                builderState = { rows: [], tokens: [] };
+                builderWarning = '';
+                builderTouchedInput.val('true');
+            }
+            renderBuilder();
+        });
+
+        form.on('submit.conditionSourceBuilder', function () {
+            syncBuilderJson();
+            if (hasConfiguredBuilderValues(parseInt(sourceTypeInput.val(), 10) || 0)) {
+                builderTouchedInput.val('true');
+            }
+        });
+
+        renderBuilder();
+
+        function destroyKendoWidgets(container) {
+            container.find('select, input').each(function () {
+                var $el = $(this);
+                if ($el.data('kendoComboBox')) { $el.data('kendoComboBox').destroy(); }
+                if ($el.data('kendoMultiSelect')) { $el.data('kendoMultiSelect').destroy(); }
+            });
+        }
+
+        function renderBuilder() {
+            var sourceType = parseInt(sourceTypeInput.val(), 10) || 0;
+            destroyKendoWidgets(builderHost);
+            builderHost.empty();
+
+            if (sourceType <= 0) {
+                previewHost.text('');
+                warningHost.hide().text('');
+                syncBuilderJson();
+                return;
+            }
+
+            if (isSessionSourceType(sourceType)) {
+                renderTokenBuilder(sourceType);
+            } else {
+                renderRowBuilder(sourceType);
+            }
+
+            syncBuilderJson();
+            renderPreview(sourceType);
+        }
+
+        function renderTokenBuilder(sourceType) {
+            var selectId = 'condition-source-token-select';
+            builderHost.html('<select id="' + selectId + '" multiple="multiple" style="width:100%"></select>');
+            var select = $('#' + selectId);
+            var selectedTokens = builderState.tokens || [];
+
+            if (isFixedTokenSourceType(sourceType)) {
+                appendOptions(select, getTokenOptions(sourceType), selectedTokens);
+                select.kendoMultiSelect({
+                    dataTextField: 'text',
+                    dataValueField: 'value',
+                    placeholder: texts.tokensPlaceholder,
+                    filter: 'contains',
+                    change: function () {
+                        builderState.tokens = this.value() || [];
+                        builderTouchedInput.val('true');
+                        builderWarning = '';
+                        syncBuilderJson();
+                        renderPreview(sourceType);
+                    }
+                });
+            } else {
+                builderHost.html('<input type="text" id="' + selectId + '" class="text-box" style="width:90%" placeholder="' + texts.tokensPlaceholder + '" />');
+                select = $('#' + selectId);
+                select.val((selectedTokens || []).join(', '));
+                select.on('change blur', function () {
+                    var parts = ($(this).val() || '').split(',');
+                    var tokens = [];
+                    for (var i = 0; i < parts.length; i++) {
+                        var token = $.trim(parts[i]);
+                        if (token) {
+                            tokens.push(token);
+                        }
+                    }
+                    builderState.tokens = tokens;
+                    builderTouchedInput.val('true');
+                    builderWarning = '';
+                    syncBuilderJson();
+                    renderPreview(sourceType);
+                });
+            }
+        }
+
+        function renderRowBuilder(sourceType) {
+            if (!$.isArray(builderState.rows)) {
+                builderState.rows = [];
+            }
+
+            var wrapper = $('<div></div>');
+            wrapper.append('<input type="button" class="k-button" id="condition-source-add-row" value="' + texts.addRow + '" />');
+            wrapper.append('<div id="condition-source-row-list"></div>');
+            builderHost.append(wrapper);
+
+            var rowList = wrapper.find('#condition-source-row-list');
+            if (!builderState.rows.length) {
+                rowList.html('<div>' + texts.emptyState + '</div>');
+            }
+
+            for (var i = 0; i < builderState.rows.length; i++) {
+                var rowElement = buildRowElement(sourceType, builderState.rows[i], i);
+                rowList.append(rowElement);
+                initializeRowElement(sourceType, rowElement, builderState.rows[i]);
+            }
+
+            wrapper.find('#condition-source-add-row').on('click', function () {
+                builderState.rows.push(createEmptyRow(sourceType));
+                builderTouchedInput.val('true');
+                builderWarning = '';
+                renderBuilder();
+            });
+        }
+
+        function buildRowElement(sourceType, row, index) {
+            var rangeLabels = sourceType === @((int)ConditionSourceType.ExpiryDays)
+                ? { min: texts.minDays, max: texts.maxDays }
+                : { min: texts.minQuantity, max: texts.maxQuantity };
+            var showOptions = sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions) ||
+                sourceType === @((int)ConditionSourceType.ProductAttributeValues);
+            var showRange = supportsRange(sourceType);
+            var rowKey = row.key || ('row-' + (index + 1));
+            var html = '<table class="adminContent condition-source-entry" data-row-key="' + rowKey + '">';
+            html += '<tr><td class="adminTitle">' + texts.entry + '</td><td class="adminData"><select class="condition-source-entry-select" style="width:280px"></select></td></tr>';
+            if (showOptions) {
+                html += '<tr><td class="adminTitle">' + texts.options + '</td><td class="adminData"><select class="condition-source-option-select" multiple="multiple" style="width:280px"></select></td></tr>';
+            }
+            if (showRange) {
+                html += '<tr><td class="adminTitle">' + rangeLabels.min + '</td><td class="adminData"><input type="number" min="0" class="condition-source-range-min text-box" placeholder="0" value="' + (row.rangeMin != null ? row.rangeMin : '') + '" /></td></tr>';
+                html += '<tr><td class="adminTitle">' + rangeLabels.max + '</td><td class="adminData"><input type="number" min="0" class="condition-source-range-max text-box" placeholder="' + texts.optionalPlaceholder + '" value="' + (row.rangeMax != null ? row.rangeMax : '') + '" /></td></tr>';
+            }
+            html += '<tr><td></td><td><input type="button" class="k-button condition-source-remove-row" value="' + texts.removeRow + '" /></td></tr>';
+            html += '</table>';
+            return $(html);
+        }
+
+        function initializeRowElement(sourceType, rowElement, row) {
+            var entrySelect = rowElement.find('.condition-source-entry-select');
+            var optionSelect = rowElement.find('.condition-source-option-select');
+
+            initializeEntrySelect(sourceType, entrySelect, row);
+            initializeOptionSelect(sourceType, optionSelect, row);
+
+            rowElement.find('.condition-source-remove-row').on('click', function () {
+                var rowKey = row.key;
+                var remaining = [];
+                for (var i = 0; i < (builderState.rows || []).length; i++) {
+                    if (builderState.rows[i].key !== rowKey) {
+                        remaining.push(builderState.rows[i]);
+                    }
+                }
+                builderState.rows = remaining;
+                builderTouchedInput.val('true');
+                builderWarning = '';
+                renderBuilder();
+            });
+
+            rowElement.find('.condition-source-range-min').on('input', function () {
+                row.rangeMin = $(this).val() !== '' ? parseInt($(this).val(), 10) : null;
+                onRowChanged();
+            });
+
+            rowElement.find('.condition-source-range-max').on('input', function () {
+                row.rangeMax = $(this).val() !== '' ? parseInt($(this).val(), 10) : null;
+                onRowChanged();
+            });
+
+            function onRowChanged() {
+                builderTouchedInput.val('true');
+                builderWarning = '';
+                syncBuilderJson();
+                renderPreview(sourceType);
+            }
+        }
+
+        function initializeEntrySelect(sourceType, select, row) {
+            if (isRemoteEntrySourceType(sourceType)) {
+                initializeRemoteEntrySelect(sourceType, select, row);
+            } else {
+                var options = getEntryOptions(sourceType);
+                appendOptions(select, options, row.entryId ? [row.entryId.toString()] : []);
+                select.kendoComboBox({
+                    dataTextField: 'text',
+                    dataValueField: 'value',
+                    filter: 'contains',
+                    placeholder: texts.entryPlaceholder,
+                    change: function () {
+                        onEntryChanged(sourceType, select, row);
+                    }
+                });
+                if (row.entryId) {
+                    select.data('kendoComboBox').value(row.entryId.toString());
+                }
+            }
+
+            select.on('change', function () {
+                onEntryChanged(sourceType, select, row);
+            });
+        }
+
+        function onEntryChanged(sourceType, select, row) {
+            var selectedValue = getWidgetValue(select);
+            row.entryId = selectedValue ? parseInt(selectedValue, 10) : null;
+            row.entryName = getSelectedText(select);
+
+            if (sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions) ||
+                sourceType === @((int)ConditionSourceType.ProductAttributeValues)) {
+                row.selectedOptionValues = [];
+                row.selectedOptionTexts = [];
+                var optionSelect = select.closest('.condition-source-entry').find('.condition-source-option-select');
+                initializeOptionSelect(sourceType, optionSelect, row);
+            }
+
+            builderTouchedInput.val('true');
+            builderWarning = '';
+            syncBuilderJson();
+            renderPreview(sourceType);
+        }
+
+        function initializeRemoteEntrySelect(sourceType, select, row) {
+            var remoteUrl = getRemoteEndpoint(sourceType);
+            if (sourceType === @((int)ConditionSourceType.ExpiryDays)) {
+                select.append($('<option></option>').val('').text(texts.anyProduct));
+            }
+            if (row.entryId && row.entryName) {
+                select.append($('<option></option>').val(row.entryId.toString()).text(row.entryName).prop('selected', true));
+            }
+
+            select.kendoComboBox({
+                dataTextField: 'text',
+                dataValueField: 'id',
+                filter: 'contains',
+                minLength: sourceType === @((int)ConditionSourceType.ExpiryDays) ? 0 : 1,
+                placeholder: texts.entryPlaceholder,
+                dataSource: {
+                    serverFiltering: true,
+                    transport: {
+                        read: {
+                            url: remoteUrl,
+                            type: 'POST',
+                            dataType: 'json',
+                            data: function () {
+                                var widget = select.data('kendoComboBox');
+                                var text = widget && widget.input ? widget.input.val() : '';
+                                return addAntiForgeryToken({ q: text });
+                            }
+                        }
+                    },
+                    schema: {
+                        data: function (response) {
+                            return normalizeRemoteItems(response);
+                        }
+                    }
+                },
+                change: function () {
+                    onEntryChanged(sourceType, select, row);
+                }
+            });
+
+            if (row.entryId) {
+                select.data('kendoComboBox').value(row.entryId.toString());
+                select.data('kendoComboBox').text(row.entryName || '');
+            }
+        }
+
+        function normalizeRemoteItems(response) {
+            var items = [];
+            if (!response) {
+                return items;
+            }
+            if ($.isArray(response)) {
+                items = response;
+            } else if (response.results) {
+                items = response.results;
+            } else if (response.Results) {
+                items = response.Results;
+            } else if (response.Data) {
+                items = response.Data;
+            }
+            var list = [];
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                list.push({
+                    id: item.id != null ? item.id : (item.Id != null ? item.Id : (item.Value != null ? item.Value : item.value)),
+                    text: item.text != null ? item.text : (item.Text != null ? item.Text : (item.Name != null ? item.Name : ''))
+                });
+            }
+            return list;
+        }
+
+        function initializeOptionSelect(sourceType, select, row) {
+            if (!select.length) {
+                return;
+            }
+
+            if (select.data('kendoMultiSelect')) {
+                select.data('kendoMultiSelect').destroy();
+            }
+            select.empty();
+            var selectedValues = $.isArray(row.selectedOptionValues) ? row.selectedOptionValues : [];
+            var lookupOptions = [];
+            if (sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions)) {
+                lookupOptions = row.entryId ? (optionSets.specificationOptionLookup[row.entryId.toString()] || []) : [];
+            } else if (sourceType === @((int)ConditionSourceType.ProductAttributeValues)) {
+                lookupOptions = row.entryId ? (optionSets.productAttributeValueLookup[row.entryId.toString()] || []) : [];
+            }
+            appendOptions(select, lookupOptions, selectedValues);
+
+            select.kendoMultiSelect({
+                dataTextField: 'text',
+                dataValueField: 'value',
+                placeholder: texts.optionsPlaceholder,
+                filter: 'contains',
+                change: function () {
+                    var values = this.value() || [];
+                    var selectedTexts = [];
+                    var dataItems = this.dataItems() || [];
+                    for (var i = 0; i < dataItems.length; i++) {
+                        selectedTexts.push(dataItems[i].text);
+                    }
+                    row.selectedOptionValues = values;
+                    row.selectedOptionTexts = selectedTexts;
+                    builderTouchedInput.val('true');
+                    builderWarning = '';
+                    syncBuilderJson();
+                    renderPreview(sourceType);
+                }
+            });
+        }
+
+        function getWidgetValue(select) {
+            if (select.data('kendoComboBox')) {
+                return select.data('kendoComboBox').value();
+            }
+            return select.val();
+        }
+
+        function syncBuilderJson() {
+            syncBuilderStateFromDom();
+
+            var normalizedRows = [];
+            var rows = builderState.rows || [];
+            for (var index = 0; index < rows.length; index++) {
+                var row = rows[index];
+                normalizedRows.push({
+                    key: row.key || ('row-' + (index + 1)),
+                    entryId: row.entryId,
+                    entryName: row.entryName || '',
+                    selectedOptionValues: row.selectedOptionValues || [],
+                    selectedOptionTexts: row.selectedOptionTexts || [],
+                    rangeMin: row.rangeMin,
+                    rangeMax: row.rangeMax
+                });
+            }
+
+            builderState.rows = normalizedRows;
+            builderState.tokens = (builderState.tokens || []).filter(function (token) { return !!token; });
+            builderJsonInput.val(JSON.stringify(builderState));
+            sourceDataInput.val(serializeSourceData(parseInt(sourceTypeInput.val(), 10) || 0));
+        }
+
+        function syncBuilderStateFromDom() {
+            var sourceType = parseInt(sourceTypeInput.val(), 10) || 0;
+            if (sourceType <= 0 || isSessionSourceType(sourceType)) {
+                return;
+            }
+
+            builderHost.find('.condition-source-entry').each(function () {
+                var rowElement = $(this);
+                var rowKey = rowElement.data('row-key');
+                var row = null;
+                for (var i = 0; i < (builderState.rows || []).length; i++) {
+                    if (builderState.rows[i].key === rowKey) {
+                        row = builderState.rows[i];
+                        break;
+                    }
+                }
+                if (!row) {
+                    return;
+                }
+
+                var entrySelect = rowElement.find('.condition-source-entry-select');
+                var optionSelect = rowElement.find('.condition-source-option-select');
+                var rangeMinInput = rowElement.find('.condition-source-range-min');
+                var rangeMaxInput = rowElement.find('.condition-source-range-max');
+                var selectedEntryValue = getWidgetValue(entrySelect);
+                row.entryId = selectedEntryValue !== null && selectedEntryValue !== undefined && selectedEntryValue !== ''
+                    ? parseInt(selectedEntryValue, 10)
+                    : null;
+                row.entryName = getSelectedText(entrySelect);
+
+                if (optionSelect.length) {
+                    var selectedValues = optionSelect.data('kendoMultiSelect')
+                        ? (optionSelect.data('kendoMultiSelect').value() || [])
+                        : (optionSelect.val() || []);
+                    row.selectedOptionValues = selectedValues;
+                }
+
+                if (rangeMinInput.length) {
+                    var rangeMinValue = rangeMinInput.val();
+                    row.rangeMin = rangeMinValue !== '' ? parseInt(rangeMinValue, 10) : null;
+                }
+
+                if (rangeMaxInput.length) {
+                    var rangeMaxValue = rangeMaxInput.val();
+                    row.rangeMax = rangeMaxValue !== '' ? parseInt(rangeMaxValue, 10) : null;
+                }
+            });
+        }
+
+        function renderPreview(sourceType) {
+            if (builderWarning && !hasConfiguredBuilderValues(sourceType)) {
+                warningHost.text(texts.legacyWarning + ': ' + builderWarning).show();
+            } else {
+                warningHost.hide().text('');
+            }
+
+            var previewText = '';
+            if (isSessionSourceType(sourceType)) {
+                previewText = (builderState.tokens || []).join(', ');
+            } else {
+                var labels = [];
+                var rows = builderState.rows || [];
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    var label = row.entryName || (row.entryId ? '#' + row.entryId : texts.anyProduct);
+                    var optionTexts = (row.selectedOptionTexts || []).filter(function (x) { return !!x; });
+                    if (optionTexts.length) {
+                        label += ' [' + optionTexts.join(', ') + ']';
+                    }
+                    if (row.rangeMin != null || row.rangeMax != null) {
+                        var rangeText = row.rangeMin != null && row.rangeMax != null
+                            ? row.rangeMin + '-' + row.rangeMax
+                            : row.rangeMin != null
+                                ? row.rangeMin + '+'
+                                : '0-' + row.rangeMax;
+                        label += sourceType === @((int)ConditionSourceType.ExpiryDays)
+                            ? ' (' + rangeText + ' days)'
+                            : ' (' + rangeText + ')';
+                    }
+                    if (label) {
+                        labels.push(label);
+                    }
+                }
+                previewText = labels.join('; ');
+            }
+
+            previewHost.text(previewText || texts.noValues);
+        }
+
+        function createEmptyRow() {
+            return {
+                key: 'row-' + new Date().getTime() + '-' + Math.floor(Math.random() * 10000),
+                entryId: null,
+                entryName: '',
+                selectedOptionValues: [],
+                selectedOptionTexts: [],
+                rangeMin: null,
+                rangeMax: null
+            };
+        }
+
+        function normalizeBuilderState(rawState) {
+            var parsedState = typeof rawState === 'string'
+                ? tryParseJson(rawState)
+                : (rawState || {});
+
+            var rows = [];
+            var sourceRows = $.isArray(parsedState.rows) ? parsedState.rows : ($.isArray(parsedState.Rows) ? parsedState.Rows : []);
+            for (var i = 0; i < sourceRows.length; i++) {
+                rows.push(normalizeRowState(sourceRows[i]));
+            }
+
+            return {
+                rows: rows,
+                tokens: $.isArray(parsedState.tokens) ? parsedState.tokens : ($.isArray(parsedState.Tokens) ? parsedState.Tokens : [])
+            };
+        }
+
+        function normalizeRowState(row) {
+            row = row || {};
+            return {
+                key: row.key || row.Key || '',
+                entryId: row.entryId != null ? row.entryId : row.EntryId,
+                entryName: row.entryName || row.EntryName || '',
+                selectedOptionValues: $.isArray(row.selectedOptionValues) ? row.selectedOptionValues : ($.isArray(row.SelectedOptionValues) ? row.SelectedOptionValues : []),
+                selectedOptionTexts: $.isArray(row.selectedOptionTexts) ? row.selectedOptionTexts : ($.isArray(row.SelectedOptionTexts) ? row.SelectedOptionTexts : []),
+                rangeMin: row.rangeMin != null ? row.rangeMin : row.RangeMin,
+                rangeMax: row.rangeMax != null ? row.rangeMax : row.RangeMax
+            };
+        }
+
+        function tryParseJson(rawJson) {
+            if (!rawJson) {
+                return {};
+            }
+            try {
+                return JSON.parse(rawJson);
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function isSessionSourceType(sourceType) {
+            return sourceType === @((int)ConditionSourceType.DeviceType) ||
+                sourceType === @((int)ConditionSourceType.SalesChannel) ||
+                sourceType === @((int)ConditionSourceType.CampaignSource) ||
+                sourceType === @((int)ConditionSourceType.ReferralSource);
+        }
+
+        function isFixedTokenSourceType(sourceType) {
+            return sourceType === @((int)ConditionSourceType.DeviceType) ||
+                sourceType === @((int)ConditionSourceType.SalesChannel);
+        }
+
+        function supportsRange(sourceType) {
+            return sourceType === @((int)ConditionSourceType.Products) ||
+                sourceType === @((int)ConditionSourceType.Categories) ||
+                sourceType === @((int)ConditionSourceType.Manufacturers) ||
+                sourceType === @((int)ConditionSourceType.Vendors) ||
+                sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions) ||
+                sourceType === @((int)ConditionSourceType.ProductAttributeValues) ||
+                sourceType === @((int)ConditionSourceType.ExpiryDays);
+        }
+
+        function hasConfiguredBuilderValues(sourceType) {
+            if (isSessionSourceType(sourceType)) {
+                return (builderState.tokens || []).length > 0;
+            }
+            var rows = builderState.rows || [];
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                if (row.entryId || ((row.selectedOptionValues || []).length > 0) || row.rangeMin != null || row.rangeMax != null) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function isRemoteEntrySourceType(sourceType) {
+            return sourceType === @((int)ConditionSourceType.Products) ||
+                sourceType === @((int)ConditionSourceType.Categories) ||
+                sourceType === @((int)ConditionSourceType.Manufacturers) ||
+                sourceType === @((int)ConditionSourceType.Vendors) ||
+                sourceType === @((int)ConditionSourceType.ExpiryDays);
+        }
+
+        function getEntryOptions(sourceType) {
+            if (sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions)) {
+                return optionSets.specificationAttributes;
+            }
+            if (sourceType === @((int)ConditionSourceType.ProductAttributeValues)) {
+                return optionSets.productAttributes;
+            }
+            return [];
+        }
+
+        function getRemoteEndpoint(sourceType) {
+            if (sourceType === @((int)ConditionSourceType.Products) || sourceType === @((int)ConditionSourceType.ExpiryDays)) {
+                return endpointUrls.products;
+            }
+            if (sourceType === @((int)ConditionSourceType.Categories)) {
+                return endpointUrls.categories;
+            }
+            if (sourceType === @((int)ConditionSourceType.Manufacturers)) {
+                return endpointUrls.manufacturers;
+            }
+            if (sourceType === @((int)ConditionSourceType.Vendors)) {
+                return endpointUrls.vendors;
+            }
+            return '';
+        }
+
+        function getTokenOptions(sourceType) {
+            if (sourceType === @((int)ConditionSourceType.DeviceType)) {
+                return optionSets.deviceTypes;
+            }
+            if (sourceType === @((int)ConditionSourceType.SalesChannel)) {
+                return optionSets.salesChannels;
+            }
+            return [];
+        }
+
+        function appendOptions(select, options, selectedValues) {
+            var selectedLookup = {};
+            var values = selectedValues || [];
+            for (var i = 0; i < values.length; i++) {
+                if (values[i] != null) {
+                    selectedLookup[values[i].toString()] = true;
+                }
+            }
+            for (var j = 0; j < (options || []).length; j++) {
+                var option = options[j];
+                if (!option || option.value == null) {
+                    continue;
+                }
+                var value = option.value.toString();
+                var optionElement = $('<option></option>').val(value).text(option.text);
+                if (selectedLookup[value]) {
+                    optionElement.prop('selected', true);
+                }
+                select.append(optionElement);
+            }
+        }
+
+        function serializeSourceData(sourceType) {
+            if (sourceType <= 0) {
+                return '';
+            }
+            if (isSessionSourceType(sourceType)) {
+                var tokens = [];
+                var seen = {};
+                var sourceTokens = builderState.tokens || [];
+                for (var i = 0; i < sourceTokens.length; i++) {
+                    var token = normalizeToken(sourceTokens[i]);
+                    if (token && !seen[token]) {
+                        seen[token] = true;
+                        tokens.push(token);
+                    }
+                }
+                return tokens.join(', ');
+            }
+
+            var serializedRows = [];
+            var rows = builderState.rows || [];
+            for (var r = 0; r < rows.length; r++) {
+                var serialized = serializeRow(sourceType, rows[r]);
+                if (serialized) {
+                    serializedRows.push(serialized);
+                }
+            }
+            return serializedRows.join(', ');
+        }
+
+        function serializeRow(sourceType, row) {
+            if (!row) {
+                return '';
+            }
+            var supportsZeroId = sourceType === @((int)ConditionSourceType.ExpiryDays);
+            var entryId = row.entryId != null && row.entryId !== '' ? parseInt(row.entryId, 10) : null;
+            if (!supportsZeroId && (!entryId || entryId <= 0)) {
+                return '';
+            }
+            if (supportsZeroId && entryId != null && entryId < 0) {
+                return '';
+            }
+
+            var serialized = (entryId || 0).toString();
+            var optionTokens = buildOptionTokens(sourceType, row);
+            if (optionTokens.length) {
+                serialized += '(' + optionTokens.join('|') + ')';
+            }
+            if (row.rangeMin != null || row.rangeMax != null) {
+                serialized += ':';
+                if (row.rangeMin != null && row.rangeMax != null) {
+                    serialized += row.rangeMin + '-' + row.rangeMax;
+                } else if (row.rangeMin != null) {
+                    serialized += row.rangeMin;
+                } else {
+                    serialized += '0-' + row.rangeMax;
+                }
+            }
+            return serialized;
+        }
+
+        function buildOptionTokens(sourceType, row) {
+            var values = [];
+            var sourceValues = row.selectedOptionValues || [];
+            for (var i = 0; i < sourceValues.length; i++) {
+                var value = sourceValues[i] == null ? '' : sourceValues[i].toString().replace(/^\s+|\s+$/g, '').replace(/^["']|["']$/g, '');
+                if (value) {
+                    values.push(value);
+                }
+            }
+            var unique = [];
+            for (var j = 0; j < values.length; j++) {
+                var exists = false;
+                for (var k = 0; k < unique.length; k++) {
+                    if (unique[k].toLowerCase() === values[j].toLowerCase()) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    unique.push(values[j]);
+                }
+            }
+            return unique;
+        }
+
+        function normalizeToken(value) {
+            return value == null
+                ? ''
+                : value.toString().replace(/^\s+|\s+$/g, '').replace(/^["']|["']$/g, '').toLowerCase();
+        }
+
+        function getSelectedText(select) {
+            if (select.data('kendoComboBox')) {
+                return select.data('kendoComboBox').text() || '';
+            }
+            var selectedOption = select.find('option:selected');
+            return selectedOption.length ? selectedOption.text() : '';
+        }
+    });
+</script>

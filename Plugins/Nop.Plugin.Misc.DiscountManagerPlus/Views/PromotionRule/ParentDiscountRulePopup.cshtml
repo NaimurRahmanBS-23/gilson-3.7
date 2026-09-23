@@ -1,0 +1,53 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleModel
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Infrastructure
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = "~/Administration/Views/Shared/_AdminPopupLayout.cshtml";
+    ViewBag.Title = Model.Id > 0
+        ? T("Admin.NopStation.DiscountManagerPlus.PromotionRules.EditDetails").Text
+        : T("Admin.NopStation.DiscountManagerPlus.PromotionRules.AddNew").Text;
+    var formAction = Model.Id > 0 ? "EditParentDiscountRulePopup" : "CreateParentDiscountRulePopup";
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+}
+@using (Html.BeginForm(formAction, "PromotionRule", pluginAdmin, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.DiscountId)
+    @Html.HiddenFor(model => model.IsDiscountBound)
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-promotions.png")" alt="" />
+            @(Model.Id > 0
+                ? T("Admin.NopStation.DiscountManagerPlus.PromotionRules.EditDetails").Text
+                : T("Admin.NopStation.DiscountManagerPlus.PromotionRules.AddNew").Text)
+        </div>
+        <div class="options">
+            @if (ViewBag.RefreshPage != true)
+            {
+                <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            }
+        </div>
+    </div>
+
+    if (ViewBag.RefreshPage == true)
+    {
+        <script type="text/javascript">
+            try { window.opener.location.reload(); } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        @Html.ValidationSummary(false)
+        @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_CreateOrUpdate.Info.cshtml", Model)
+        if (Model.Id > 0)
+        {
+            <p>@T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.SaveBeforeManage")</p>
+            <a class="k-button" href="@PluginAdminUrl.Combine(Url.Action("Edit", "PromotionRule", pluginAdmin), "id=" + Model.Id)" target="_blank">
+                @T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.Actions.OpenRule")
+            </a>
+        }
+    }
+}

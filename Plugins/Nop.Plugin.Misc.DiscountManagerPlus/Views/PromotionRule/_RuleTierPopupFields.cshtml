@@ -1,0 +1,225 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleTierModel
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Infrastructure
+@using Nop.Plugin.Misc.DiscountManagerPlus.Domain
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+    var rewardProductUrl = PluginAdminUrl.Combine(
+        Url.Action("RuleConditionSelectProductPopup", "PromotionRule", pluginAdmin),
+        "productIdInput=" + Html.FieldIdFor(model => model.RewardProductId) + "&productNameInput=tier-reward-product-name&btnId=btnRefreshTierRewardProduct");
+}
+
+<table class="adminContent">
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.MinQuantity):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.MinQuantity)
+            @Html.ValidationMessageFor(model => model.MinQuantity)
+            @if (Model.RuleTypeId == (int)PromotionRuleType.CartCondition)
+            {
+                <div>@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.QuantityMetric.CartCondition.Note")</div>
+            }
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.MaxQuantity):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.MaxQuantity)
+            @Html.ValidationMessageFor(model => model.MaxQuantity)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.SelectedRuleProductIds):
+        </td>
+        <td class="adminData">
+            @Html.ListBoxFor(model => model.SelectedRuleProductIds, Model.AvailableRuleProducts)
+            @Html.ValidationMessageFor(model => model.SelectedRuleProductIds)
+            <div>@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.AppliesToRuleProducts.Hint")</div>
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.DiscountTypeId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownListFor(model => model.DiscountTypeId, Model.AvailableDiscountTypes)
+            @Html.ValidationMessageFor(model => model.DiscountTypeId)
+        </td>
+    </tr>
+    <tr id="tier-discount-value-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.DiscountValue):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.DiscountValue)
+            @Html.ValidationMessageFor(model => model.DiscountValue)
+        </td>
+    </tr>
+    <tr id="tier-reward-quantity-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.RewardQuantity):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.RewardQuantity)
+            @Html.ValidationMessageFor(model => model.RewardQuantity)
+        </td>
+    </tr>
+    <tr id="tier-reward-product-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.RewardProductId):
+        </td>
+        <td class="adminData">
+            @Html.HiddenFor(model => model.RewardProductId)
+            <span id="tier-reward-product-name">@Model.RewardProductName</span>
+            @Html.ValidationMessageFor(model => model.RewardProductId)
+            <input type="button" id="tier-reward-product-choose" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.RewardProduct.Choose")" onclick="javascript:OpenWindow('@Html.Raw(rewardProductUrl)', 800, 850, true); return false;" />
+            <input type="button" id="tier-reward-product-name-remove" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.RewardProduct.Remove")" />
+            <input type="submit" id="btnRefreshTierRewardProduct" style="display:none" />
+        </td>
+    </tr>
+    <tr id="tier-reward-mode-row">
+        <td class="adminTitle">
+            Reward mode:
+        </td>
+        <td class="adminData">
+            <select id="tier-reward-mode">
+                <option value="specific">Specific reward product</option>
+                <option value="qualified">Cheapest qualified buy item</option>
+                <option value="cart">Cheapest item in cart</option>
+            </select>
+            <div>Choose how the discounted reward item is selected for Buy X Get Y item-level discounts.</div>
+        </td>
+    </tr>
+    <tr id="tier-auto-add-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.AutoAddReward):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.AutoAddReward)
+            @Html.ValidationMessageFor(model => model.AutoAddReward)
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#@Html.FieldIdFor(model => model.SelectedRuleProductIds)').kendoMultiSelect({ filter: "contains" });
+        syncRewardModeFromModel();
+        toggleTierRewardFields();
+        toggleRewardProductRemoveButton();
+
+        $('#@Html.FieldIdFor(model => model.DiscountTypeId)').on('change', function () {
+            toggleTierRewardFields();
+        });
+        $('#tier-reward-mode').on('change', function () {
+            applyRewardMode();
+            toggleRewardProductRemoveButton();
+        });
+
+        $('#tier-reward-product-name-remove').on('click', function () {
+            clearRewardProduct();
+            toggleRewardProductRemoveButton();
+            return false;
+        });
+
+        $('#btnRefreshTierRewardProduct').on('click', function () {
+            var selectedProductId = parseInt($('#@Html.FieldIdFor(model => model.RewardProductId)').val(), 10) || 0;
+            if (selectedProductId > 0) {
+                $('#tier-reward-mode').val('specific');
+            }
+            toggleRewardProductRemoveButton();
+            return false;
+        });
+    });
+
+    function clearRewardProduct() {
+        $('#@Html.FieldIdFor(model => model.RewardProductId)').val('');
+        $('#tier-reward-product-name').text('');
+    }
+
+    function syncRewardModeFromModel() {
+        var rewardProductIdRaw = $('#@Html.FieldIdFor(model => model.RewardProductId)').val();
+        var rewardProductId = parseInt(rewardProductIdRaw, 10);
+        if (rewardProductId === -1) {
+            $('#tier-reward-mode').val('cart');
+        } else if (rewardProductId > 0) {
+            $('#tier-reward-mode').val('specific');
+        } else {
+            $('#tier-reward-mode').val('qualified');
+            $('#@Html.FieldIdFor(model => model.RewardProductId)').val('0');
+        }
+    }
+
+    function applyRewardMode() {
+        var mode = $('#tier-reward-mode').val();
+        if (mode === 'cart') {
+            $('#@Html.FieldIdFor(model => model.RewardProductId)').val('-1');
+            $('#tier-reward-product-name').text('');
+            $('#@Html.FieldIdFor(model => model.AutoAddReward)').prop('checked', false);
+        } else if (mode === 'qualified') {
+            $('#@Html.FieldIdFor(model => model.RewardProductId)').val('0');
+            $('#tier-reward-product-name').text('');
+            $('#@Html.FieldIdFor(model => model.AutoAddReward)').prop('checked', false);
+        } else {
+            var rewardProductId = parseInt($('#@Html.FieldIdFor(model => model.RewardProductId)').val(), 10) || 0;
+            if (rewardProductId <= 0) {
+                clearRewardProduct();
+            }
+        }
+
+        var isSpecific = mode === 'specific';
+        $('#tier-reward-product-choose').toggle(isSpecific);
+        if (!isSpecific) {
+            $('#tier-reward-product-name-remove').hide();
+        }
+    }
+
+    function toggleRewardProductRemoveButton() {
+        var rewardProductId = parseInt($('#@Html.FieldIdFor(model => model.RewardProductId)').val(), 10) || 0;
+        var mode = $('#tier-reward-mode').val();
+        if (mode === 'specific' && rewardProductId > 0) {
+            $('#tier-reward-product-name-remove').show();
+        } else {
+            $('#tier-reward-product-name-remove').hide();
+        }
+    }
+
+    function toggleTierRewardFields() {
+        var ruleTypeId = parseInt($('#@Html.FieldIdFor(model => model.RuleTypeId)').val(), 10) || 0;
+        var discountType = parseInt($('#@Html.FieldIdFor(model => model.DiscountTypeId)').val(), 10) || 0;
+        var isBuyXGetY = ruleTypeId === @((int)PromotionRuleType.BuyXGetY);
+        var isFreeItem = discountType === @((int)DiscountType.FreeItem);
+        var isRewardDiscount = discountType === @((int)DiscountType.Percentage) || discountType === @((int)DiscountType.FixedAmount);
+        var supportsRewardTargeting = isBuyXGetY && (isFreeItem || isRewardDiscount);
+
+        $('#tier-discount-value-row').toggle(!isFreeItem);
+        $('#tier-reward-quantity-row').toggle(isBuyXGetY);
+        $('#tier-reward-product-row').toggle(supportsRewardTargeting);
+        $('#tier-reward-mode-row').toggle(supportsRewardTargeting);
+        $('#tier-auto-add-row').toggle(isFreeItem);
+
+        if (!supportsRewardTargeting) {
+            clearRewardProduct();
+        }
+
+        if (!isFreeItem) {
+            $('#@Html.FieldIdFor(model => model.AutoAddReward)').prop('checked', false);
+        }
+
+        if (isBuyXGetY && (!$('#@Html.FieldIdFor(model => model.RewardQuantity)').val() || $('#@Html.FieldIdFor(model => model.RewardQuantity)').val() === '0')) {
+            $('#@Html.FieldIdFor(model => model.RewardQuantity)').val('1');
+        }
+
+        if (supportsRewardTargeting) {
+            applyRewardMode();
+        }
+
+        toggleRewardProductRemoveButton();
+    }
+</script>

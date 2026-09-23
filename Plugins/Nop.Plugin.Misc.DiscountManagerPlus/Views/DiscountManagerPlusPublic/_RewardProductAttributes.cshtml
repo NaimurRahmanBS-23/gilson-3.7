@@ -1,0 +1,32 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Models.RewardProductAttributesModel
+@using Nop.Web.Models.Catalog
+@using System.Web.Mvc
+@{
+    var product = Model.Product;
+    var formId = Model.FormId ?? "reward-product-form";
+}
+
+@if (product.AddToCart.CustomerEntersPrice)
+{
+    var priceInputId = string.Format("addtocart_{0}.CustomerEnteredPrice", product.Id);
+    <div class="customer-entered-price">
+        <div class="price-input">
+            <label for="@priceInputId" class="enter-price-label">@T("Products.EnterProductPrice")</label>
+            <input id="@priceInputId" name="@priceInputId" value="@Convert.ToInt32(Math.Ceiling(product.AddToCart.CustomerEnteredPrice))" class="enter-price-input" />
+        </div>
+        <div class="price-range">
+            @product.AddToCart.CustomerEnteredPriceRange
+        </div>
+    </div>
+}
+
+@Html.Partial("~/Views/Product/_RentalInfo.cshtml", product)
+
+@if (product.GiftCard.IsGiftCard)
+{
+    var dataDictGiftCard = new ViewDataDictionary();
+    dataDictGiftCard.TemplateInfo.HtmlFieldPrefix = string.Format("giftcard_{0}", product.Id);
+    @Html.Partial("~/Views/Product/_GiftCardInfo.cshtml", product.GiftCard, dataDictGiftCard)
+}
+
+@Html.Partial("~/Views/Product/_ProductAttributes.cshtml", product.ProductAttributes)

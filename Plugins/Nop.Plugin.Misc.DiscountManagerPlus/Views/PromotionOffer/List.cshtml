@@ -1,0 +1,46 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Models.PromotionOfferListModel
+@using Nop.Plugin.Misc.DiscountManagerPlus
+@using Nop.Web.Framework.UI
+@{
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+    Html.AddTitleParts(T("Plugins.NopStation.DiscountManagerPlus.Offers.PageTitle").Text);
+}
+
+<div class="page promotion-offers-page">
+    <div class="page-title">
+        <h1>@Model.Title</h1>
+    </div>
+    <div class="page-body">
+        @if (!Model.Offers.Any())
+        {
+            <div class="no-data">@Model.EmptyMessage</div>
+        }
+        else
+        {
+            <div class="promotion-offer-list">
+                @foreach (var offer in Model.Offers)
+                {
+                    <div class="promotion-offer-item">
+                        <div class="offer-header">
+                            <h2>@offer.Name</h2>
+                            <span class="offer-discount">@offer.DiscountDisplay</span>
+                        </div>
+                        <div class="offer-summary">@offer.Summary</div>
+                        <div class="offer-meta">
+                            <div><strong>@T("Plugins.NopStation.DiscountManagerPlus.Offers.RuleType"):</strong> @offer.RuleTypeName</div>
+                            @if (!string.IsNullOrWhiteSpace(offer.StartDate))
+                            {
+                                <div><strong>@T("Plugins.NopStation.DiscountManagerPlus.Offers.ValidFrom"):</strong> @offer.StartDate</div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(offer.EndDate))
+                            {
+                                <div><strong>@T("Plugins.NopStation.DiscountManagerPlus.Offers.ValidTo"):</strong> @offer.EndDate</div>
+                            }
+                            <div>@T("Plugins.NopStation.DiscountManagerPlus.Offers.AutoApply")</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

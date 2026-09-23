@@ -1,0 +1,25 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleModel
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.AddNew").Text;
+    ViewBag.DmpAdminMenu = "rules";
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+}
+@using (Html.BeginForm("Create", "PromotionRule", pluginAdmin, FormMethod.Post, new { id = "promotion-rule-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/Shared/_AdminPluginMenu.cshtml")
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-promotions.png")" alt="" />
+            @T("Admin.NopStation.DiscountManagerPlus.PromotionRules.AddNew") @Html.ActionLink("(" + T("Admin.NopStation.DiscountManagerPlus.PromotionRules.BackToList") + ")", "List", "PromotionRule", pluginAdmin, null)
+        </div>
+        <div class="options">
+            <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            <input type="submit" name="save-continue" class="k-button" value="@T("Admin.Common.SaveContinue")" />
+        </div>
+    </div>
+    @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_CreateOrUpdate.cshtml", Model)
+}

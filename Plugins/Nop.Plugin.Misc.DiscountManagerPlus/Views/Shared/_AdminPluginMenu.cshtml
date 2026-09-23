@@ -1,0 +1,14 @@
+@{
+    var current = ViewBag.DmpAdminMenu as string ?? string.Empty;
+}
+<div class="dmp-admin-menu" style="margin: 0 0 15px 0;">
+    <a href="@Url.Content("~/Plugins/DiscountManagerPlus/Configure")" class="k-button@(current == "configuration" ? " k-state-active" : null)">
+        @T("Admin.NopStation.DiscountManagerPlus.Menu.Configuration")
+    </a>
+    <a href="@Url.Content("~/Plugins/PromotionRule/List")" class="k-button@(current == "rules" ? " k-state-active" : null)">
+        @T("Admin.NopStation.DiscountManagerPlus.Menu.PromotionRules")
+    </a>
+    <a href="@Url.Content("~/Plugins/PromotionAnalytics/List")" class="k-button@(current == "analytics" ? " k-state-active" : null)">
+        @T("Admin.NopStation.DiscountManagerPlus.Menu.Analytics")
+    </a>
+</div>

@@ -1,0 +1,159 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleExcludedProductSearchModel
+@using Nop.Core.Infrastructure
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Infrastructure
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+    var addExcludedUrl = PluginAdminUrl.Combine(Url.Action("ExcludedProductAddMultiplePopup", "PromotionRule", pluginAdmin), "promotionRuleId=" + Model.PromotionRuleId);
+}
+
+<p>@T("Admin.NopStation.DiscountManagerPlus.ExcludedProducts.Description")</p>
+
+<table class="adminContent">
+    <tr>
+        <td>
+            <div id="excluded-products-grid"></div>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#excluded-products-grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("ExcludedProductList", "PromotionRule", pluginAdmin))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: function () {
+                                        return addAntiForgeryToken({ PromotionRuleId: @Model.PromotionRuleId });
+                                    }
+                                },
+                                destroy: {
+                                    url: "@Html.Raw(Url.Action("ExcludedProductDelete", "PromotionRule", pluginAdmin))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors",
+                                model: {
+                                    id: "Id",
+                                    fields: {
+                                        ProductName: { editable: false, type: "string" },
+                                        Sku: { editable: false, type: "string" },
+                                        Price: { editable: false, type: "number" },
+                                        CreatedOnUtc: { editable: false, type: "date" }
+                                    }
+                                }
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                this.cancelChanges();
+                            },
+                            pageSize: @(defaultGridPageSize),
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [@(gridPageSizes)]
+                        },
+                        editable: {
+                            confirmation: false,
+                            mode: "inline"
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "Id",
+                            headerTemplate: "<input id='excluded-mastercheckbox' type='checkbox'/>",
+                            headerAttributes: { style: "text-align:center" },
+                            template: "<input type='checkbox' name='SelectedExcludedProductIds' value='#=Id#' class='excluded-checkboxGroups' />",
+                            attributes: { style: "text-align:center" },
+                            width: 50
+                        }, {
+                            field: "ProductName",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.ExcludedProducts.Fields.ProductName")",
+                            encoded: false
+                        }, {
+                            field: "Sku",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.ExcludedProducts.Fields.Sku")",
+                            width: 120
+                        }, {
+                            field: "Price",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.ExcludedProducts.Fields.Price")",
+                            width: 100
+                        }, {
+                            field: "CreatedOnUtc",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.ExcludedProducts.Fields.CreatedOn")",
+                            width: 150,
+                            type: "date",
+                            format: "{0:G}"
+                        }, {
+                            command: { name: "destroy", text: "@T("Admin.Common.Delete")" },
+                            title: "@T("Admin.Common.Delete")",
+                            width: 100
+                        }]
+                    });
+
+                    $('#excluded-mastercheckbox').click(function () {
+                        $('.excluded-checkboxGroups').attr('checked', $(this).is(':checked')).change();
+                    });
+                });
+
+                function refreshExcludedProductsGrid() {
+                    var grid = $("#excluded-products-grid").data('kendoGrid');
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                }
+
+                function bulkDeleteExcludedProducts() {
+                    var selectedIds = [];
+                    $('#excluded-products-grid input.excluded-checkboxGroups:checked').each(function () {
+                        selectedIds.push($(this).val());
+                    });
+
+                    if (selectedIds.length === 0) {
+                        alert('@T("Admin.NopStation.DiscountManagerPlus.ExcludedProducts.SelectExcludedProducts")');
+                        return;
+                    }
+
+                    if (!confirm('@T("Admin.Common.AreYouSure")'))
+                        return;
+
+                    $.ajax({
+                        url: '@Url.Action("ExcludedProductBulkDelete", "PromotionRule", pluginAdmin)',
+                        type: 'POST',
+                        data: addAntiForgeryToken({ selectedIds: selectedIds }),
+                        success: function (data) {
+                            if (data.Result || data.result) {
+                                refreshExcludedProductsGrid();
+                            }
+                        }
+                    });
+                }
+            </script>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="button" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.ExcludedProducts.AddExcludedProducts")" onclick="javascript:OpenWindow('@Html.Raw(addExcludedUrl)', 1100, 800, true); return false;" />
+            <input type="button" class="k-button" id="btnBulkDeleteExcludedProducts" value="@T("Admin.NopStation.DiscountManagerPlus.ExcludedProducts.BulkDelete")" onclick="bulkDeleteExcludedProducts(); return false;" />
+            <input type="submit" id="btnRefreshExcludedProducts" style="display:none" />
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#btnRefreshExcludedProducts').click(function () {
+                        refreshExcludedProductsGrid();
+                        return false;
+                    });
+                });
+            </script>
+        </td>
+    </tr>
+</table>

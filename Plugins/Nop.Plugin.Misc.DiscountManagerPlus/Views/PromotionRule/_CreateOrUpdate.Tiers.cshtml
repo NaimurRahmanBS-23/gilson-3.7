@@ -1,0 +1,137 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleTierSearchModel
+@using Nop.Core.Infrastructure
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Infrastructure
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+    var createTierUrl = PluginAdminUrl.Combine(Url.Action("RuleTierCreatePopup", "PromotionRule", pluginAdmin), "promotionRuleId=" + Model.PromotionRuleId + "&btnId=btnRefreshTiers&formId=tier-popup-form");
+}
+
+<table class="adminContent">
+    <tr>
+        <td>
+            <div id="rule-tiers-grid"></div>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#rule-tiers-grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("RuleTierList", "PromotionRule", pluginAdmin))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: function () {
+                                        return addAntiForgeryToken({ PromotionRuleId: @Model.PromotionRuleId });
+                                    }
+                                },
+                                destroy: {
+                                    url: "@Html.Raw(Url.Action("RuleTierDelete", "PromotionRule", pluginAdmin))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors",
+                                model: {
+                                    id: "Id",
+                                    fields: {
+                                        MinQuantity: { editable: false, type: "number" },
+                                        MaxQuantity: { editable: false, type: "number" },
+                                        DiscountValue: { editable: false, type: "number" },
+                                        RewardQuantity: { editable: false, type: "number" },
+                                        AutoAddReward: { editable: false, type: "boolean" }
+                                    }
+                                }
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                this.cancelChanges();
+                            },
+                            pageSize: @(defaultGridPageSize),
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [@(gridPageSizes)]
+                        },
+                        editable: {
+                            confirmation: false,
+                            mode: "inline"
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "MinQuantity",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.MinQuantity")"
+                        }, {
+                            field: "MaxQuantity",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.MaxQuantity")"
+                        }, {
+                            field: "AppliesToRuleProductsSummary",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.AppliesToRuleProducts")"
+                        }, {
+                            field: "DiscountTypeName",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.DiscountType")"
+                        }, {
+                            field: "DiscountValue",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.DiscountValue")"
+                        }, {
+                            field: "RewardQuantity",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.RewardQuantity")"
+                        }, {
+                            field: "AutoAddReward",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleTiers.Fields.AutoAddReward")",
+                            width: 100,
+                            headerAttributes: { style: "text-align:center" },
+                            attributes: { style: "text-align:center" },
+                            template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=AutoAddReward#.gif" />'
+                        }, {
+                            field: "Id",
+                            title: "@T("Admin.Common.Edit")",
+                            width: 80,
+                            template: '<input type="button" class="k-button" value="@T("Admin.Common.Edit")" onclick="openRuleTierEditPopup(#=Id#); return false;" />'
+                        }, {
+                            command: { name: "destroy", text: "@T("Admin.Common.Delete")" },
+                            title: "@T("Admin.Common.Delete")",
+                            width: 100
+                        }]
+                    });
+                });
+
+                function openRuleTierEditPopup(id) {
+                    OpenWindow('@Html.Raw(Url.Content("~/Plugins/PromotionRule/RuleTierEditPopup/"))' + id, 700, 600, true);
+                    return false;
+                }
+
+                function refreshTiersGrid() {
+                    var grid = $("#rule-tiers-grid").data('kendoGrid');
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                }
+            </script>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="button" class="k-button" value="@T("Admin.Common.AddNew")" onclick="javascript:OpenWindow('@Html.Raw(createTierUrl)', 700, 600, true); return false;" />
+            <input type="submit" id="btnRefreshTiers" style="display:none" />
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#btnRefreshTiers').click(function () {
+                        refreshTiersGrid();
+                        return false;
+                    });
+                });
+            </script>
+        </td>
+    </tr>
+</table>

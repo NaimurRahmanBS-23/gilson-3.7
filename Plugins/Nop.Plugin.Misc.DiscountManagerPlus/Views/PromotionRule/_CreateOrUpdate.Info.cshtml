@@ -1,0 +1,382 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleModel
+@using Nop.Plugin.Misc.DiscountManagerPlus.Domain
+@using Nop.Web.Framework
+
+<table class="adminContent">
+    @if (Model.IsDiscountBound)
+    {
+        <tr>
+            <td class="adminTitle">
+                @T("Admin.Promotions.Discounts.Fields.Name"):
+            </td>
+            <td class="adminData">
+                @Model.ParentDiscountName
+                @Html.HiddenFor(model => model.DiscountId)
+            </td>
+        </tr>
+    }
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.Name):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.SystemName):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.SystemName)
+            @Html.ValidationMessageFor(model => model.SystemName)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.RuleTypeId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownListFor(model => model.RuleTypeId, Model.AvailableRuleTypes)
+            @Html.ValidationMessageFor(model => model.RuleTypeId)
+        </td>
+    </tr>
+    <tr id="discount-type-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.DiscountTypeId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownListFor(model => model.DiscountTypeId, Model.AvailableDiscountTypes)
+            @Html.ValidationMessageFor(model => model.DiscountTypeId)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.DiscountScopeId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownListFor(model => model.DiscountScopeId, Model.AvailableDiscountScopes)
+            @Html.ValidationMessageFor(model => model.DiscountScopeId)
+        </td>
+    </tr>
+    <tr id="discount-value-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.DiscountValue):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.DiscountValue)
+            @Html.ValidationMessageFor(model => model.DiscountValue)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.Priority):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.Priority)
+            @Html.ValidationMessageFor(model => model.Priority)
+        </td>
+    </tr>
+    @if (!Model.IsDiscountBound)
+    {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.IsActive):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.IsActive)
+                @Html.ValidationMessageFor(model => model.IsActive)
+            </td>
+        </tr>
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.IsActive)
+    }
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.IsExclusive):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.IsExclusive)
+            @Html.ValidationMessageFor(model => model.IsExclusive)
+        </td>
+    </tr>
+    @if (!Model.IsDiscountBound)
+    {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.LinkedDiscountId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.LinkedDiscountId, Model.AvailableLinkedDiscounts)
+                @Html.ValidationMessageFor(model => model.LinkedDiscountId)
+            </td>
+        </tr>
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.LinkedDiscountId)
+    }
+    <tr id="carry-default-discount-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.CarryDefaultDiscount):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.CarryDefaultDiscount)
+            @Html.ValidationMessageFor(model => model.CarryDefaultDiscount)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.StopFurtherRulesForMatchedLines):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.StopFurtherRulesForMatchedLines)
+            @Html.ValidationMessageFor(model => model.StopFurtherRulesForMatchedLines)
+        </td>
+    </tr>
+    <tr id="stacked-cumulative-mode-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.EnableStackedCumulativeMode):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.EnableStackedCumulativeMode)
+            @Html.ValidationMessageFor(model => model.EnableStackedCumulativeMode)
+        </td>
+    </tr>
+    @if (!Model.IsDiscountBound)
+    {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.IsFlashEnabled):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.IsFlashEnabled)
+                @Html.ValidationMessageFor(model => model.IsFlashEnabled)
+            </td>
+        </tr>
+        <tr class="flash-settings-row">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.UsageLimitTotal):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.UsageLimitTotal)
+                @Html.ValidationMessageFor(model => model.UsageLimitTotal)
+            </td>
+        </tr>
+        <tr class="flash-settings-row">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.UsageLimitPerCustomer):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.UsageLimitPerCustomer)
+                @Html.ValidationMessageFor(model => model.UsageLimitPerCustomer)
+            </td>
+        </tr>
+        <tr class="flash-settings-row">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.UsageWindowStartUtc):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.UsageWindowStartUtc)
+                @Html.ValidationMessageFor(model => model.UsageWindowStartUtc)
+            </td>
+        </tr>
+        <tr class="flash-settings-row">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.UsageWindowEndUtc):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.UsageWindowEndUtc)
+                @Html.ValidationMessageFor(model => model.UsageWindowEndUtc)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.StartDate):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.StartDate)
+                @Html.ValidationMessageFor(model => model.StartDate)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.EndDate):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.EndDate)
+                @Html.ValidationMessageFor(model => model.EndDate)
+            </td>
+        </tr>
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.IsFlashEnabled)
+        @Html.HiddenFor(model => model.UsageLimitTotal)
+        @Html.HiddenFor(model => model.UsageLimitPerCustomer)
+        @Html.HiddenFor(model => model.UsageWindowStartUtc)
+        @Html.HiddenFor(model => model.UsageWindowEndUtc)
+        @Html.HiddenFor(model => model.StartDate)
+        @Html.HiddenFor(model => model.EndDate)
+    }
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.SelectedStoreIds):
+        </td>
+        <td class="adminData">
+            @if (Model.AvailableStores != null && Model.AvailableStores.Count > 0)
+            {
+                foreach (var store in Model.AvailableStores)
+                {
+                    var storeId = 0;
+                    int.TryParse(store.Value, out storeId);
+                    <div>
+                        <input type="checkbox" name="SelectedStoreIds" value="@store.Value" checked="@(Model.SelectedStoreIds != null && Model.SelectedStoreIds.Contains(storeId))" />
+                        @store.Text
+                    </div>
+                }
+            }
+            else
+            {
+                <div>@T("Admin.Configuration.Stores.NoStoresDefined")</div>
+            }
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        toggleMainDiscountFields();
+        toggleStackedCumulativeModeField();
+        toggleFlashFields();
+        toggleLinkedDiscountFields();
+        $('#@Html.FieldIdFor(model => model.RuleTypeId), #@Html.FieldIdFor(model => model.DiscountTypeId)').on('change', toggleMainDiscountFields);
+        $('#@Html.FieldIdFor(model => model.IsFlashEnabled)').on('change', toggleFlashFields);
+        $('#@Html.FieldIdFor(model => model.Name)').on('blur', autoFillSystemName);
+        $('#@Html.FieldIdFor(model => model.Name)').closest('form').on('submit', autoFillSystemName);
+        $('#@Html.FieldIdFor(model => model.LinkedDiscountId)').on('change', toggleLinkedDiscountFields);
+    });
+
+    function getAllowedDiscountTypes(ruleType) {
+        switch (ruleType) {
+            case @((int)PromotionRuleType.ProductBased):
+                return [@((int)DiscountType.Percentage), @((int)DiscountType.FixedAmount), @((int)DiscountType.FreeItem)];
+            case @((int)PromotionRuleType.ComboPricing):
+                return [@((int)DiscountType.Percentage), @((int)DiscountType.FixedAmount), @((int)DiscountType.FixedBundlePrice)];
+            case @((int)PromotionRuleType.CartCondition):
+            case @((int)PromotionRuleType.SubtotalBased):
+                return [@((int)DiscountType.Percentage), @((int)DiscountType.FixedAmount)];
+            default:
+                return [];
+        }
+    }
+
+    function filterDiscountTypes(ruleType) {
+        var allowedTypes = getAllowedDiscountTypes(ruleType);
+        var discountTypeSelect = $('#@Html.FieldIdFor(model => model.DiscountTypeId)');
+
+        discountTypeSelect.find('option').each(function () {
+            var optionValue = parseInt($(this).val(), 10) || 0;
+            var isAllowed = $.inArray(optionValue, allowedTypes) !== -1;
+            $(this).prop('disabled', !isAllowed);
+            $(this).toggle(isAllowed);
+        });
+
+        var selectedType = parseInt(discountTypeSelect.val(), 10) || 0;
+        if (allowedTypes.length > 0 && $.inArray(selectedType, allowedTypes) === -1) {
+            discountTypeSelect.val(allowedTypes[0].toString());
+        }
+    }
+
+    function toggleMainDiscountFields() {
+        var ruleType = parseInt($('#@Html.FieldIdFor(model => model.RuleTypeId)').val(), 10) || 0;
+        var isBuyXGetY = ruleType === @((int)PromotionRuleType.BuyXGetY);
+
+        $('#discount-type-row').toggle(!isBuyXGetY);
+
+        if (isBuyXGetY) {
+            $('#@Html.FieldIdFor(model => model.DiscountTypeId)').val('0');
+            $('#@Html.FieldIdFor(model => model.DiscountValue)').val('0');
+        } else {
+            filterDiscountTypes(ruleType);
+        }
+
+        var discountType = parseInt($('#@Html.FieldIdFor(model => model.DiscountTypeId)').val(), 10) || 0;
+        var isFreeItem = discountType === @((int)DiscountType.FreeItem);
+        $('#discount-value-row').toggle(!isBuyXGetY && !isFreeItem);
+
+        if (isFreeItem) {
+            $('#@Html.FieldIdFor(model => model.DiscountValue)').val('0');
+        }
+
+        toggleStackedCumulativeModeField();
+    }
+
+    function toggleStackedCumulativeModeField() {
+        var ruleType = parseInt($('#@Html.FieldIdFor(model => model.RuleTypeId)').val(), 10) || 0;
+        var isBuyXGetY = ruleType === @((int)PromotionRuleType.BuyXGetY);
+        var field = $('#@Html.FieldIdFor(model => model.EnableStackedCumulativeMode)');
+
+        $('#stacked-cumulative-mode-row').toggle(isBuyXGetY);
+        field.prop('disabled', !isBuyXGetY);
+
+        if (!isBuyXGetY) {
+            field.prop('checked', false);
+        }
+    }
+
+    function autoFillSystemName() {
+        var systemNameInput = $('#@Html.FieldIdFor(model => model.SystemName)');
+        if ($.trim(systemNameInput.val()).length > 0) {
+            return;
+        }
+
+        var nameValue = $('#@Html.FieldIdFor(model => model.Name)').val() || '';
+        var generated = nameValue
+            .toString()
+            .replace(/^\s+|\s+$/g, '')
+            .replace(/[^a-zA-Z0-9]+/g, '.')
+            .replace(/\.+/g, '.')
+            .replace(/^\.|\.$/g, '');
+
+        if (generated.length > 0) {
+            systemNameInput.val(generated);
+        }
+    }
+
+    function toggleFlashFields() {
+        if (@Model.IsDiscountBound.ToString().ToLowerInvariant()) {
+            return;
+        }
+
+        var isFlashEnabled = $('#@Html.FieldIdFor(model => model.IsFlashEnabled)').is(':checked');
+        $('.flash-settings-row').toggle(isFlashEnabled);
+
+        if (!isFlashEnabled) {
+            $('#@Html.FieldIdFor(model => model.UsageLimitTotal)').val('0');
+            $('#@Html.FieldIdFor(model => model.UsageLimitPerCustomer)').val('0');
+            $('#@Html.FieldIdFor(model => model.UsageWindowStartUtc)').val('');
+            $('#@Html.FieldIdFor(model => model.UsageWindowEndUtc)').val('');
+        }
+    }
+
+    function toggleLinkedDiscountFields() {
+        if (@Model.IsDiscountBound.ToString().ToLowerInvariant()) {
+            $('#carry-default-discount-row').show();
+            return;
+        }
+
+        var hasLinkedDiscount = parseInt($('#@Html.FieldIdFor(model => model.LinkedDiscountId)').val(), 10) > 0;
+        var carryDefaultDiscount = $('#@Html.FieldIdFor(model => model.CarryDefaultDiscount)');
+
+        $('#carry-default-discount-row').toggle(hasLinkedDiscount);
+        carryDefaultDiscount.prop('disabled', !hasLinkedDiscount);
+
+        if (!hasLinkedDiscount) {
+            carryDefaultDiscount.prop('checked', false);
+        }
+    }
+</script>

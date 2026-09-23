@@ -1,0 +1,58 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleRewardAttributePopupModel
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = "~/Administration/Views/Shared/_AdminPopupLayout.cshtml";
+    ViewBag.Title = T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.Choose").Text;
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+}
+@using (Html.BeginForm("RuleRewardAttributePopup", "PromotionRule", pluginAdmin, FormMethod.Post, new { enctype = "multipart/form-data", id = "reward-attribute-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ProductId)
+    <input type="hidden" name="valueIdsInput" value="@(ViewBag.ValueIdsInput ?? string.Empty)" />
+    <input type="hidden" name="btnId" value="@(ViewBag.BtnId ?? string.Empty)" />
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-promotions.png")" alt="" />
+            @T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.Choose")
+        </div>
+        <div class="options">
+            @if (ViewBag.RefreshPage != true)
+            {
+                <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            }
+        </div>
+    </div>
+
+    if (ViewBag.RefreshPage == true)
+    {
+        <script type="text/javascript">
+            try {
+                var input = window.opener.document.getElementById('@(ViewBag.ValueIdsInput ?? string.Empty)');
+                if (input) {
+                    input.value = '@Html.Raw(Model.RewardAttributeValueIds)';
+                }
+                var btn = window.opener.document.getElementById('@(ViewBag.BtnId ?? string.Empty)');
+                if (btn) {
+                    btn.click();
+                }
+            } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        @Html.ValidationSummary(false)
+        if (Model.Warnings != null && Model.Warnings.Any())
+        {
+            <ul>
+                @foreach (var warning in Model.Warnings)
+                {
+                    <li>@warning</li>
+                }
+            </ul>
+        }
+        @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_RewardProductAttributes.cshtml", Model.ProductAttributes, new ViewDataDictionary(ViewData) { { "productId", Model.ProductId } })
+    }
+}

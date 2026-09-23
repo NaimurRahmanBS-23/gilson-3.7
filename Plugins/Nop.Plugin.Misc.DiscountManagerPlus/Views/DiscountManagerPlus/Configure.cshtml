@@ -1,0 +1,99 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.ConfigurationModel
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = ViewContext.IsChildAction ? "" : "~/Administration/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.DmpAdminMenu = "configuration";
+    if (!ViewContext.IsChildAction)
+    {
+        ViewBag.Title = T("Admin.NopStation.DiscountManagerPlus.Configuration").Text;
+    }
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+}
+@using (Html.BeginForm("Configure", "DiscountManagerPlus", pluginAdmin, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/Shared/_AdminPluginMenu.cshtml")
+    if (!ViewContext.IsChildAction)
+    {
+        <div class="section-header">
+            <div class="title">
+                <img src="@Url.Content("~/Administration/Content/images/ico-configuration.png")" alt="" />
+                @T("Admin.NopStation.DiscountManagerPlus.Configuration")
+            </div>
+            <div class="options">
+                <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            </div>
+        </div>
+    }
+    @Html.Action("StoreScopeConfiguration", "Setting", new { area = "Admin" })
+    @Html.ValidationSummary(false)
+
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.OverrideStoreCheckboxFor(model => model.IsEnabled_OverrideForStore, model => model.IsEnabled, Model.ActiveStoreScopeConfiguration)
+                @Html.NopLabelFor(model => model.IsEnabled):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.IsEnabled)
+                @Html.ValidationMessageFor(model => model.IsEnabled)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.OverrideStoreCheckboxFor(model => model.MaxRuleEvaluationTimeMs_OverrideForStore, model => model.MaxRuleEvaluationTimeMs, Model.ActiveStoreScopeConfiguration)
+                @Html.NopLabelFor(model => model.MaxRuleEvaluationTimeMs):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.MaxRuleEvaluationTimeMs)
+                @Html.ValidationMessageFor(model => model.MaxRuleEvaluationTimeMs)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.OverrideStoreCheckboxFor(model => model.EnablePromotionBadge_OverrideForStore, model => model.EnablePromotionBadge, Model.ActiveStoreScopeConfiguration)
+                @Html.NopLabelFor(model => model.EnablePromotionBadge):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.EnablePromotionBadge)
+                @Html.ValidationMessageFor(model => model.EnablePromotionBadge)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.OverrideStoreCheckboxFor(model => model.EnableCartSavingsBreakdown_OverrideForStore, model => model.EnableCartSavingsBreakdown, Model.ActiveStoreScopeConfiguration)
+                @Html.NopLabelFor(model => model.EnableCartSavingsBreakdown):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.EnableCartSavingsBreakdown)
+                @Html.ValidationMessageFor(model => model.EnableCartSavingsBreakdown)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.OverrideStoreCheckboxFor(model => model.UseDefaultDiscountPipeline_OverrideForStore, model => model.UseDefaultDiscountPipeline, Model.ActiveStoreScopeConfiguration)
+                @Html.NopLabelFor(model => model.UseDefaultDiscountPipeline):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.UseDefaultDiscountPipeline)
+                @Html.ValidationMessageFor(model => model.UseDefaultDiscountPipeline)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.OverrideStoreCheckboxFor(model => model.EnableLogging_OverrideForStore, model => model.EnableLogging, Model.ActiveStoreScopeConfiguration)
+                @Html.NopLabelFor(model => model.EnableLogging):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.EnableLogging)
+                @Html.ValidationMessageFor(model => model.EnableLogging)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            </td>
+        </tr>
+    </table>
+}

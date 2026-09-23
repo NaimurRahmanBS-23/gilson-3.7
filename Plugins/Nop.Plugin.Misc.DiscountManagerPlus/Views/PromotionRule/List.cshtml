@@ -1,0 +1,166 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleSearchModel
+@using Nop.Core.Infrastructure
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Infrastructure
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules").Text;
+    ViewBag.DmpAdminMenu = "rules";
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+}
+@using (Html.BeginForm("List", "PromotionRule", pluginAdmin, FormMethod.Post, new { id = "promotion-rule-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/Shared/_AdminPluginMenu.cshtml")
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-promotions.png")" alt="" />
+            @T("Admin.NopStation.DiscountManagerPlus.PromotionRules")
+        </div>
+        <div class="options">
+            <a href="@Url.Action("Create", "PromotionRule", pluginAdmin)" class="k-button">@T("Admin.Common.AddNew")</a>
+        </div>
+    </div>
+
+    <table width="100%">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SearchName):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.SearchName)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SearchRuleTypeId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.SearchRuleTypeId, Model.AvailableRuleTypes)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SearchIsActive):
+            </td>
+            <td class="adminData">
+                <select id="@Html.FieldIdFor(model => model.SearchIsActive)" name="SearchIsActive">
+                    <option value="">@T("Admin.Common.All")</option>
+                    <option value="True">@T("Admin.Common.Yes")</option>
+                    <option value="False">@T("Admin.Common.No")</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" id="search-promotion-rules" class="k-button" value="@T("Admin.Common.Search")" />
+            </td>
+        </tr>
+    </table>
+
+    <table class="adminContent">
+        <tr>
+            <td>
+                <div id="promotion-rules-grid"></div>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $("#promotion-rules-grid").kendoGrid({
+                            dataSource: {
+                                type: "json",
+                                transport: {
+                                    read: {
+                                        url: "@Html.Raw(Url.Action("List", "PromotionRule", pluginAdmin))",
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: additionalData
+                                    }
+                                },
+                                schema: {
+                                    data: "Data",
+                                    total: "Total",
+                                    errors: "Errors"
+                                },
+                                error: function (e) {
+                                    display_kendoui_grid_error(e);
+                                    this.cancelChanges();
+                                },
+                                pageSize: @(defaultGridPageSize),
+                                serverPaging: true,
+                                serverFiltering: true,
+                                serverSorting: true
+                            },
+                            pageable: {
+                                refresh: true,
+                                pageSizes: [@(gridPageSizes)]
+                            },
+                            editable: {
+                                confirmation: false,
+                                mode: "inline"
+                            },
+                            scrollable: false,
+                            columns: [{
+                                field: "Name",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.Name")"
+                            }, {
+                                field: "RuleTypeName",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.RuleType")"
+                            }, {
+                                field: "DiscountTypeName",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.DiscountType")"
+                            }, {
+                                field: "DiscountScopeName",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.DiscountScope")",
+                                width: 140
+                            }, {
+                                field: "DiscountValue",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.DiscountValue")"
+                            }, {
+                                field: "SetupStatus",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.SetupStatus")",
+                                width: 140
+                            }, {
+                                field: "SetupDetails",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.SetupDetails")"
+                            }, {
+                                field: "Priority",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.Priority")",
+                                width: 80
+                            }, {
+                                field: "IsActive",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.IsActive")",
+                                width: 80,
+                                headerAttributes: { style: "text-align:center" },
+                                attributes: { style: "text-align:center" },
+                                template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=IsActive#.gif" />'
+                            }, {
+                                field: "Id",
+                                title: "@T("Admin.Common.Edit")",
+                                width: 80,
+                                template: '<a class="k-button" href="@PluginAdminUrl.Combine(Url.Action("Edit", "PromotionRule", pluginAdmin), "id=")#=Id#">@T("Admin.Common.Edit")</a>'
+                            }]
+                        });
+                    });
+
+                    $('#search-promotion-rules').click(function () {
+                        var grid = $('#promotion-rules-grid').data('kendoGrid');
+                        grid.dataSource.page(1);
+                        return false;
+                    });
+
+                    function additionalData() {
+                        var data = {
+                            SearchName: $('#@Html.FieldIdFor(model => model.SearchName)').val(),
+                            SearchRuleTypeId: $('#@Html.FieldIdFor(model => model.SearchRuleTypeId)').val(),
+                            SearchIsActive: $('#@Html.FieldIdFor(model => model.SearchIsActive)').val()
+                        };
+                        addAntiForgeryToken(data);
+                        return data;
+                    }
+                </script>
+            </td>
+        </tr>
+    </table>
+}

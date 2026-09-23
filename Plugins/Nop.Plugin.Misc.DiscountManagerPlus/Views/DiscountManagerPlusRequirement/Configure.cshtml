@@ -1,0 +1,86 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.DiscountManagerPlusRequirementModel
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = "";
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var saveButton = $('#save-discount-manager-plus-requirement@(Model.RequirementId)');
+        if (!saveButton.length)
+            return;
+
+        saveButton.on('click', function () {
+            var postData = {
+                DiscountId: @Model.DiscountId,
+                RequirementId: @Model.RequirementId
+            };
+            addAntiForgeryToken(postData);
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("Configure", "DiscountManagerPlusRequirement", pluginAdmin))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+                    var response = jqXHR.responseJSON;
+                    if (response && response.Errors) {
+                        var errorMessages = '';
+                        $.each(response.Errors, function (i, error) {
+                            errorMessages += error;
+                            if (response.Errors.length - 1 != i)
+                                errorMessages += '\n';
+                        });
+                        alert(errorMessages);
+                        return;
+                    }
+
+                    $('#pnl-save-discount-manager-plus-requirement-result@(Model.RequirementId)').fadeIn("slow").delay(1000).fadeOut("slow");
+                    @if (Model.RequirementId == 0)
+                    {
+                        <text>$("#discountRequirementContainer").trigger('nopnewdiscountruleadded', [data.NewRequirementId]);</text>
+                    }
+                },
+                error: function () {
+                    alert('@T("Admin.Promotions.Discounts.Requirements.FailedToSave")');
+                }
+            });
+        });
+    });
+</script>
+
+<table class="adminContent">
+    <tr>
+        <td class="adminTitle">
+            @T("Admin.NopStation.DiscountManagerPlus.Requirement.Fields.Conditions"):
+        </td>
+        <td class="adminData">
+            <div>@T("Admin.NopStation.DiscountManagerPlus.Requirement.Fields.Conditions.Hint")</div>
+            @if (Model.RequirementId == 0)
+            {
+                <input type="button" id="save-discount-manager-plus-requirement@(Model.RequirementId)" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.Requirement.Create")" />
+            }
+            <div id="pnl-save-discount-manager-plus-requirement-result@(Model.RequirementId)" style="display:none;">
+                @T("Admin.Promotions.Discounts.Requirements.Saved")
+            </div>
+        </td>
+    </tr>
+    @if (!Model.DefaultDiscountPipelineEnabled)
+    {
+        <tr>
+            <td></td>
+            <td class="adminData">
+                <div style="color:red;">
+                    @T("Admin.NopStation.DiscountManagerPlus.Requirement.DefaultPipelineDisabled")
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+
+@if (Model.RequirementId > 0)
+{
+    @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/DiscountManagerPlusRequirement/_Conditions.cshtml", Model.ConditionSearchModel)
+}

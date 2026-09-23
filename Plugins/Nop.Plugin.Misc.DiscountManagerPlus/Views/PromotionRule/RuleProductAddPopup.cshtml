@@ -1,0 +1,39 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleProductAddModel
+@using Nop.Plugin.Misc.DiscountManagerPlus.Domain
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = "~/Administration/Views/Shared/_AdminPopupLayout.cshtml";
+    ViewBag.Title = T("Admin.NopStation.DiscountManagerPlus.RuleProducts.AddNew").Text;
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+}
+@using (Html.BeginForm("RuleProductAddPopup", "PromotionRule", pluginAdmin, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.PromotionRuleId)
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-promotions.png")" alt="" />
+            @T("Admin.NopStation.DiscountManagerPlus.RuleProducts.AddNew")
+        </div>
+        <div class="options">
+            @if (ViewBag.RefreshPage != true)
+            {
+                <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            }
+        </div>
+    </div>
+
+    if (ViewBag.RefreshPage == true)
+    {
+        <script type="text/javascript">
+            try { window.opener.refreshProductsGrid(); } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        @Html.ValidationSummary(false)
+        @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_RuleProductPopupFields.cshtml", Model)
+    }
+}

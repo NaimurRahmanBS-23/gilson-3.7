@@ -1,0 +1,386 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Models.CartSavingsModel
+@using Nop.Plugin.Misc.DiscountManagerPlus
+@using Nop.Plugin.Misc.DiscountManagerPlus.Domain
+@using Nop.Web.Framework.UI
+@{
+    var cartSavingsCssUrl = Url.Content("~/Plugins/Misc.DiscountManagerPlus/Content/css/cart-savings.css");
+    var autoOpenPopupId = Model.PendingRewards.FirstOrDefault() != null ? Model.PendingRewards.First().PopupId : null;
+    var rewardSelectionRequiredMessage = T("Plugins.NopStation.DiscountManagerPlus.RewardSelection.Error.SelectionRequired").Text;
+    var rewardAddFailedMessage = T("Plugins.NopStation.DiscountManagerPlus.RewardSelection.Error.AddFailed").Text;
+    Html.AddCssFileParts("~/Plugins/Misc.DiscountManagerPlus/Content/css/cart-savings.css");
+    if (Model.PendingRewards.Any())
+    {
+        Html.AddScriptParts("~/Plugins/Misc.DiscountManagerPlus/Content/js/cart-savings.js");
+    }
+}
+
+<script type="text/javascript">
+    (function () {
+        var href = '@cartSavingsCssUrl';
+        if (document.querySelector && document.querySelector('link[data-ns-dmp-cart-savings-css]')) {
+            return;
+        }
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        link.setAttribute('data-ns-dmp-cart-savings-css', 'true');
+        document.getElementsByTagName('head')[0].appendChild(link);
+    })();
+    if (typeof jQuery !== 'undefined' && !jQuery.magnificPopup) {
+        jQuery.magnificPopup = {
+            open: function (opts) {
+                var src = opts && opts.items ? opts.items.src : null;
+                if (!src) return;
+                jQuery('.ns-dmp-cart-reward-popup').hide();
+                jQuery(src).show().addClass('ns-dmp-cart-reward-popup--open');
+            },
+            close: function () {
+                jQuery('.ns-dmp-cart-reward-popup').hide().removeClass('ns-dmp-cart-reward-popup--open');
+            }
+        };
+    }
+</script>
+
+<div class="ns-discount-manager-plus-cart-root ns-dmp-cart-savings-root"
+     data-auto-open-popup="@(string.IsNullOrWhiteSpace(autoOpenPopupId) ? string.Empty : "#" + autoOpenPopupId)"
+     data-reward-error="@rewardAddFailedMessage">
+    @if (Model.Reminders.Any())
+    {
+        <div class="ns-discount-manager-plus-reminders">
+            <div class="title">@Model.ReminderTitle</div>
+            <ul>
+                @foreach (var reminder in Model.Reminders)
+                {
+                    <li>@reminder</li>
+                }
+            </ul>
+        </div>
+    }
+
+    @if (Model.MultipleDiscountNotices.Any())
+    {
+        <div class="ns-discount-manager-plus-notice">
+            <div class="notice-icon">&#10024;</div>
+            <div class="notice-content">
+                @foreach (var notice in Model.MultipleDiscountNotices)
+                {
+                    <div class="notice-message">@notice</div>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.CheapestItemSelectionDetails.Any())
+    {
+        <div class="ns-discount-manager-plus-details">
+            <div class="details-title">@T("Plugins.NopStation.DiscountManagerPlus.CartSavings.SavingsBreakdown")</div>
+            <ul>
+                @foreach (var detail in Model.CheapestItemSelectionDetails)
+                {
+                    <li>@detail</li>
+                }
+            </ul>
+        </div>
+    }
+
+    @if (Model.ExcludedProductWarnings.Any())
+    {
+        <div class="ns-discount-manager-plus-warning">
+            <div class="warning-icon">&#9888;</div>
+            <div class="warning-content">
+                @foreach (var warning in Model.ExcludedProductWarnings)
+                {
+                    <div class="warning-message">@warning</div>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.HasAttentionMessages && Model.IsDualOfferScenario)
+    {
+        <div class="ns-discount-manager-plus-dual-offer">
+            <div class="dual-offer-icon">&#127919;</div>
+            <div class="dual-offer-content">
+                @foreach (var message in Model.AttentionMessages.Where(m => m.IsDualOfferScenario))
+                {
+                    <div class="dual-offer-message @(message.IsHighlighted ? "is-highlighted" : "")" data-priority="@message.DisplayPriority">
+                        <div class="message-header">
+                            <strong>@message.RuleName</strong>
+                            @if (message.MessageType == AttentionMessageType.Boost)
+                            {
+                                <span class="badge-boost">Boost</span>
+                            }
+                            else if (message.MessageType == AttentionMessageType.Opportunity)
+                            {
+                                <span class="badge-opportunity">Opportunity</span>
+                            }
+                        </div>
+                        <div class="message-text">@message.Message</div>
+                        @if (!string.IsNullOrEmpty(message.DiscountChoiceExplanation))
+                        {
+                            <div class="discount-explanation">
+                                <em>@message.DiscountChoiceExplanation</em>
+                            </div>
+                        }
+                        @if (message.ChosenItemReasons != null && message.ChosenItemReasons.Any())
+                        {
+                            <div class="choice-reasons">
+                                <ul>
+                                    @foreach (var reason in message.ChosenItemReasons)
+                                    {
+                                        <li>@reason</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.HasMaximizationTips)
+    {
+        <div class="ns-discount-manager-plus-maximization">
+            <div class="maximization-icon">&#128161;</div>
+            <div class="maximization-content">
+                <div class="maximization-title">@T("Plugins.NopStation.DiscountManagerPlus.CartSavings.MaximizationTitle")</div>
+                @foreach (var tip in Model.MaximizationTips.OrderByDescending(t => t.Priority).ThenByDescending(t => t.PotentialSavings).Take(3))
+                {
+                    <div class="maximization-tip @(tip.IsQuickWin ? "is-quick-win" : "")">
+                        <div class="tip-content">
+                            <div class="tip-message">@tip.Message</div>
+                            @if (tip.PotentialSavings > 0)
+                            {
+                                <div class="tip-savings">Save additional @tip.PotentialSavings.ToString("F2")</div>
+                            }
+                            @if (tip.SuggestedProducts != null && tip.SuggestedProducts.Any())
+                            {
+                                <div class="tip-products">
+                                    <span>Consider adding: @string.Join(", ", tip.SuggestedProducts)</span>
+                                </div>
+                            }
+                            @if (tip.IsQuickWin)
+                            {
+                                <div class="tip-quick-win">Quick Win</div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.IsDualOfferScenario && Model.DualOfferExplanation != null)
+    {
+        <div class="ns-discount-manager-plus-explanation">
+            <div class="explanation-icon">&#128202;</div>
+            <div class="explanation-content">
+                <div class="explanation-title">@T("Plugins.NopStation.DiscountManagerPlus.CartSavings.HowDiscountsApplied")</div>
+                <div class="explanation-text">@Model.DualOfferExplanation.ExplanationText</div>
+                @if (Model.DualOfferExplanation.DiscountChoices != null && Model.DualOfferExplanation.DiscountChoices.Any())
+                {
+                    <div class="explanation-breakdown">
+                        <div class="breakdown-title">@T("Plugins.NopStation.DiscountManagerPlus.CartSavings.DiscountBreakdown")</div>
+                        @foreach (var choice in Model.DualOfferExplanation.DiscountChoices.OrderByDescending(c => c.Priority))
+                        {
+                            <div class="explanation-choice" data-priority="@choice.Priority">
+                                <div class="choice-promotion">@choice.PromotionName</div>
+                                <div class="choice-details">
+                                    <span class="choice-product">@choice.ProductName</span>
+                                    @if (choice.UnitNumber.HasValue)
+                                    {
+                                        <span class="choice-unit">(Unit @choice.UnitNumber)</span>
+                                    }
+                                    <span class="choice-discount">@choice.DiscountType</span>
+                                    <span class="choice-amount">@choice.DiscountAmount.ToString("F2")</span>
+                                </div>
+                                @if (!string.IsNullOrEmpty(choice.Reasoning))
+                                {
+                                    <div class="choice-reasoning">
+                                        <small>@choice.Reasoning</small>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                @if (Model.DualOfferExplanation.SavingsPercentage > 0)
+                {
+                    <div class="explanation-savings">
+                        <span>@T("Plugins.NopStation.DiscountManagerPlus.CartSavings.TotalSavingsPercentage"): </span>
+                        <strong>@Model.DualOfferExplanation.SavingsPercentage.ToString("F1")%</strong>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.PendingRewards.Any())
+    {
+        <div class="ns-dmp-cart-savings-panel ns-dmp-cart-savings-panel--rewards">
+            <div class="ns-dmp-cart-savings-panel__header">
+                <h4>@Model.PendingRewardsTitle</h4>
+                <p>@Model.PendingRewardsDescription</p>
+            </div>
+            <div class="ns-dmp-cart-reward-list">
+                @foreach (var reward in Model.PendingRewards)
+                {
+                    var heroImage = reward.Options.FirstOrDefault() != null ? reward.Options.First().ImageUrl ?? string.Empty : string.Empty;
+                    <div class="ns-dmp-cart-reward-card">
+                        <div class="ns-dmp-cart-reward-card__image">
+                            @if (!string.IsNullOrWhiteSpace(heroImage))
+                            {
+                                <img src="@heroImage" alt="@reward.RuleName" />
+                            }
+                        </div>
+                        <div class="ns-dmp-cart-reward-card__content">
+                            <div class="ns-dmp-cart-reward-card__rule">
+                                <span>@T("Plugins.NopStation.DiscountManagerPlus.CartSavings.RuleLabel"):</span>
+                                <span>@reward.RuleName</span>
+                            </div>
+                            <h5 class="ns-dmp-cart-reward-card__title">@Model.PendingRewardsTitle</h5>
+                            <div class="ns-dmp-cart-reward-card__meta">
+                                <span>@T("Plugins.NopStation.DiscountManagerPlus.CartSavings.QuantityLabel"):</span>
+                                <strong>x@reward.RewardQuantity</strong>
+                            </div>
+                            <div class="ns-dmp-cart-reward-card__button">
+                                <button type="button" class="button-2 js-ns-dmp-reward-open" data-mfp-src="#@reward.PopupId">@Model.PendingRewardsSelectText</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        foreach (var reward in Model.PendingRewards)
+        {
+            if (!reward.Options.Any())
+            {
+                continue;
+            }
+
+            <div id="@reward.PopupId" class="mfp-hide ns-dmp-cart-reward-popup" style="display:none;">
+                <form id="@reward.FormId"
+                      data-action="@reward.AddToCartUrl"
+                      data-max-selection="@reward.MaxSelectableQuantity"
+                      data-selection-required="@rewardSelectionRequiredMessage"
+                      class="ns-dmp-cart-reward-popup__form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="promotionRuleId" value="@reward.PromotionRuleId" />
+                    <input type="hidden" name="rewardQuantity" value="@reward.RewardQuantity" />
+
+                    <div class="ns-dmp-cart-reward-popup__eyebrow">@T("Plugins.NopStation.DiscountManagerPlus.RewardSelection.Badge.Free")</div>
+                    <h3 class="ns-dmp-cart-reward-popup__title">@Model.PendingRewardsTitle</h3>
+                    <div class="ns-dmp-cart-reward-popup__rule">@reward.RuleName</div>
+
+                    <div class="ns-dmp-reward-option-grid">
+                        @foreach (var option in reward.Options)
+                        {
+                            <label class="ns-dmp-reward-option @(option.IsSelected ? "is-selected" : string.Empty)" data-option-id="@option.RewardProductId">
+                                <input class="ns-dmp-reward-option__radio" type="radio" name="rewardProductId" value="@option.RewardProductId" @(option.IsSelected ? "checked=\"checked\"" : null) />
+                                <span class="ns-dmp-reward-option__badge">@T("Plugins.NopStation.DiscountManagerPlus.RewardSelection.Badge.Free")</span>
+                                <span class="ns-dmp-reward-option__media">
+                                    @if (!string.IsNullOrWhiteSpace(option.ImageUrl))
+                                    {
+                                        <img src="@option.ImageUrl" alt="@option.RewardProductName" />
+                                    }
+                                </span>
+                                <span class="ns-dmp-reward-option__content">
+                                    <span class="ns-dmp-reward-option__title">@option.RewardProductName</span>
+                                    @if (!string.IsNullOrWhiteSpace(option.RewardProductPrice))
+                                    {
+                                        <span class="ns-dmp-reward-option__price-wrap">
+                                            @if (!string.IsNullOrWhiteSpace(option.RewardProductOldPrice) && option.RewardProductOldPrice != option.RewardProductPrice)
+                                            {
+                                                <span class="ns-dmp-reward-option__old-price"><s>@option.RewardProductOldPrice</s></span>
+                                            }
+                                            <span class="ns-dmp-reward-option__price">@option.RewardProductPrice</span>
+                                        </span>
+                                    }
+                                </span>
+                            </label>
+                        }
+                    </div>
+
+                    @foreach (var option in reward.Options)
+                    {
+                        var attributesModel = new Nop.Plugin.Misc.DiscountManagerPlus.Models.RewardProductAttributesModel
+                        {
+                            Product = option.Product,
+                            FormId = reward.FormId
+                        };
+                        <div class="ns-dmp-reward-attributes @(option.IsSelected ? string.Empty : "is-hidden")" data-option-id="@option.RewardProductId">
+                            @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/DiscountManagerPlusPublic/_RewardProductAttributes.cshtml", attributesModel)
+                        </div>
+                    }
+
+                    <div class="ns-dmp-cart-reward-popup__message is-hidden"></div>
+                    <div class="ns-dmp-cart-reward-popup__actions">
+                        <button type="submit" class="ns-dmp-cart-reward-popup__submit js-ns-dmp-reward-add">
+                            <span class="ns-dmp-cart-reward-popup__submit-text">@Model.PendingRewardsAddText</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        }
+    }
+
+    @if (Model.Items.Any())
+    {
+        <div class="ns-discount-manager-plus-savings">
+            @if (!string.IsNullOrWhiteSpace(Model.SummaryText))
+            {
+                <div class="summary">@Model.SummaryText</div>
+            }
+            <div class="title">@Model.Title</div>
+            <ul>
+                @foreach (var item in Model.Items)
+                {
+                    <li class="@(item.IsBogoStyle ? "bogo-item" : "discount-item")">
+                        <span class="item-left">
+                            @if (!string.IsNullOrWhiteSpace(item.BadgeText))
+                            {
+                                <span class="badge">@item.BadgeText</span>
+                            }
+                            <span class="name">@item.RuleName</span>
+                            @if (!string.IsNullOrWhiteSpace(item.DetailText))
+                            {
+                                <small class="detail">@item.DetailText</small>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.AppliedToText))
+                            {
+                                <small class="applied-to">@item.AppliedToText</small>
+                            }
+                        </span>
+                        <span class="amount">@item.DiscountAmountFormatted</span>
+                    </li>
+                }
+            </ul>
+            <div class="total">
+                <span>@Model.TotalLabel</span>
+                <strong>@Model.TotalSavingsFormatted</strong>
+            </div>
+            <div class="offers-link">
+                <a href="@(Url.RouteUrl(DiscountManagerPlusDefaults.OffersRouteName) ?? "/promotions/offers")">@T("Plugins.NopStation.DiscountManagerPlus.Offers.LinkText")</a>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.Items.Any() || Model.PendingRewards.Any() || Model.Reminders.Any())
+{
+    <script type="text/javascript">
+        $(function () {
+            var rootContainer = $('.ns-discount-manager-plus-cart-root').first();
+            var savingsBlock = rootContainer.find('.ns-discount-manager-plus-savings').first();
+            var orderSummaryContent = $('.order-summary-content').first();
+            if (savingsBlock.length > 0 && orderSummaryContent.length > 0) {
+                savingsBlock.insertBefore(orderSummaryContent);
+            }
+            if (rootContainer.length > 0) {
+                rootContainer.css('display', 'block');
+            }
+        });
+    </script>
+}

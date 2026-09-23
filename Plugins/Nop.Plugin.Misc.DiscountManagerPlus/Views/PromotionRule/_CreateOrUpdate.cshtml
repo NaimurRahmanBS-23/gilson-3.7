@@ -1,0 +1,87 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleModel
+@using Nop.Plugin.Misc.DiscountManagerPlus.Domain
+@using Nop.Web.Framework
+@using Nop.Web.Framework.UI
+@{
+    Html.AddScriptParts("~/Scripts/jquery.tmpl.min.js");
+}
+@Html.ValidationSummary(false)
+@Html.HiddenFor(model => model.Id)
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#promotionrule-edit").kendoTabStrip({
+            animation: {
+                open: {
+                    effects: "fadeIn"
+                }
+            },
+            select: tabstrip_on_tab_select
+        });
+        toggleRuleTypeSections();
+        $('#@Html.FieldIdFor(model => model.RuleTypeId)').on('change', toggleRuleTypeSections);
+    });
+
+    function toggleRuleTypeSections() {
+        var ruleType = parseInt($('#@Html.FieldIdFor(model => model.RuleTypeId)').val(), 10) || 0;
+        $('#tab-products').toggle(ruleType === @((int)PromotionRuleType.ProductBased) || ruleType === @((int)PromotionRuleType.ComboPricing) || ruleType === @((int)PromotionRuleType.BuyXGetY));
+        $('#tab-tiers').toggle(
+            ruleType === @((int)PromotionRuleType.BuyXGetY) ||
+            ruleType === @((int)PromotionRuleType.ProductBased) ||
+            ruleType === @((int)PromotionRuleType.CartCondition) ||
+            ruleType === @((int)PromotionRuleType.SubtotalBased));
+        $('#tab-conditions').toggle(
+            ruleType === @((int)PromotionRuleType.ProductBased) ||
+            ruleType === @((int)PromotionRuleType.ComboPricing) ||
+            ruleType === @((int)PromotionRuleType.BuyXGetY) ||
+            ruleType === @((int)PromotionRuleType.CartCondition) ||
+            ruleType === @((int)PromotionRuleType.SubtotalBased));
+    }
+</script>
+<div id="promotionrule-edit">
+    <ul>
+        <li @Html.RenderSelectedTabIndex(0, GetSelectedTabIndex())>
+            @T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Info")
+        </li>
+        @if (Model.Id > 0)
+        {
+            <li @Html.RenderSelectedTabIndex(1, GetSelectedTabIndex()) id="tab-products">
+                @string.Format(T("Admin.NopStation.DiscountManagerPlus.PromotionRules.ProductsWithCount").Text, Model.RuleProductCount)
+            </li>
+            <li @Html.RenderSelectedTabIndex(2, GetSelectedTabIndex()) id="tab-tiers">
+                @string.Format(T("Admin.NopStation.DiscountManagerPlus.PromotionRules.TiersWithCount").Text, Model.RuleTierCount)
+            </li>
+            <li @Html.RenderSelectedTabIndex(3, GetSelectedTabIndex())>
+                @string.Format(T("Admin.NopStation.DiscountManagerPlus.PromotionRules.ExcludedProductsWithCount").Text, Model.ExcludedProductCount)
+            </li>
+            <li @Html.RenderSelectedTabIndex(4, GetSelectedTabIndex()) id="tab-conditions">
+                @string.Format(T("Admin.NopStation.DiscountManagerPlus.PromotionRules.ConditionsWithCount").Text, Model.RuleConditionCount)
+            </li>
+            <li @Html.RenderSelectedTabIndex(5, GetSelectedTabIndex())>
+                @T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History")
+            </li>
+        }
+    </ul>
+    <div>
+        @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_CreateOrUpdate.Info.cshtml", Model)
+    </div>
+    @if (Model.Id > 0)
+    {
+        <div>
+            @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_CreateOrUpdate.Products.cshtml", Model.RuleProductSearchModel)
+        </div>
+        <div>
+            @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_CreateOrUpdate.Tiers.cshtml", Model.RuleTierSearchModel)
+        </div>
+        <div>
+            @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_CreateOrUpdate.ExcludedProducts.cshtml", Model.ExcludedProductSearchModel)
+        </div>
+        <div>
+            @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_CreateOrUpdate.Conditions.cshtml", Model.RuleConditionSearchModel)
+        </div>
+        <div>
+            @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/PromotionRule/_CreateOrUpdate.History.cshtml", Model.RuleUsageHistorySearchModel)
+        </div>
+    }
+</div>
+<input type="hidden" id="selected-tab-index" name="selected-tab-index" value="@(GetSelectedTabIndex())">

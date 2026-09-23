@@ -1,0 +1,114 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.DiscountDetailsPromotionRulesModel
+@using System.Web.Routing
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Infrastructure
+@using Nop.Web.Framework
+@{
+    Layout = "";
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+}
+
+<div class="section-header">
+    <div class="title">
+        @T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.Title")
+    </div>
+</div>
+
+@if (!Model.IsSavedDiscount)
+{
+    <p>@T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.SaveDiscountFirst")</p>
+}
+else
+{
+    <table class="adminContent">
+        <tr>
+            <td>
+                <p>@T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.SafeSetupHint")</p>
+                @{
+                    var createRuleUrl = PluginAdminUrl.Combine(Url.Action("CreateParentDiscountRulePopup", "PromotionRule", pluginAdmin), "discountId=" + Model.DiscountId);
+                }
+                <input type="button" class="k-button" value="@T("Admin.Common.AddNew")"
+                       onclick="javascript:OpenWindow('@Html.Raw(createRuleUrl)', 980, 780, true); return false;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @if (!Model.Rules.Any())
+                {
+                    <p>@T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.Empty")</p>
+                }
+                else
+                {
+                    <table class="adminContent" style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.Name")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.RuleType")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.CarryDefaultDiscount")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.SetupStatus")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.SetupSection.Products")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.SetupSection.Tiers")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.SetupSection.Conditions")</th>
+                                <th>@T("Admin.Common.Actions")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var rule in Model.Rules)
+                            {
+                                var editPopupUrl = PluginAdminUrl.Combine(Url.Action("EditParentDiscountRulePopup", "PromotionRule", pluginAdmin), "id=" + rule.Id + "&discountId=" + Model.DiscountId);
+                                var editUrl = PluginAdminUrl.Combine(Url.Action("Edit", "PromotionRule", pluginAdmin), "id=" + rule.Id);
+                                <tr>
+                                    <td>
+                                        <div>@rule.Name</div>
+                                        <small>@rule.SystemName</small>
+                                    </td>
+                                    <td>@rule.RuleTypeName</td>
+                                    <td>@(rule.CarryDefaultDiscount ? T("Admin.Common.Yes").Text : T("Admin.Common.No").Text)</td>
+                                    <td>
+                                        <div>@rule.SetupStatus</div>
+                                        @if (!string.IsNullOrWhiteSpace(rule.SetupDetails))
+                                        {
+                                            <small>@rule.SetupDetails</small>
+                                        }
+                                    </td>
+                                    <td>@rule.RuleProductCount</td>
+                                    <td>@rule.RuleTierCount</td>
+                                    <td>@rule.RuleConditionCount</td>
+                                    <td>
+                                        <input type="button" class="k-button" value="@T("Admin.Common.Edit")"
+                                               onclick="javascript:OpenWindow('@Html.Raw(editPopupUrl)', 980, 780, true); return false;" />
+                                        <a class="k-button" href="@editUrl" target="_blank">@T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.Actions.OpenRule")</a>
+                                        <input type="button" class="k-button" value="@T("Admin.Common.Delete")"
+                                               onclick="deleteDiscountManagerPlusRule(@rule.Id, @Model.DiscountId); return false;" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </td>
+        </tr>
+    </table>
+
+    <script type="text/javascript">
+        function deleteDiscountManagerPlusRule(id, discountId) {
+            if (!confirm('@T("Admin.Common.AreYouSure")')) {
+                return;
+            }
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@Url.Action("DeleteParentDiscountRule", "PromotionRule", pluginAdmin)",
+                data: addAntiForgeryToken({
+                    id: id,
+                    discountId: discountId
+                }),
+                success: function () {
+                    location.reload();
+                },
+                error: function () {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+}

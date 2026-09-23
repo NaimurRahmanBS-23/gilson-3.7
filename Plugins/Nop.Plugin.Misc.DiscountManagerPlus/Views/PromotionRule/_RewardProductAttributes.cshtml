@@ -1,0 +1,120 @@
+@model IList<Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleRewardAttributePopupModel.RewardProductAttributeModel>
+@using Nop.Core.Domain.Catalog
+@using Nop.Web.Framework
+@if (Model != null && Model.Count > 0)
+{
+    var productId = Convert.ToInt32(ViewData["productId"]);
+    <div class="product-attributes-input">
+        <dl>
+            @foreach (var attribute in Model)
+            {
+                var controlId = string.Format("product_attribute_{0}", attribute.Id);
+                var textPrompt = !string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.TextPrompt : attribute.Name;
+                <dt id="@string.Format("product_attribute_row_{0}", attribute.Id)">
+                    <span class="text-prompt">@textPrompt</span>
+                    @if (attribute.IsRequired)
+                    {
+                        <span class="required">*</span>
+                    }
+                </dt>
+                <dd>
+                    @switch (attribute.AttributeControlType)
+                    {
+                        case AttributeControlType.DropdownList:
+                            {
+                                <select name="@(controlId)" id="@(controlId)">
+                                    @if (!attribute.IsRequired)
+                                    {
+                                        <option value="0">---</option>
+                                    }
+                                    @foreach (var attributeValue in attribute.Values)
+                                    {
+                                        var optionText = string.IsNullOrEmpty(attributeValue.PriceAdjustment)
+                                            ? attributeValue.Name
+                                            : attributeValue.Name + " [" + attributeValue.PriceAdjustment + "]";
+                                        <option selected="@attributeValue.IsPreSelected" value="@attributeValue.Id">@optionText</option>
+                                    }
+                                </select>
+                                foreach (var attributeValue in attribute.Values.Where(value => value.CustomerEntersQty))
+                                {
+                                    <div id="@(controlId)_@(attributeValue.Id)_qty_box" style="display:none">
+                                        <label for="@(controlId)_@(attributeValue.Id)_qty">@T("Products.ProductAttributes.PriceAdjustment.Quantity")</label>
+                                        <input type="text" name="@(controlId)_@(attributeValue.Id)_qty" id="@(controlId)_@(attributeValue.Id)_qty" value="@(attributeValue.Quantity)" />
+                                    </div>
+                                }
+                            }
+                            break;
+                        case AttributeControlType.RadioList:
+                        case AttributeControlType.ColorSquares:
+                            {
+                                <ul class="option-list">
+                                    @foreach (var attributeValue in attribute.Values)
+                                    {
+                                        var optionText = string.IsNullOrEmpty(attributeValue.PriceAdjustment)
+                                            ? attributeValue.Name
+                                            : attributeValue.Name + " [" + attributeValue.PriceAdjustment + "]";
+                                        <li>
+                                            <input id="@(controlId)_@(attributeValue.Id)" type="radio" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" />
+                                            <label for="@(controlId)_@(attributeValue.Id)">@optionText</label>
+                                            if (attributeValue.CustomerEntersQty)
+                                            {
+                                                <div id="@(controlId)_@(attributeValue.Id)_qty_box" style="display:none">
+                                                    <label for="@(controlId)_@(attributeValue.Id)_qty">@T("Products.ProductAttributes.PriceAdjustment.Quantity")</label>
+                                                    <input type="text" name="@(controlId)_@(attributeValue.Id)_qty" id="@(controlId)_@(attributeValue.Id)_qty" value="@(attributeValue.Quantity)" />
+                                                </div>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            break;
+                        case AttributeControlType.Checkboxes:
+                        case AttributeControlType.ReadonlyCheckboxes:
+                            {
+                                <ul class="option-list">
+                                    @foreach (var attributeValue in attribute.Values)
+                                    {
+                                        var optionText = string.IsNullOrEmpty(attributeValue.PriceAdjustment)
+                                            ? attributeValue.Name
+                                            : attributeValue.Name + " [" + attributeValue.PriceAdjustment + "]";
+                                        <li>
+                                            <input id="@(controlId)_@(attributeValue.Id)" type="checkbox" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected" @(attribute.AttributeControlType == AttributeControlType.ReadonlyCheckboxes ? Html.Raw(" disabled=\"disabled\"") : null) />
+                                            <label for="@(controlId)_@(attributeValue.Id)">@optionText</label>
+                                            if (attributeValue.CustomerEntersQty)
+                                            {
+                                                <div id="@(controlId)_@(attributeValue.Id)_qty_box" style="display:none">
+                                                    <label for="@(controlId)_@(attributeValue.Id)_qty">@T("Products.ProductAttributes.PriceAdjustment.Quantity")</label>
+                                                    <input type="text" name="@(controlId)_@(attributeValue.Id)_qty" id="@(controlId)_@(attributeValue.Id)_qty" value="@(attributeValue.Quantity)" />
+                                                </div>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            break;
+                        case AttributeControlType.TextBox:
+                            {
+                                <input name="@(controlId)" type="text" id="@(controlId)" class="text-box" />
+                            }
+                            break;
+                        case AttributeControlType.MultilineTextbox:
+                            {
+                                <textarea cols="20" id="@(controlId)" name="@(controlId)" rows="2"></textarea>
+                            }
+                            break;
+                        case AttributeControlType.Datepicker:
+                            {
+                                @Html.DatePickerDropDowns(controlId + "_day", controlId + "_month", controlId + "_year", DateTime.Now.Year, DateTime.Now.Year + 1)
+                            }
+                            break;
+                        case AttributeControlType.FileUpload:
+                            {
+                                <input type="file" id="@(controlId)" name="@(controlId)" />
+                            }
+                            break;
+                    }
+                </dd>
+            }
+        </dl>
+    </div>
+}

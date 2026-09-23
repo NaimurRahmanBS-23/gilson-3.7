@@ -1,0 +1,222 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleAnalyticsSearchModel
+@using Nop.Core.Infrastructure
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Infrastructure
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = T("Admin.NopStation.DiscountManagerPlus.Analytics").Text;
+    ViewBag.DmpAdminMenu = "analytics";
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+}
+@using (Html.BeginForm("List", "PromotionAnalytics", pluginAdmin, FormMethod.Post, new { id = "promotion-analytics-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Partial("~/Plugins/Misc.DiscountManagerPlus/Views/Shared/_AdminPluginMenu.cshtml")
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-promotions.png")" alt="" />
+            @T("Admin.NopStation.DiscountManagerPlus.Analytics")
+        </div>
+    </div>
+
+    <table width="100%">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SearchCreatedFrom):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.SearchCreatedFrom)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SearchCreatedTo):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.SearchCreatedTo)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SearchStoreId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.SearchStoreId, Model.AvailableStores)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" id="search-analytics" class="k-button" value="@T("Admin.Common.Search")" />
+            </td>
+        </tr>
+    </table>
+
+    <table class="adminContent" id="analytics-summary-row">
+        <tr>
+            <td>
+                <strong id="summary-total-usage">0</strong>
+                <div>@T("Admin.NopStation.DiscountManagerPlus.Analytics.Summary.TotalUsage")</div>
+            </td>
+            <td>
+                <strong id="summary-total-discount">0.00</strong>
+                <div>@T("Admin.NopStation.DiscountManagerPlus.Analytics.Summary.TotalDiscount")</div>
+            </td>
+            <td>
+                <strong id="summary-impact-rate">0%</strong>
+                <div>@T("Admin.NopStation.DiscountManagerPlus.Analytics.Summary.OrderImpactRate")</div>
+                <small id="summary-impacted-orders">0 / 0</small>
+            </td>
+            <td>
+                <strong id="summary-total-revenue">0.00</strong>
+                <div>@T("Admin.NopStation.DiscountManagerPlus.Analytics.Summary.TotalRevenue")</div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="adminContent">
+        <tr>
+            <td>
+                <div id="promotion-analytics-grid"></div>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $("#promotion-analytics-grid").kendoGrid({
+                            dataSource: {
+                                type: "json",
+                                transport: {
+                                    read: {
+                                        url: "@Html.Raw(Url.Action("List", "PromotionAnalytics", pluginAdmin))",
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: additionalData
+                                    }
+                                },
+                                schema: {
+                                    data: "Data",
+                                    total: "Total",
+                                    errors: "Errors"
+                                },
+                                error: function (e) {
+                                    display_kendoui_grid_error(e);
+                                    this.cancelChanges();
+                                },
+                                pageSize: @(defaultGridPageSize),
+                                serverPaging: true,
+                                serverFiltering: true,
+                                serverSorting: true
+                            },
+                            pageable: {
+                                refresh: true,
+                                pageSizes: [@(gridPageSizes)]
+                            },
+                            editable: {
+                                confirmation: false,
+                                mode: "inline"
+                            },
+                            scrollable: false,
+                            columns: [{
+                                field: "RuleName",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.RuleName")"
+                            }, {
+                                field: "RuleTypeName",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.RuleType")",
+                                width: 140
+                            }, {
+                                field: "UsageCount",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.UsageCount")",
+                                width: 100
+                            }, {
+                                field: "ImpactedOrdersCount",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.ImpactedOrders")",
+                                width: 120
+                            }, {
+                                field: "ImpactedCustomersCount",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.ImpactedCustomers")",
+                                width: 120
+                            }, {
+                                field: "TotalDiscountAmount",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.TotalDiscount")",
+                                width: 120
+                            }, {
+                                field: "AverageDiscountPerOrder",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.AverageDiscountPerOrder")",
+                                width: 130
+                            }, {
+                                field: "TotalRevenueAmount",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.TotalRevenue")",
+                                width: 120
+                            }, {
+                                field: "OrderImpactRatePercent",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.OrderImpactRate")",
+                                width: 110
+                            }, {
+                                field: "IsActive",
+                                title: "@T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.IsActive")",
+                                width: 80,
+                                headerAttributes: { style: "text-align:center" },
+                                attributes: { style: "text-align:center" },
+                                template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=IsActive#.gif" />'
+                            }, {
+                                field: "Id",
+                                title: "@T("Admin.Common.Edit")",
+                                width: 80,
+                                template: '<a class="k-button" href="@PluginAdminUrl.Combine(Url.Action("Edit", "PromotionRule", pluginAdmin), "id=")#=Id#">@T("Admin.Common.Edit")</a>'
+                            }]
+                        });
+
+                        loadAnalyticsSummary();
+
+                        $('#search-analytics').on('click', function () {
+                            var grid = $('#promotion-analytics-grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            loadAnalyticsSummary();
+                            return false;
+                        });
+                    });
+
+                    function additionalData() {
+                        var data = {
+                            SearchCreatedFrom: $('#@Html.FieldIdFor(model => model.SearchCreatedFrom)').val(),
+                            SearchCreatedTo: $('#@Html.FieldIdFor(model => model.SearchCreatedTo)').val(),
+                            SearchStoreId: $('#@Html.FieldIdFor(model => model.SearchStoreId)').val()
+                        };
+                        addAntiForgeryToken(data);
+                        return data;
+                    }
+
+                    function loadAnalyticsSummary() {
+                        var postData = {
+                            SearchCreatedFrom: $('#@Html.FieldIdFor(model => model.SearchCreatedFrom)').val(),
+                            SearchCreatedTo: $('#@Html.FieldIdFor(model => model.SearchCreatedTo)').val(),
+                            SearchStoreId: $('#@Html.FieldIdFor(model => model.SearchStoreId)').val()
+                        };
+                        addAntiForgeryToken(postData);
+
+                        $.ajax({
+                            cache: false,
+                            type: 'POST',
+                            url: '@Url.Action("Summary", "PromotionAnalytics", pluginAdmin)',
+                            data: postData,
+                            success: function (data) {
+                                var totalUsageCount = data.totalUsageCount != null ? data.totalUsageCount : (data.TotalUsageCount || 0);
+                                var totalDiscountAmount = data.totalDiscountAmount != null ? data.totalDiscountAmount : (data.TotalDiscountAmount || 0);
+                                var orderImpactRatePercent = data.orderImpactRatePercent != null ? data.orderImpactRatePercent : (data.OrderImpactRatePercent || 0);
+                                var totalImpactedOrdersCount = data.totalImpactedOrdersCount != null ? data.totalImpactedOrdersCount : (data.TotalImpactedOrdersCount || 0);
+                                var totalOrdersCount = data.totalOrdersCount != null ? data.totalOrdersCount : (data.TotalOrdersCount || 0);
+                                var totalRevenueAmount = data.totalRevenueAmount != null ? data.totalRevenueAmount : (data.TotalRevenueAmount || 0);
+
+                                $('#summary-total-usage').text(totalUsageCount);
+                                $('#summary-total-discount').text(Number(totalDiscountAmount).toFixed(2));
+                                $('#summary-impact-rate').text(Number(orderImpactRatePercent).toFixed(2) + '%');
+                                $('#summary-impacted-orders').text(totalImpactedOrdersCount + ' / ' + totalOrdersCount);
+                                $('#summary-total-revenue').text(Number(totalRevenueAmount).toFixed(2));
+                            }
+                        });
+                    }
+                </script>
+            </td>
+        </tr>
+    </table>
+}

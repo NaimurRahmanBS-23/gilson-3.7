@@ -1,0 +1,263 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleProductAddModel
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Infrastructure
+@using Nop.Plugin.Misc.DiscountManagerPlus.Domain
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+    var allowRewardProduct = ViewBag.AllowRewardProduct != null && (bool)ViewBag.AllowRewardProduct;
+    var selectProductUrl = PluginAdminUrl.Combine(
+        Url.Action("RuleConditionSelectProductPopup", "PromotionRule", pluginAdmin),
+        "productIdInput=" + Html.FieldIdFor(model => model.ProductId) + "&productNameInput=rule-product-name&btnId=btnRefreshRuleProduct");
+}
+
+<table class="adminContent">
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.IsAllProducts):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.IsAllProducts)
+            @Html.ValidationMessageFor(model => model.IsAllProducts)
+        </td>
+    </tr>
+    <tr id="source-type-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.SourceTypeId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownListFor(model => model.SourceTypeId, Model.AvailableSourceTypes)
+            @Html.ValidationMessageFor(model => model.SourceTypeId)
+        </td>
+    </tr>
+    <tr id="source-product-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.ProductId):
+        </td>
+        <td class="adminData">
+            @Html.HiddenFor(model => model.ProductId)
+            <span id="rule-product-name">@Model.ProductName</span>
+            @Html.ValidationMessageFor(model => model.ProductId)
+            <input type="button" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.Product.Choose")" onclick="javascript:OpenWindow('@Html.Raw(selectProductUrl)', 800, 850, true); return false;" />
+            <input type="button" id="rule-product-name-remove" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.Product.Remove")" />
+            <input type="submit" id="btnRefreshRuleProduct" style="display:none" />
+        </td>
+    </tr>
+    <tr id="source-category-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.CategoryId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownListFor(model => model.CategoryId, Model.AvailableCategories)
+            @Html.ValidationMessageFor(model => model.CategoryId)
+        </td>
+    </tr>
+    <tr id="source-manufacturer-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.ManufacturerId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownListFor(model => model.ManufacturerId, Model.AvailableManufacturers)
+            @Html.ValidationMessageFor(model => model.ManufacturerId)
+        </td>
+    </tr>
+    <tr id="source-vendor-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.VendorId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownListFor(model => model.VendorId, Model.AvailableVendors)
+            @Html.ValidationMessageFor(model => model.VendorId)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.MinQuantity):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.MinQuantity)
+            @Html.ValidationMessageFor(model => model.MinQuantity)
+        </td>
+    </tr>
+    <tr>
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.MaxQuantity):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.MaxQuantity)
+            @Html.ValidationMessageFor(model => model.MaxQuantity)
+        </td>
+    </tr>
+    @if (allowRewardProduct)
+    {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.IsRewardProduct):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.IsRewardProduct)
+                @Html.ValidationMessageFor(model => model.IsRewardProduct)
+            </td>
+        </tr>
+    }
+    <tr id="reward-attribute-selection-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.RewardAttributeSelectionTypeId):
+        </td>
+        <td class="adminData">
+            @Html.DropDownListFor(model => model.RewardAttributeSelectionTypeId, Model.AvailableRewardAttributeSelectionTypes)
+            @Html.ValidationMessageFor(model => model.RewardAttributeSelectionTypeId)
+        </td>
+    </tr>
+    <tr id="reward-attribute-values-row">
+        <td class="adminTitle">
+            @Html.NopLabelFor(model => model.RewardAttributeValueIds):
+        </td>
+        <td class="adminData">
+            @Html.EditorFor(model => model.RewardAttributeValueIds)
+            <input type="button" id="btnSelectRewardAttributes" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.Choose")" />
+            <input type="button" id="btnClearRewardAttributes" class="k-button" value="@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.Clear")" />
+            @Html.ValidationMessageFor(model => model.RewardAttributeValueIds)
+            <div>@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.Hint")</div>
+            <div id="reward-attribute-summary"></div>
+            <input type="submit" id="btnRefreshRewardAttributes" style="display:none" />
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        toggleRemoveButton();
+
+        $('#rule-product-name-remove').on('click', function () {
+            $('#@Html.FieldIdFor(model => model.ProductId)').val(0);
+            $('#rule-product-name').text('');
+            toggleRemoveButton();
+            return false;
+        });
+
+        $('#btnRefreshRuleProduct').on('click', function () {
+            toggleRemoveButton();
+            return false;
+        });
+
+        $('#@Html.FieldIdFor(model => model.IsAllProducts)').on('change', function () {
+            toggleAllProductsFields();
+        });
+
+        $('#@Html.FieldIdFor(model => model.SourceTypeId)').on('change', function () {
+            updateSourceFields();
+        });
+
+        $('#@Html.FieldIdFor(model => model.RewardAttributeSelectionTypeId)').on('change', function () {
+            toggleRewardAttributeFields();
+        });
+
+        $('#btnSelectRewardAttributes').on('click', function () {
+            var productId = parseInt($('#@Html.FieldIdFor(model => model.ProductId)').val(), 10) || 0;
+            if (productId <= 0) {
+                alert('@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.SelectProductFirst")');
+                return false;
+            }
+
+            var selectedValueIds = $('#@Html.FieldIdFor(model => model.RewardAttributeValueIds)').val() || '';
+            var url = '@Url.Action("RuleRewardAttributePopup", "PromotionRule", pluginAdmin)'
+                + '?productId=' + productId
+                + '&valueIdsInput=@Html.FieldIdFor(model => model.RewardAttributeValueIds)'
+                + '&btnId=btnRefreshRewardAttributes'
+                + '&selectedValueIds=' + encodeURIComponent(selectedValueIds);
+            OpenWindow(url, 900, 850, true);
+            return false;
+        });
+
+        $('#btnClearRewardAttributes').on('click', function () {
+            $('#@Html.FieldIdFor(model => model.RewardAttributeValueIds)').val('');
+            updateRewardAttributeSummary();
+            return false;
+        });
+
+        $('#btnRefreshRewardAttributes').on('click', function () {
+            updateRewardAttributeSummary();
+            return false;
+        });
+
+        updateSourceFields();
+        updateRewardAttributeSummary();
+        toggleAllProductsFields();
+    });
+
+    function toggleAllProductsFields() {
+        var isAllProducts = $('#@Html.FieldIdFor(model => model.IsAllProducts)').is(':checked');
+        $('#source-type-row').toggle(!isAllProducts);
+        $('#source-product-row').toggle(!isAllProducts);
+        $('#source-category-row').toggle(!isAllProducts);
+        $('#source-manufacturer-row').toggle(!isAllProducts);
+        $('#source-vendor-row').toggle(!isAllProducts);
+        if (isAllProducts) {
+            $('#reward-attribute-selection-row').hide();
+            $('#reward-attribute-values-row').hide();
+        } else {
+            updateSourceFields();
+        }
+    }
+
+    function toggleRemoveButton() {
+        var productId = parseInt($('#@Html.FieldIdFor(model => model.ProductId)').val(), 10) || 0;
+        var sourceType = parseInt($('#@Html.FieldIdFor(model => model.SourceTypeId)').val(), 10) || 0;
+        if (productId > 0 && sourceType === @((int)RuleProductSourceType.Product)) {
+            $('#rule-product-name-remove').show();
+        } else {
+            $('#rule-product-name-remove').hide();
+        }
+    }
+
+    function toggleRewardAttributeFields() {
+        var selectionType = parseInt($('#@Html.FieldIdFor(model => model.RewardAttributeSelectionTypeId)').val(), 10) || 0;
+        var sourceType = parseInt($('#@Html.FieldIdFor(model => model.SourceTypeId)').val(), 10) || 0;
+        var isProductSource = sourceType === @((int)RuleProductSourceType.Product);
+        $('#reward-attribute-selection-row').toggle(isProductSource);
+        $('#reward-attribute-values-row').toggle(isProductSource && selectionType === @((int)RewardAttributeSelectionType.SpecificValues));
+
+        if (!isProductSource) {
+            $('#@Html.FieldIdFor(model => model.RewardAttributeSelectionTypeId)').val('@((int)RewardAttributeSelectionType.Any)');
+            $('#@Html.FieldIdFor(model => model.RewardAttributeValueIds)').val('');
+            updateRewardAttributeSummary();
+        }
+    }
+
+    function updateSourceFields() {
+        var sourceType = parseInt($('#@Html.FieldIdFor(model => model.SourceTypeId)').val(), 10) || 0;
+        var isProduct = sourceType === @((int)RuleProductSourceType.Product);
+        $('#source-product-row').toggle(isProduct);
+        $('#source-category-row').toggle(sourceType === @((int)RuleProductSourceType.Category));
+        $('#source-manufacturer-row').toggle(sourceType === @((int)RuleProductSourceType.Manufacturer));
+        $('#source-vendor-row').toggle(sourceType === @((int)RuleProductSourceType.Vendor));
+
+        if (!isProduct) {
+            $('#@Html.FieldIdFor(model => model.ProductId)').val(0);
+            $('#rule-product-name').text('');
+            $('#@Html.FieldIdFor(model => model.RewardAttributeSelectionTypeId)').val('@((int)RewardAttributeSelectionType.Any)');
+            $('#@Html.FieldIdFor(model => model.RewardAttributeValueIds)').val('');
+        }
+
+        toggleRemoveButton();
+        toggleRewardAttributeFields();
+    }
+
+    function updateRewardAttributeSummary() {
+        var valueIds = ($('#@Html.FieldIdFor(model => model.RewardAttributeValueIds)').val() || '').toString().replace(/^\s+|\s+$/g, '');
+        if (!valueIds) {
+            $('#reward-attribute-summary').text('');
+            return;
+        }
+
+        var parts = valueIds.split(',');
+        var count = 0;
+        for (var i = 0; i < parts.length; i++) {
+            if ($.trim(parts[i]).length > 0) {
+                count++;
+            }
+        }
+        $('#reward-attribute-summary').text(count + ' selected');
+    }
+</script>

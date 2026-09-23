@@ -1,0 +1,140 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleSelectProductSearchModel
+@using Nop.Core.Infrastructure
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    Layout = "~/Administration/Views/Shared/_AdminPopupLayout.cshtml";
+    ViewBag.Title = T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SelectProduct").Text;
+    var pluginAdmin = new RouteValueDictionary {
+        { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" },
+        { "area", "" },
+        { "productIdInput", Request["productIdInput"] },
+        { "productNameInput", Request["productNameInput"] },
+        { "btnId", Request["btnId"] }
+    };
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+}
+@using (Html.BeginForm("RequirementConditionSelectProductPopup", "DiscountManagerPlusRequirement", pluginAdmin, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-promotions.png")" alt="" />
+            @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SelectProduct")
+        </div>
+    </div>
+
+    if (ViewBag.RefreshPage == true)
+    {
+        <script type="text/javascript">
+            try {
+                window.opener.document.getElementById('@(Request["productIdInput"])').value = '@(ViewBag.ProductId)';
+                window.opener.document.getElementById('@(Request["productNameInput"])').innerHTML = '@Html.Raw(ViewBag.ProductName)';
+                window.opener.document.getElementById('@(Request["btnId"])').click();
+            } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.AddProductModel.AssociatedToProductId)
+        <table width="100%">
+            <tr>
+                <td class="adminTitle">
+                    @Html.NopLabelFor(model => model.SearchProductName):
+                </td>
+                <td class="adminData">
+                    @Html.EditorFor(model => model.SearchProductName)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" id="search-products" class="k-button" value="@T("Admin.Common.Search")" />
+                </td>
+            </tr>
+        </table>
+        <table class="adminContent">
+            <tr>
+                <td>
+                    <div id="products-grid"></div>
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $("#products-grid").kendoGrid({
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: "@Html.Raw(Url.Action("RequirementConditionSelectProductPopupList", "DiscountManagerPlusRequirement", pluginAdmin))",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: additionalData
+                                        }
+                                    },
+                                    schema: {
+                                        data: "Data",
+                                        total: "Total",
+                                        errors: "Errors"
+                                    },
+                                    error: function (e) {
+                                        display_kendoui_grid_error(e);
+                                        this.cancelChanges();
+                                    },
+                                    pageSize: @(defaultGridPageSize),
+                                    serverPaging: true,
+                                    serverFiltering: true,
+                                    serverSorting: true
+                                },
+                                pageable: {
+                                    refresh: true,
+                                    pageSizes: [@(gridPageSizes)]
+                                },
+                                editable: {
+                                    confirmation: false,
+                                    mode: "inline"
+                                },
+                                scrollable: false,
+                                columns: [{
+                                    field: "Id",
+                                    title: "@T("Admin.Common.Select")",
+                                    width: 80,
+                                    template: '<input type="button" class="k-button" value="@T("Admin.Common.Select")" onclick="selectConditionProduct(#=Id#); return false;" />'
+                                }, {
+                                    field: "Name",
+                                    title: "@T("Admin.Catalog.Products.Fields.Name")"
+                                }, {
+                                    field: "Published",
+                                    title: "@T("Admin.Catalog.Products.Fields.Published")",
+                                    width: 100,
+                                    headerAttributes: { style: "text-align:center" },
+                                    attributes: { style: "text-align:center" },
+                                    template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=Published#.gif" />'
+                                }]
+                            });
+                        });
+
+                        function additionalData() {
+                            var data = {
+                                SearchProductName: $('#@Html.FieldIdFor(model => model.SearchProductName)').val()
+                            };
+                            addAntiForgeryToken(data);
+                            return data;
+                        }
+
+                        function selectConditionProduct(productId) {
+                            $("#@Html.FieldIdFor(model => model.AddProductModel.AssociatedToProductId)").val(productId);
+                            $('#save').trigger('click');
+                        }
+
+                        $('#search-products').click(function () {
+                            var grid = $('#products-grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            return false;
+                        });
+                    </script>
+                    <input type="submit" id="save" name="save" class="k-button" style="display:none" value="@T("Admin.Common.Save")" />
+                </td>
+            </tr>
+        </table>
+    }
+}

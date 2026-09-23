@@ -1,0 +1,146 @@
+@model Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models.PromotionRuleProductSearchModel
+@using Nop.Core.Infrastructure
+@using Nop.Plugin.Misc.DiscountManagerPlus.Admin.Infrastructure
+@using Nop.Web.Framework
+@using System.Web.Routing
+@{
+    var pluginAdmin = new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers" }, { "area", "" } };
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+    var addPopupUrl = PluginAdminUrl.Combine(Url.Action("RuleProductAddPopup", "PromotionRule", pluginAdmin), "promotionRuleId=" + Model.PromotionRuleId);
+    var addMultipleUrl = PluginAdminUrl.Combine(Url.Action("RuleProductAddMultiplePopup", "PromotionRule", pluginAdmin), "promotionRuleId=" + Model.PromotionRuleId);
+}
+
+<table class="adminContent">
+    <tr>
+        <td>
+            <div id="rule-products-grid"></div>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#rule-products-grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("RuleProductList", "PromotionRule", pluginAdmin))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: function () {
+                                        return addAntiForgeryToken({ PromotionRuleId: @Model.PromotionRuleId });
+                                    }
+                                },
+                                destroy: {
+                                    url: "@Html.Raw(Url.Action("RuleProductDelete", "PromotionRule", pluginAdmin))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors",
+                                model: {
+                                    id: "Id",
+                                    fields: {
+                                        SourceTypeName: { editable: false, type: "string" },
+                                        SourceName: { editable: false, type: "string" },
+                                        AttributeFilterSummary: { editable: false, type: "string" },
+                                        MinQuantity: { editable: false, type: "number" },
+                                        MaxQuantity: { editable: false, type: "number" },
+                                        IsRewardProduct: { editable: false, type: "boolean" }
+                                    }
+                                }
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                this.cancelChanges();
+                            },
+                            pageSize: @(defaultGridPageSize),
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [@(gridPageSizes)]
+                        },
+                        editable: {
+                            confirmation: false,
+                            mode: "inline"
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "SourceTypeName",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.SourceType")",
+                            width: 140
+                        }, {
+                            field: "SourceName",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.SourceName")"
+                        }, {
+                            field: "AttributeFilterSummary",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds")",
+                            width: 220
+                        }, {
+                            field: "MinQuantity",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.MinQuantity")",
+                            width: 100
+                        }, {
+                            field: "MaxQuantity",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.MaxQuantity")",
+                            width: 100
+                        },
+                        @if (Model.AllowRewardProduct)
+                        {
+                            <text>{
+                            field: "IsRewardProduct",
+                            title: "@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.IsRewardProduct")",
+                            width: 120,
+                            headerAttributes: { style: "text-align:center" },
+                            attributes: { style: "text-align:center" },
+                            template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=IsRewardProduct#.gif" />'
+                        },</text>
+                        }
+                        {
+                            field: "Id",
+                            title: "@T("Admin.Common.Edit")",
+                            width: 80,
+                            template: '<input type="button" class="k-button" value="@T("Admin.Common.Edit")" onclick="editRuleProduct(#=Id#); return false;" />'
+                        }, {
+                            command: { name: "destroy", text: "@T("Admin.Common.Delete")" },
+                            title: "@T("Admin.Common.Delete")",
+                            width: 100
+                        }]
+                    });
+                });
+
+                function editRuleProduct(id) {
+                    OpenWindow('@Html.Raw(Url.Content("~/Plugins/PromotionRule/RuleProductEditPopup/"))' + id, 820, 600, true);
+                    return false;
+                }
+
+                function refreshProductsGrid() {
+                    var grid = $("#rule-products-grid").data('kendoGrid');
+                    if (grid) {
+                        grid.dataSource.read();
+                    }
+                }
+            </script>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="button" class="k-button" value="@T("Admin.Common.AddNew")" onclick="javascript:OpenWindow('@Html.Raw(addPopupUrl)', 820, 600, true); return false;" />
+            <input type="button" class="k-button" value="@T("Admin.Promotions.Discounts.AppliedToProducts.AddNew")" onclick="javascript:OpenWindow('@Html.Raw(addMultipleUrl)', 1100, 800, true); return false;" />
+            <input type="submit" id="btnRefreshProducts" style="display:none" />
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#btnRefreshProducts').click(function () {
+                        refreshProductsGrid();
+                        return false;
+                    });
+                });
+            </script>
+        </td>
+    </tr>
+</table>
