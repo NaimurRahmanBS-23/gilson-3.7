@@ -351,48 +351,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult PromotionBadge(string widgetZone, object additionalData)
-        {
-            var store = _storeContext.CurrentStore;
-            var settings = _settingService.LoadSetting<DiscountManagerPlusSettings>(store.Id);
-            if (!settings.IsEnabled || !settings.EnablePromotionBadge)
-                return Content("");
-
-            var productId = ResolveProductId(additionalData);
-            if (productId <= 0)
-                return Content("");
-
-            var customer = _workContext.CurrentCustomer;
-            var cart = GetCart().ToList();
-            if (!cart.Any(x => x.ProductId == productId))
-            {
-                cart.Add(new ShoppingCartItem
-                {
-                    CustomerId = customer.Id,
-                    StoreId = store.Id,
-                    ShoppingCartTypeId = (int)ShoppingCartType.ShoppingCart,
-                    ProductId = productId,
-                    Quantity = 1,
-                    AttributesXml = string.Empty,
-                    CreatedOnUtc = DateTime.UtcNow,
-                    UpdatedOnUtc = DateTime.UtcNow
-                });
-            }
-
-            var appliedPromotions = _discountManagerPlusService.EvaluateCart(cart, store.Id);
-            if (!appliedPromotions.Any(x => x.DiscountAmount > 0))
-                return Content("");
-
-            var model = new PromotionBadgeModel
-            {
-                Text = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.PromotionBadge"),
-                CssClass = "ns-discount-manager-plus-badge"
-            };
-
-            return View(ViewRoot + "PromotionBadge.cshtml", model);
-        }
-
-        [ChildActionOnly]
         public ActionResult OffersLink(string widgetZone, object additionalData)
         {
             var store = _storeContext.CurrentStore;
@@ -418,22 +376,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Controllers
             return _workContext.CurrentCustomer.ShoppingCartItems
                 .Where(sci => sci.ShoppingCartType == ShoppingCartType.ShoppingCart && sci.StoreId == _storeContext.CurrentStore.Id)
                 .ToList();
-        }
-
-        private int ResolveProductId(object additionalData)
-        {
-            var overview = additionalData as ProductOverviewModel;
-            if (overview != null)
-                return overview.Id;
-
-            var details = additionalData as ProductDetailsModel;
-            if (details != null)
-                return details.Id;
-
-            if (additionalData is int)
-                return (int)additionalData;
-
-            return 0;
         }
 
         private bool IsRewardProductAllowed(PromotionRule rule, int rewardProductId)

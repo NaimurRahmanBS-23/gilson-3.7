@@ -111,8 +111,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Services
                     }
                 }
 
-                var timeoutMs = settings.MaxRuleEvaluationTimeMs > 0 ? settings.MaxRuleEvaluationTimeMs : int.MaxValue;
-                var startedOn = DateTime.UtcNow;
                 var activeRules = _promotionRuleService.GetActiveRules(storeId);
 
                 DiscountManagerPlusLog.Information(_logger, string.Format("DUAL_OFFER_DEBUG: Found {0} active rules", activeRules.Count));
@@ -124,9 +122,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Services
 
                 foreach (var rule in activeRules)
                 {
-                    if ((DateTime.UtcNow - startedOn).TotalMilliseconds > timeoutMs)
-                        break;
-
                     if (!IsRuleRuntimeEligible(rule, context))
                         continue;
 

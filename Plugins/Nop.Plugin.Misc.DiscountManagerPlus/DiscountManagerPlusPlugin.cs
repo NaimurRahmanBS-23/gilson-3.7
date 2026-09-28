@@ -67,9 +67,7 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
             {
                 IsEnabled = true,
                 EnableCartSavingsBreakdown = true,
-                MaxRuleEvaluationTimeMs = 100,
                 UseDefaultDiscountPipeline = true,
-                EnablePromotionBadge = true,
                 EnableLogging = false
             };
             _settingService.SaveSetting(settings);
@@ -207,7 +205,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
             return new List<string>
             {
                 "header_after",
-                "productbox_addinfo_after",
                 "order_summary_content_before",
                 "order_summary_cart_footer",
                 "order_summary_content_after"
@@ -223,10 +220,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
                 widgetZone == "order_summary_content_after")
             {
                 actionName = "CartSavings";
-            }
-            else if (widgetZone == "productbox_addinfo_after")
-            {
-                actionName = "PromotionBadge";
             }
             else
             {
@@ -328,10 +321,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Saved"] = "Configuration saved successfully.",
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.IsEnabled"] = "Plugin enabled",
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.IsEnabled.Hint"] = "Check to enable the Discount Manager Plus.",
-            ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.MaxRuleEvaluationTimeMs"] = "Max rule evaluation time (ms)",
-            ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.MaxRuleEvaluationTimeMs.Hint"] = "Maximum allowed rule evaluation time in milliseconds. Default: 100ms.",
-            ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnablePromotionBadge"] = "Show promotion badge",
-            ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnablePromotionBadge.Hint"] = "Display a promotion badge on product listings when a rule applies.",
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableCartSavingsBreakdown"] = "Show cart savings breakdown",
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableCartSavingsBreakdown.Hint"] = "Show a per-rule savings breakdown on the cart page.",
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.UseDefaultDiscountPipeline"] = "Use default nopCommerce discount pipeline",
@@ -793,7 +782,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
             ["Plugins.NopStation.DiscountManagerPlus.RewardSelection.Warning.Checkout.Default"] = "Please select required reward item(s) before completing checkout.",
             ["Plugins.NopStation.DiscountManagerPlus.Requirement.NotEligible"] = "This discount requirement is not eligible for the current cart.",
             ["Plugins.NopStation.DiscountManagerPlus.Requirement.DefaultPipelineDisabled"] = "DiscountManagerPlus default discount integration is disabled.",
-            ["Plugins.NopStation.DiscountManagerPlus.PromotionBadge"] = "Promotion available",
             ["Admin.NopStation.DiscountManagerPlus.Requirement.Fields.Conditions"] = "Advanced conditions",
             ["Admin.NopStation.DiscountManagerPlus.Requirement.Fields.Conditions.Hint"] = "Configure advanced DiscountManagerPlus-style conditions for this nopCommerce discount requirement.",
             ["Admin.NopStation.DiscountManagerPlus.Requirement.Create"] = "Create advanced requirement",
@@ -838,6 +826,11 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
             this.AddOrUpdatePluginLocaleResource("Admin.Common.None", "None");
             this.AddOrUpdatePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableLogging", "Enable plugin logging");
             this.AddOrUpdatePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableLogging.Hint", "Write Discount Manager Plus diagnostic messages to System > Log. Leave unchecked in production. Errors are still logged.");
+            this.DeletePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.MaxRuleEvaluationTimeMs");
+            this.DeletePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.MaxRuleEvaluationTimeMs.Hint");
+            this.DeletePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnablePromotionBadge");
+            this.DeletePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnablePromotionBadge.Hint");
+            this.DeletePluginLocaleResource("Plugins.NopStation.DiscountManagerPlus.PromotionBadge");
             _sharedResourcesEnsured = true;
         }
 

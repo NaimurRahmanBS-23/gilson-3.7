@@ -42,26 +42,6 @@
         </tr>
         <tr>
             <td class="adminTitle">
-                @Html.OverrideStoreCheckboxFor(model => model.MaxRuleEvaluationTimeMs_OverrideForStore, model => model.MaxRuleEvaluationTimeMs, Model.ActiveStoreScopeConfiguration)
-                @Html.NopLabelFor(model => model.MaxRuleEvaluationTimeMs):
-            </td>
-            <td class="adminData">
-                @Html.EditorFor(model => model.MaxRuleEvaluationTimeMs)
-                @Html.ValidationMessageFor(model => model.MaxRuleEvaluationTimeMs)
-            </td>
-        </tr>
-        <tr>
-            <td class="adminTitle">
-                @Html.OverrideStoreCheckboxFor(model => model.EnablePromotionBadge_OverrideForStore, model => model.EnablePromotionBadge, Model.ActiveStoreScopeConfiguration)
-                @Html.NopLabelFor(model => model.EnablePromotionBadge):
-            </td>
-            <td class="adminData">
-                @Html.EditorFor(model => model.EnablePromotionBadge)
-                @Html.ValidationMessageFor(model => model.EnablePromotionBadge)
-            </td>
-        </tr>
-        <tr>
-            <td class="adminTitle">
                 @Html.OverrideStoreCheckboxFor(model => model.EnableCartSavingsBreakdown_OverrideForStore, model => model.EnableCartSavingsBreakdown, Model.ActiveStoreScopeConfiguration)
                 @Html.NopLabelFor(model => model.EnableCartSavingsBreakdown):
             </td>

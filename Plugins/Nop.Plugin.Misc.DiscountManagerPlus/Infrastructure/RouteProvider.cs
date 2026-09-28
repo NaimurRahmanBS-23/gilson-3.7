@@ -75,11 +75,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Infrastructure
                 new { controller = "DiscountManagerPlusPublic", action = "CartSavings" },
                 publicNamespace);
 
-            routes.MapRoute("Plugin.Misc.DiscountManagerPlus.PromotionBadge",
-                "Plugins/DiscountManagerPlusPublic/PromotionBadge",
-                new { controller = "DiscountManagerPlusPublic", action = "PromotionBadge" },
-                publicNamespace);
-
             routes.MapRoute("Plugin.Misc.DiscountManagerPlus.OffersLink",
                 "Plugins/DiscountManagerPlusPublic/OffersLink",
                 new { controller = "DiscountManagerPlusPublic", action = "OffersLink" },
