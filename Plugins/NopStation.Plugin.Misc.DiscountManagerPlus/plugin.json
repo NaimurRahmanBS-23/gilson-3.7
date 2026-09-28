@@ -1,0 +1,12 @@
+{
+  "Group": "Misc",
+  "FriendlyName": "DiscountManager Plus",
+  "SystemName": "NopStation.Plugin.Misc.DiscountManagerPlus",
+  "Version": "4.90.1.2",
+  "SupportedVersions": [ "4.90" ],
+  "Author": "Nop-Station Team",
+  "DisplayOrder": 1,
+  "FileName": "NopStation.Plugin.Misc.DiscountManagerPlus.dll",
+  "Description": "DiscountManager Plus for nopCommerce supporting product-based rules, combo/bundle pricing, Buy X Get Y (BOGO), and cart condition/subtotal rules.",
+  "DependsOnSystemNames": [ "NopStation.Core" ]
+}

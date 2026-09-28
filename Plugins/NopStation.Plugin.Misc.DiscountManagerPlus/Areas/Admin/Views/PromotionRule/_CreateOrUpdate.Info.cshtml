@@ -1,0 +1,373 @@
+@model PromotionRuleModel
+
+<div class="card-body">
+    @if (Model.IsDiscountBound)
+    {
+        <div class="form-group row">
+            <div class="col-md-3"><label>@T("Admin.Promotions.Discounts.Fields.Name")</label></div>
+            <div class="col-md-9">
+                <div class="form-text-row">@Model.ParentDiscountName</div>
+                <input asp-for="DiscountId" type="hidden" />
+            </div>
+        </div>
+
+    }
+
+    <div class="form-group row">
+        <div class="col-md-3"><nop-label asp-for="Name" /></div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Name" asp-required="true" />
+            <span asp-validation-for="Name"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3"><nop-label asp-for="SystemName" /></div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SystemName" asp-required="true" />
+            <span asp-validation-for="SystemName"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3"><nop-label asp-for="RuleTypeId" /></div>
+        <div class="col-md-9">
+            <nop-select asp-for="RuleTypeId" asp-items="@Model.AvailableRuleTypes" asp-required="true" />
+            <span asp-validation-for="RuleTypeId"></span>
+        </div>
+    </div>
+
+    <div class="form-group row" id="discount-type-row">
+        <div class="col-md-3"><nop-label asp-for="DiscountTypeId" /></div>
+        <div class="col-md-9">
+            <nop-select asp-for="DiscountTypeId" asp-items="@Model.AvailableDiscountTypes" />
+            <span asp-validation-for="DiscountTypeId"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3"><nop-label asp-for="DiscountScopeId" /></div>
+        <div class="col-md-9">
+            <nop-select asp-for="DiscountScopeId" asp-items="@Model.AvailableDiscountScopes" />
+            <span asp-validation-for="DiscountScopeId"></span>
+        </div>
+    </div>
+
+    <div class="form-group row" id="discount-value-row">
+        <div class="col-md-3"><nop-label asp-for="DiscountValue" /></div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DiscountValue" />
+            <span asp-validation-for="DiscountValue"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3"><nop-label asp-for="Priority" /></div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Priority" />
+            <span asp-validation-for="Priority"></span>
+        </div>
+    </div>
+
+    @if (!Model.IsDiscountBound)
+    {
+        <div class="form-group row">
+            <div class="col-md-3"><nop-label asp-for="IsActive" /></div>
+            <div class="col-md-9">
+                <nop-editor asp-for="IsActive" />
+                <span asp-validation-for="IsActive"></span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <input asp-for="IsActive" type="hidden" />
+    }
+
+    <div class="form-group row">
+        <div class="col-md-3"><nop-label asp-for="IsExclusive" /></div>
+        <div class="col-md-9">
+            <nop-editor asp-for="IsExclusive" />
+            <span asp-validation-for="IsExclusive"></span>
+        </div>
+    </div>
+
+    @if (!Model.IsDiscountBound)
+    {
+        <div class="form-group row">
+            <div class="col-md-3"><nop-label asp-for="LinkedDiscountId" /></div>
+            <div class="col-md-9">
+                <nop-select asp-for="LinkedDiscountId" asp-items="@Model.AvailableLinkedDiscounts" />
+                <span asp-validation-for="LinkedDiscountId"></span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <input asp-for="LinkedDiscountId" type="hidden" />
+    }
+
+    <div class="form-group row" id="carry-default-discount-row">
+        <div class="col-md-3"><nop-label asp-for="CarryDefaultDiscount" /></div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CarryDefaultDiscount" />
+            <span asp-validation-for="CarryDefaultDiscount"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3"><nop-label asp-for="StopFurtherRulesForMatchedLines" /></div>
+        <div class="col-md-9">
+            <nop-editor asp-for="StopFurtherRulesForMatchedLines" />
+            <span asp-validation-for="StopFurtherRulesForMatchedLines"></span>
+        </div>
+    </div>
+
+    <div class="form-group row" id="stacked-cumulative-mode-row">
+        <div class="col-md-3"><nop-label asp-for="EnableStackedCumulativeMode" /></div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableStackedCumulativeMode" />
+            <span asp-validation-for="EnableStackedCumulativeMode"></span>
+        </div>
+    </div>
+
+    @if (!Model.IsDiscountBound)
+    {
+        <div class="form-group row">
+            <div class="col-md-3"><nop-label asp-for="IsFlashEnabled" /></div>
+            <div class="col-md-9">
+                <nop-editor asp-for="IsFlashEnabled" />
+                <span asp-validation-for="IsFlashEnabled"></span>
+            </div>
+        </div>
+
+        <div class="form-group row flash-settings-row">
+            <div class="col-md-3"><nop-label asp-for="UsageLimitTotal" /></div>
+            <div class="col-md-9">
+                <nop-editor asp-for="UsageLimitTotal" />
+                <span asp-validation-for="UsageLimitTotal"></span>
+            </div>
+        </div>
+
+        <div class="form-group row flash-settings-row">
+            <div class="col-md-3"><nop-label asp-for="UsageLimitPerCustomer" /></div>
+            <div class="col-md-9">
+                <nop-editor asp-for="UsageLimitPerCustomer" />
+                <span asp-validation-for="UsageLimitPerCustomer"></span>
+            </div>
+        </div>
+
+        <div class="form-group row flash-settings-row">
+            <div class="col-md-3"><nop-label asp-for="UsageWindowStartUtc" /></div>
+            <div class="col-md-9">
+                <nop-editor asp-for="UsageWindowStartUtc" />
+                <span asp-validation-for="UsageWindowStartUtc"></span>
+            </div>
+        </div>
+
+        <div class="form-group row flash-settings-row">
+            <div class="col-md-3"><nop-label asp-for="UsageWindowEndUtc" /></div>
+            <div class="col-md-9">
+                <nop-editor asp-for="UsageWindowEndUtc" />
+                <span asp-validation-for="UsageWindowEndUtc"></span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <input asp-for="IsFlashEnabled" type="hidden" />
+        <input asp-for="UsageLimitTotal" type="hidden" />
+        <input asp-for="UsageLimitPerCustomer" type="hidden" />
+        <input asp-for="UsageWindowStartUtc" type="hidden" />
+        <input asp-for="UsageWindowEndUtc" type="hidden" />
+    }
+
+    @if (!Model.IsDiscountBound)
+    {
+        <div class="form-group row">
+            <div class="col-md-3"><nop-label asp-for="StartDate" /></div>
+            <div class="col-md-9">
+                <nop-editor asp-for="StartDate" />
+                <span asp-validation-for="StartDate"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-3"><nop-label asp-for="EndDate" /></div>
+            <div class="col-md-9">
+                <nop-editor asp-for="EndDate" />
+                <span asp-validation-for="EndDate"></span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <input asp-for="StartDate" type="hidden" />
+        <input asp-for="EndDate" type="hidden" />
+    }
+
+    <div class="form-group row advanced-setting">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedStoreIds" />
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                    <span asp-validation-for="SelectedStoreIds"></span>
+                    <script>
+                        $(function() {
+                            $('#@Html.IdFor(model => model.SelectedStoreIds)').select2({
+                                closeOnSelect: false,
+                                @if (!Model.AvailableStores.Any())
+                                {
+                                <text>
+                                disabled: true,
+                                placeholder: 'No stores available',
+                                </text>
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="col-md-8">
+                    @await Component.InvokeAsync(typeof(MultistoreDisabledWarningViewComponent))
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function() {
+        toggleMainDiscountFields();
+        toggleStackedCumulativeModeField();
+        toggleFlashFields();
+        toggleLinkedDiscountFields();
+        $('#@Html.IdFor(model => model.RuleTypeId), #@Html.IdFor(model => model.DiscountTypeId)').on('change', toggleMainDiscountFields);
+        $('#@Html.IdFor(model => model.IsFlashEnabled)').on('change', toggleFlashFields);
+        $('#@Html.IdFor(model => model.Name)').on('blur', autoFillSystemName);
+        $('#@Html.IdFor(model => model.LinkedDiscountId)').on('change', toggleLinkedDiscountFields);
+    });
+
+    function getAllowedDiscountTypes(ruleType) {
+        switch (ruleType) {
+            case @((int)PromotionRuleType.ProductBased):
+                return [@((int)DiscountType.Percentage), @((int)DiscountType.FixedAmount), @((int)DiscountType.FreeItem)];
+            case @((int)PromotionRuleType.ComboPricing):
+                return [@((int)DiscountType.Percentage), @((int)DiscountType.FixedAmount), @((int)DiscountType.FixedBundlePrice)];
+            case @((int)PromotionRuleType.CartCondition):
+            case @((int)PromotionRuleType.SubtotalBased):
+                return [@((int)DiscountType.Percentage), @((int)DiscountType.FixedAmount)];
+            default:
+                return [];
+        }
+    }
+
+    function filterDiscountTypes(ruleType) {
+        var allowedTypes = getAllowedDiscountTypes(ruleType);
+        var discountTypeSelect = $('#@Html.IdFor(model => model.DiscountTypeId)');
+
+        discountTypeSelect.find('option').each(function () {
+            var optionValue = parseInt($(this).val(), 10) || 0;
+            var isAllowed = allowedTypes.indexOf(optionValue) !== -1;
+            $(this).prop('disabled', !isAllowed);
+            $(this).toggle(isAllowed);
+        });
+
+        var selectedType = parseInt(discountTypeSelect.val(), 10) || 0;
+        if (allowedTypes.length > 0 && allowedTypes.indexOf(selectedType) === -1) {
+            discountTypeSelect.val(allowedTypes[0].toString());
+        }
+    }
+
+    function toggleMainDiscountFields() {
+        var ruleType = parseInt($('#@Html.IdFor(model => model.RuleTypeId)').val(), 10) || 0;
+        var isBuyXGetY = ruleType === @((int)PromotionRuleType.BuyXGetY);
+
+        $('#discount-type-row').toggle(!isBuyXGetY);
+
+        if (isBuyXGetY) {
+            $('#@Html.IdFor(model => model.DiscountTypeId)').val('0');
+            $('#@Html.IdFor(model => model.DiscountValue)').val('0');
+        } else {
+            filterDiscountTypes(ruleType);
+        }
+
+        var discountType = parseInt($('#@Html.IdFor(model => model.DiscountTypeId)').val(), 10) || 0;
+        var isFreeItem = discountType === @((int)DiscountType.FreeItem);
+        $('#discount-value-row').toggle(!isBuyXGetY && !isFreeItem);
+
+        if (isFreeItem) {
+            $('#@Html.IdFor(model => model.DiscountValue)').val('0');
+        }
+
+        toggleStackedCumulativeModeField();
+    }
+
+    function toggleStackedCumulativeModeField() {
+        var ruleType = parseInt($('#@Html.IdFor(model => model.RuleTypeId)').val(), 10) || 0;
+        var isBuyXGetY = ruleType === @((int)PromotionRuleType.BuyXGetY);
+        var field = $('#@Html.IdFor(model => model.EnableStackedCumulativeMode)');
+
+        $('#stacked-cumulative-mode-row').toggle(isBuyXGetY);
+        field.prop('disabled', !isBuyXGetY);
+
+        if (!isBuyXGetY) {
+            field.prop('checked', false);
+        }
+    }
+
+    function autoFillSystemName() {
+        var systemNameInput = $('#@Html.IdFor(model => model.SystemName)');
+        if ($.trim(systemNameInput.val()).length > 0) {
+            return;
+        }
+
+        var nameValue = $('#@Html.IdFor(model => model.Name)').val() || '';
+        var generated = nameValue
+            .toString()
+            .trim()
+            .replace(/[^a-zA-Z0-9]+/g, '.')
+            .replace(/\.+/g, '.')
+            .replace(/^\.|\.$/g, '');
+
+        if (generated.length > 0) {
+            systemNameInput.val(generated);
+        }
+    }
+
+    function toggleFlashFields() {
+        if (@Model.IsDiscountBound.ToString().ToLowerInvariant()) {
+            return;
+        }
+
+        var isFlashEnabled = $('#@Html.IdFor(model => model.IsFlashEnabled)').is(':checked');
+        $('.flash-settings-row').toggle(isFlashEnabled);
+
+        if (!isFlashEnabled) {
+            $('#@Html.IdFor(model => model.UsageLimitTotal)').val('0');
+            $('#@Html.IdFor(model => model.UsageLimitPerCustomer)').val('0');
+            $('#@Html.IdFor(model => model.UsageWindowStartUtc)').val('');
+            $('#@Html.IdFor(model => model.UsageWindowEndUtc)').val('');
+        }
+    }
+
+    function toggleLinkedDiscountFields() {
+        if (@Model.IsDiscountBound.ToString().ToLowerInvariant()) {
+            $('#carry-default-discount-row').show();
+            return;
+        }
+
+        var hasLinkedDiscount = parseInt($('#@Html.IdFor(model => model.LinkedDiscountId)').val(), 10) > 0;
+        var carryDefaultDiscount = $('#@Html.IdFor(model => model.CarryDefaultDiscount)');
+
+        $('#carry-default-discount-row').toggle(hasLinkedDiscount);
+        carryDefaultDiscount.prop('disabled', !hasLinkedDiscount);
+
+        if (!hasLinkedDiscount) {
+            carryDefaultDiscount.prop('checked', false);
+        }
+    }
+</script>

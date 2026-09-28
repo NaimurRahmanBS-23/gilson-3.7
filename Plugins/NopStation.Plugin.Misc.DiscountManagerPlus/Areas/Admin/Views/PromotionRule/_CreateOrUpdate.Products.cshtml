@@ -1,0 +1,108 @@
+@model PromotionRuleProductSearchModel
+
+@{
+    var productColumns = new List<ColumnProperty>
+    {
+        new(nameof(PromotionRuleProductModel.SourceTypeName))
+        {
+            Title = T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.SourceType").Text,
+            Width = "140"
+        },
+        new(nameof(PromotionRuleProductModel.SourceName))
+        {
+            Title = T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.SourceName").Text
+        },
+        new(nameof(PromotionRuleProductModel.AttributeFilterSummary))
+        {
+            Title = T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds").Text,
+            Width = "220"
+        },
+        new(nameof(PromotionRuleProductModel.MinQuantity))
+        {
+            Title = T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.MinQuantity").Text,
+            Width = "100"
+        },
+        new(nameof(PromotionRuleProductModel.MaxQuantity))
+        {
+            Title = T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.MaxQuantity").Text,
+            Width = "100"
+        }
+    };
+
+    if (Model.AllowRewardProduct)
+    {
+        productColumns.Add(new ColumnProperty(nameof(PromotionRuleProductModel.IsRewardProduct))
+        {
+            Title = T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.IsRewardProduct").Text,
+            Width = "120",
+            Render = new RenderBoolean()
+        });
+    }
+
+    productColumns.Add(new ColumnProperty(nameof(PromotionRuleProductModel.Id))
+    {
+        Title = T("Admin.Common.Edit").Text,
+        Width = "80",
+        ClassName = NopColumnClassDefaults.Button,
+        Render = new RenderButtonCustom(NopButtonClassDefaults.Default, T("Admin.Common.Edit").Text)
+        {
+            OnClickFunctionName = "editRuleProduct"
+        }
+    });
+
+    productColumns.Add(new ColumnProperty(nameof(PromotionRuleProductModel.Id))
+    {
+        Title = T("Admin.Common.Delete").Text,
+        Width = "80",
+        ClassName = NopColumnClassDefaults.Button,
+        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+    });
+}
+
+<div class="card-body">
+    <div class="row mb-3">
+        <div class="text-right col-12">
+            <button type="button"
+                    class="btn btn-primary"
+                    onclick="OpenWindow('@Url.Action("RuleProductAddPopup", new { promotionRuleId = Model.PromotionRuleId })', 820, 600, true); return false;">
+                <i class="fas fa-plus-square"></i>
+                @T("Admin.Common.AddNew")
+            </button>
+            <button type="button"
+                    class="btn btn-secondary"
+                    onclick="OpenWindow('@Url.Action("RuleProductAddMultiplePopup", new { promotionRuleId = Model.PromotionRuleId })', 1100, 800, true); return false;">
+                <i class="fas fa-list-check"></i>
+                @T("Admin.Promotions.Discounts.AppliedToProducts.AddNew")
+            </button>
+            <button type="submit" id="btnRefreshProducts" class="d-none"></button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        @await Html.PartialAsync("Table", new DataTablesModel
+        {
+            Name = "rule-products-grid",
+            UrlRead = new DataUrl("RuleProductList", "PromotionRule", new RouteValueDictionary { ["PromotionRuleId"] = Model.PromotionRuleId }),
+            UrlDelete = new DataUrl("RuleProductDelete", "PromotionRule", null),
+            SearchButtonId = "btnRefreshProducts",
+            Length = Model.PageSize,
+            LengthMenu = Model.AvailablePageSizes,
+            Filters = new List<FilterParameter>
+            {
+                new(nameof(Model.PromotionRuleId))
+            },
+            ColumnCollection = productColumns
+        })
+    </div>
+</div>
+
+<script asp-location="Footer">
+    function editRuleProduct(id) {
+        OpenWindow('@Url.Action("RuleProductEditPopup", "PromotionRule")?id=' + id, 820, 600, true);
+        return false;
+    }
+
+    function refreshProductsGrid() {
+        $('#rule-products-grid').DataTable().ajax.reload();
+    }
+</script>

@@ -1,0 +1,295 @@
+@model PromotionRuleProductAddModel
+
+@{
+    Layout = "_AdminPopupLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.DiscountManagerPlus.RuleProducts.AddNew").Text;
+    var allowRewardProduct = ViewBag.AllowRewardProduct is bool allowed && allowed;
+}
+
+<form asp-controller="PromotionRule" asp-action="RuleProductAddPopup" method="post">
+    <input asp-for="PromotionRuleId" type="hidden" />
+
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DiscountManagerPlus.RuleProducts.AddNew")
+        </h1>
+        <div class="float-right">
+            &nbsp;
+        </div>
+    </div>
+
+    @if (ViewBag.RefreshPage == true)
+    {
+        <script>
+            try { window.opener.refreshProductsGrid(); } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        <section class="content">
+            <div class="container-fluid">
+                <div class="form-horizontal">
+                    <div class="cards-group">
+                        <div class="card card-default card-popup">
+                            <div class="card-body">
+                                <div asp-validation-summary="All"></div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-4"><nop-label asp-for="IsAllProducts" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="IsAllProducts" />
+                                        <span asp-validation-for="IsAllProducts"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="source-type-row">
+                                    <div class="col-md-4"><nop-label asp-for="SourceTypeId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="SourceTypeId" asp-items="@Model.AvailableSourceTypes" />
+                                        <span asp-validation-for="SourceTypeId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="source-product-row">
+                                    <div class="col-md-4"><nop-label asp-for="ProductId" /></div>
+                                    <div class="col-md-8">
+                                        <input type="hidden" asp-for="ProductId" />
+                                        <span id="rule-product-name">@Model.ProductName</span>
+                                        <span asp-validation-for="ProductId"></span>
+                                        <button type="submit"
+                                                onclick="javascript:OpenWindow('@(Url.Action("RuleConditionSelectProductPopup", "PromotionRule", new { productIdInput = Html.IdFor(model => model.ProductId), productNameInput = "rule-product-name", btnId = "btnRefreshRuleProduct" }))', 800, 850, true); return false;"
+                                                class="btn btn-primary">
+                                            @T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.Product.Choose")
+                                        </button>
+                                        <button type="submit" id="rule-product-name-remove" class="btn btn-danger">
+                                            @T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.Product.Remove")
+                                        </button>
+                                        <button type="submit" id="btnRefreshRuleProduct" style="display: none"></button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="source-category-row">
+                                    <div class="col-md-4"><nop-label asp-for="CategoryId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="CategoryId" asp-items="@Model.AvailableCategories" />
+                                        <span asp-validation-for="CategoryId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="source-manufacturer-row">
+                                    <div class="col-md-4"><nop-label asp-for="ManufacturerId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="ManufacturerId" asp-items="@Model.AvailableManufacturers" />
+                                        <span asp-validation-for="ManufacturerId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="source-vendor-row">
+                                    <div class="col-md-4"><nop-label asp-for="VendorId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="VendorId" asp-items="@Model.AvailableVendors" />
+                                        <span asp-validation-for="VendorId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-4"><nop-label asp-for="MinQuantity" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="MinQuantity" />
+                                        <span asp-validation-for="MinQuantity"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-4"><nop-label asp-for="MaxQuantity" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="MaxQuantity" />
+                                        <span asp-validation-for="MaxQuantity"></span>
+                                    </div>
+                                </div>
+
+                                @if (allowRewardProduct)
+                                {
+                                    <div class="form-group row">
+                                        <div class="col-md-4"><nop-label asp-for="IsRewardProduct" /></div>
+                                        <div class="col-md-8">
+                                            <nop-editor asp-for="IsRewardProduct" />
+                                            <span asp-validation-for="IsRewardProduct"></span>
+                                        </div>
+                                    </div>
+                                }
+
+                                <div class="form-group row" id="reward-attribute-selection-row">
+                                    <div class="col-md-4"><nop-label asp-for="RewardAttributeSelectionTypeId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="RewardAttributeSelectionTypeId" asp-items="@Model.AvailableRewardAttributeSelectionTypes" />
+                                        <span asp-validation-for="RewardAttributeSelectionTypeId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="reward-attribute-values-row">
+                                    <div class="col-md-4"><nop-label asp-for="RewardAttributeValueIds" /></div>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <nop-editor asp-for="RewardAttributeValueIds" />
+                                            <div class="input-group-append">
+                                                <button type="button" id="btnSelectRewardAttributes" class="btn btn-secondary">
+                                                    @T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.Choose")
+                                                </button>
+                                                <button type="button" id="btnClearRewardAttributes" class="btn btn-danger">
+                                                    @T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.Clear")
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="RewardAttributeValueIds"></span>
+                                        <div class="text-muted mt-1">@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.Hint")</div>
+                                        <div class="text-muted mt-1" id="reward-attribute-summary"></div>
+                                        <button type="submit" id="btnRefreshRewardAttributes" style="display: none"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="far fa-save"></i>@T("Admin.Common.Save")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script asp-location="Footer">
+            $(document).ready(function() {
+                toggleRemoveButton();
+
+                $('#rule-product-name-remove').on('click', function() {
+                    $('#@Html.IdFor(model => model.ProductId)').val(0);
+                    $('#rule-product-name').text('');
+                    toggleRemoveButton();
+                    return false;
+                });
+
+                $('#btnRefreshRuleProduct').on('click', function() {
+                    toggleRemoveButton();
+                    return false;
+                });
+
+                $('#@Html.IdFor(model => model.IsAllProducts)').on('change', function() {
+                    toggleAllProductsFields();
+                });
+
+                $('#@Html.IdFor(model => model.SourceTypeId)').on('change', function() {
+                    updateSourceFields();
+                });
+
+                $('#@Html.IdFor(model => model.RewardAttributeSelectionTypeId)').on('change', function() {
+                    toggleRewardAttributeFields();
+                });
+
+                $('#btnSelectRewardAttributes').on('click', function() {
+                    var productId = parseInt($('#@Html.IdFor(model => model.ProductId)').val(), 10) || 0;
+                    if (productId <= 0) {
+                        alert('@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.SelectProductFirst")');
+                        return false;
+                    }
+
+                    var selectedValueIds = $('#@Html.IdFor(model => model.RewardAttributeValueIds)').val() || '';
+                    var url = '@Url.Action("RuleRewardAttributePopup", "PromotionRule")'
+                        + '?productId=' + productId
+                        + '&valueIdsInput=@Html.IdFor(model => model.RewardAttributeValueIds)'
+                        + '&btnId=btnRefreshRewardAttributes'
+                        + '&selectedValueIds=' + encodeURIComponent(selectedValueIds);
+                    OpenWindow(url, 900, 850, true);
+                    return false;
+                });
+
+                $('#btnClearRewardAttributes').on('click', function() {
+                    $('#@Html.IdFor(model => model.RewardAttributeValueIds)').val('');
+                    updateRewardAttributeSummary();
+                    return false;
+                });
+
+                $('#btnRefreshRewardAttributes').on('click', function() {
+                    updateRewardAttributeSummary();
+                    return false;
+                });
+
+                updateSourceFields();
+                updateRewardAttributeSummary();
+                toggleAllProductsFields();
+            });
+
+            function toggleAllProductsFields() {
+                var isAllProducts = $('#@Html.IdFor(model => model.IsAllProducts)').is(':checked');
+                $('#source-type-row').toggle(!isAllProducts);
+                $('#source-product-row').toggle(!isAllProducts);
+                $('#source-category-row').toggle(!isAllProducts);
+                $('#source-manufacturer-row').toggle(!isAllProducts);
+                $('#source-vendor-row').toggle(!isAllProducts);
+                if (isAllProducts) {
+                    $('#reward-attribute-selection-row').hide();
+                    $('#reward-attribute-values-row').hide();
+                } else {
+                    updateSourceFields();
+                }
+            }
+
+            function toggleRemoveButton() {
+                var productId = parseInt($('#@Html.IdFor(model => model.ProductId)').val(), 10) || 0;
+                var sourceType = parseInt($('#@Html.IdFor(model => model.SourceTypeId)').val(), 10) || 0;
+                if (productId > 0 && sourceType === @((int)RuleProductSourceType.Product)) {
+                    $('#rule-product-name-remove').showElement();
+                } else {
+                    $('#rule-product-name-remove').hideElement();
+                }
+            }
+
+            function toggleRewardAttributeFields() {
+                var selectionType = parseInt($('#@Html.IdFor(model => model.RewardAttributeSelectionTypeId)').val(), 10) || 0;
+                var sourceType = parseInt($('#@Html.IdFor(model => model.SourceTypeId)').val(), 10) || 0;
+                var isProductSource = sourceType === @((int)RuleProductSourceType.Product);
+                $('#reward-attribute-selection-row').toggle(isProductSource);
+                $('#reward-attribute-values-row').toggle(isProductSource && selectionType === @((int)RewardAttributeSelectionType.SpecificValues));
+
+                if (!isProductSource) {
+                    $('#@Html.IdFor(model => model.RewardAttributeSelectionTypeId)').val('@((int)RewardAttributeSelectionType.Any)');
+                    $('#@Html.IdFor(model => model.RewardAttributeValueIds)').val('');
+                    updateRewardAttributeSummary();
+                }
+            }
+
+            function updateSourceFields() {
+                var sourceType = parseInt($('#@Html.IdFor(model => model.SourceTypeId)').val(), 10) || 0;
+                var isProduct = sourceType === @((int)RuleProductSourceType.Product);
+                $('#source-product-row').toggle(isProduct);
+                $('#source-category-row').toggle(sourceType === @((int)RuleProductSourceType.Category));
+                $('#source-manufacturer-row').toggle(sourceType === @((int)RuleProductSourceType.Manufacturer));
+                $('#source-vendor-row').toggle(sourceType === @((int)RuleProductSourceType.Vendor));
+
+                if (!isProduct) {
+                    $('#@Html.IdFor(model => model.ProductId)').val(0);
+                    $('#rule-product-name').text('');
+                    $('#@Html.IdFor(model => model.RewardAttributeSelectionTypeId)').val('@((int)RewardAttributeSelectionType.Any)');
+                    $('#@Html.IdFor(model => model.RewardAttributeValueIds)').val('');
+                }
+
+                toggleRemoveButton();
+                toggleRewardAttributeFields();
+            }
+
+            function updateRewardAttributeSummary() {
+                var valueIds = ($('#@Html.IdFor(model => model.RewardAttributeValueIds)').val() || '').toString().trim();
+                if (!valueIds) {
+                    $('#reward-attribute-summary').text('');
+                    return;
+                }
+
+                var count = valueIds.split(',').map(function(x) { return x.trim(); }).filter(function(x) { return x.length > 0; }).length;
+                $('#reward-attribute-summary').text(count + ' selected');
+            }
+
+        </script>
+    }
+</form>

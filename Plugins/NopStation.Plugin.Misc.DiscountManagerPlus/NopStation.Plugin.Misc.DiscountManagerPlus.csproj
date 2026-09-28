@@ -1,0 +1,76 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+      <TargetFramework>net9.0</TargetFramework>
+      <OutputPath>..\..\Presentation\Nop.Web\Plugins\NopStation.Plugin.Misc.DiscountManagerPlus</OutputPath>
+      <OutDir>$(OutputPath)</OutDir>
+      <Version>4.90.1.1</Version>
+      <Authors>Nop-Station Team</Authors>
+      <Company>Nop-Station</Company>
+      <Product>Nop-Station DiscountManagerPlus</Product>
+      <AssemblyVersion>4.90.1.1</AssemblyVersion>
+      <FileVersion>4.90.1.1</FileVersion>
+      <NeutralLanguage>en</NeutralLanguage>
+      <Copyright>Nop-Station Team</Copyright>
+      <PackageTags>NopStation,OnePageCheckout,NopCommerce,Plugin</PackageTags>
+      <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+      <Description>This plugin allows to checkout in one page.</Description>
+    </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NopStation.Plugin.Misc.Actions">
+      <HintPath>..\NopStation.Plugin.Misc.Core\NopStation.Plugin.Misc.Actions.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Presentation\Nop.Web.Framework\Nop.Web.Framework.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Presentation\Nop.Web\Nop.Web.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\NopStation.Plugin.Misc.Core\NopStation.Plugin.Misc.Core.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClearPluginAssemblies Include="$(MSBuildProjectDirectory)\..\..\Build\ClearPluginAssemblies.proj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Views\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Admin\Views\DiscountManagerPlus\Configure.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Content\css\cart-savings.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\js\cart-savings.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Target Name="NopTarget" AfterTargets="Build">
+    <!-- Delete unnecessary libraries from plugins path -->
+    <MSBuild Projects="@(ClearPluginAssemblies)" Properties="PluginPath=$(MSBuildProjectDirectory)\$(OutDir)" Targets="NopClear" />
+    <!-- Delete extra folders and files from plugin output directory -->
+    <RemoveDir Directories="$(OutDir)\refs;$(OutDir)\ref" />
+    <Delete Files="$(OutDir)\$(AssemblyName).deps.json;$(OutDir)\$(AssemblyName).pdb;$(OutDir)\$(AssemblyName).staticwebassets.runtime.json" />
+  </Target>
+</Project>

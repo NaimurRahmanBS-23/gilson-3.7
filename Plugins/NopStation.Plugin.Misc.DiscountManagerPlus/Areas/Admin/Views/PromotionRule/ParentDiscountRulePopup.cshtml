@@ -1,0 +1,72 @@
+@model PromotionRuleModel
+
+@{
+    Layout = "_AdminPopupLayout";
+    ViewBag.PageTitle = Model.Id > 0
+        ? T("Admin.NopStation.DiscountManagerPlus.PromotionRules.EditDetails").Text
+        : T("Admin.NopStation.DiscountManagerPlus.PromotionRules.AddNew").Text;
+    var formAction = Model.Id > 0 ? "EditParentDiscountRulePopup" : "CreateParentDiscountRulePopup";
+}
+
+<form asp-controller="PromotionRule" asp-action="@formAction" method="post">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="DiscountId" type="hidden" />
+    <input asp-for="IsDiscountBound" type="hidden" />
+
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @(Model.Id > 0
+                ? T("Admin.NopStation.DiscountManagerPlus.PromotionRules.EditDetails").Text
+                : T("Admin.NopStation.DiscountManagerPlus.PromotionRules.AddNew").Text)
+        </h1>
+        <div class="float-right">
+            &nbsp;
+        </div>
+    </div>
+
+    @if (ViewBag.RefreshPage == true)
+    {
+        <script>
+            try { window.opener.location.reload(); } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        <section class="content">
+            <div class="container-fluid">
+                <div class="form-horizontal">
+                    <div class="cards-group">
+                        <div class="card card-default card-popup">
+                            <div class="card-body">
+                                <div asp-validation-summary="All"></div>
+                                @await Html.PartialAsync("_CreateOrUpdate.Info", Model)
+                            </div>
+                        </div>
+
+                        @if (Model.Id > 0)
+                        {
+                            <div class="card card-default card-popup">
+                                <div class="card-body">
+                                    <p class="mb-2">@T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.SaveBeforeManage")</p>
+                                    <a class="btn btn-secondary" href="@Url.Action("Edit", "PromotionRule", new { id = Model.Id })" target="_blank">
+                                        @T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.Actions.OpenRule")
+                                    </a>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="card card-default card-popup">
+                            <div class="card-body text-right">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="far fa-save"></i>
+                                    @T("Admin.Common.Save")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+</form>

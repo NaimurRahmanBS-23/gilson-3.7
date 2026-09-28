@@ -1,0 +1,204 @@
+@model PromotionRuleConditionSearchModel
+
+<script src="~/lib_npm/jsrender/jsrender.min.js" asp-location="Head"></script>
+
+<div class="card-body">
+    <div class="cards-group">
+        <script>
+            $(function() {
+                loadRuleConditions();
+            });
+
+            function refreshConditionsGrid() {
+                loadRuleConditions();
+            }
+
+            function loadRuleConditions(conditionId, groupId, interactionTypeId, deleteCondition, deleteGroup) {
+                var postData = {
+                    promotionRuleId: @Model.PromotionRuleId,
+                    conditionId: (typeof conditionId === 'undefined' ? 0 : conditionId),
+                    groupId: (typeof groupId === 'undefined' ? 0 : groupId),
+                    interactionTypeId: (typeof interactionTypeId === 'undefined' ? 0 : interactionTypeId),
+                    deleteCondition: (typeof deleteCondition === 'undefined' ? false : deleteCondition),
+                    deleteGroup: (typeof deleteGroup === 'undefined' ? false : deleteGroup)
+                };
+
+                addAntiForgeryToken(postData);
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "@(Url.Action("GetRuleConditions", "PromotionRule"))",
+                    data: postData,
+                    success: function (data, textStatus, jqXHR) {
+                        loadConditionBoxes(data.Conditions, "#ruleConditionContainer", true);
+                        updateGroupSelect(data.AvailableGroups, data.NextGroupId);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $("#getRuleConditionsAlert").trigger("click");
+                    }
+                });
+            }
+
+            function loadConditionBoxes(conditions, placeholder, hideEmptyString) {
+                if (conditions.length > 0 || hideEmptyString)
+                    $(placeholder).html('');
+                else
+                    $(placeholder).html('@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.GroupIsEmpty")');
+
+                $(placeholder).append(
+                    $("#ruleConditionTemplate").render(conditions)
+                );
+
+                for (var i = 0; i < conditions.length; i++) {
+                    if (!conditions[i].ChildRequirements || conditions[i].ChildRequirements.length === 0)
+                        continue;
+
+                    var placeholderName = conditions[i].IsGroup
+                        ? '#ruleconditionplaceholder-g' + conditions[i].GroupId
+                        : '#ruleconditionplaceholder-c' + conditions[i].ConditionId;
+                    $(placeholderName).html('loading...');
+                    loadConditionBoxes(conditions[i].ChildRequirements, placeholderName, false);
+                }
+            }
+
+            function updateGroupSelect(groups, nextGroupId) {
+                var groupsElement = $("#ConditionGroupId");
+                groupsElement.html('');
+                $.each(groups, function (id, option) {
+                    groupsElement.append($('<option></option>').val(option.Value).html(option.Text));
+                });
+
+                groupsElement.data('nextGroup', nextGroupId || 1);
+                if (groups.length > 1) {
+                    $("#pnlGroup").showElement();
+                } else {
+                    $("#pnlGroup").hideElement();
+                }
+            }
+
+            function openRuleConditionCreatePopup(addNewGroup) {
+                var groupId = 0;
+                if (addNewGroup) {
+                    groupId = $("#ConditionGroupId").data('nextGroup') || 1;
+                } else {
+                    groupId = parseInt($("#ConditionGroupId").val(), 10) || 1;
+                }
+
+                var url = '@(Url.Action("RuleConditionCreatePopup", "PromotionRule", new { promotionRuleId = Model.PromotionRuleId }))';
+                if (groupId > 0)
+                    url += '&conditionGroup=' + groupId;
+
+                OpenWindow(url, 860, 760, true);
+                return false;
+            }
+
+            function openRuleConditionEditPopup(id) {
+                OpenWindow('@Url.Action("RuleConditionEditPopup", "PromotionRule")?id=' + id, 860, 760, true);
+                return false;
+            }
+
+            function deleteCondition(id) {
+                loadRuleConditions(id, 0, 0, true, false);
+            }
+
+            function deleteConditionGroup(groupId) {
+                loadRuleConditions(0, groupId, 0, false, true);
+            }
+
+            function changeInteraction(groupId, typeId) {
+                loadRuleConditions(0, groupId, typeId, false, false);
+            }
+        </script>
+
+        <div id="ruleConditionContainer"></div>
+
+        <script id="ruleConditionTemplate" type="text/x-jsrender">
+            <div class="requirement-container {{if IsGroup}}requirement-group{{/if}}" id="rulecondition{{if IsGroup}}{{>GroupId}}{{else}}{{>ConditionId}}{{/if}}">
+                <div class="requirement-heading clearfix">
+                    {{if IsGroup}}
+                    <span class="float-left margin-r-5">
+                        @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Group.Title")
+                        <i>{{:RuleName}}</i>
+                    </span>
+                    <div class="interaction-type float-left clearfix">
+                        <span class="float-left margin-r-10">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.InteractionTypeInGroup")</span>
+                        <select class="form-control input-sm float-left" id="interactiontype{{>GroupId}}"
+                                name="interactiontype{{>GroupId}}"
+                                onchange="changeInteraction({{>GroupId}}, this.value)">
+                            {{for AvailableInteractionTypes}}
+                                {{if Selected}}
+                                    <option value="{{>Value}}" selected>{{>Text}}</option>
+                                {{else}}
+                                    <option value="{{>Value}}">{{>Text}}</option>
+                                {{/if}}
+                            {{/for}}
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-link" onclick="deleteConditionGroup({{>GroupId}})">
+                        <i class="far fa-trash-can"></i>
+                        @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.RemoveGroup")
+                    </button>
+                    {{else}}
+                    <div class="float-left">
+                        @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Condition.Title")
+                    </div>
+                    <div class="float-right">
+                        <button type="button" class="btn btn-link" onclick="openRuleConditionEditPopup({{>ConditionId}})">
+                            <i class="far fa-pen-to-square"></i>
+                            @T("Admin.Common.Edit")
+                        </button>
+                        <button type="button" class="btn btn-link" onclick="deleteCondition({{>ConditionId}})">
+                            <i class="far fa-trash-can"></i>
+                            @T("Admin.Common.Delete")
+                        </button>
+                    </div>
+                    {{/if}}
+                </div>
+                <div class="requirement-body">
+                    {{if IsGroup}}
+                    <div id="ruleconditionplaceholder-g{{>GroupId}}"></div>
+                    {{else}}
+                    <div class="requirement-summary">{{:Summary}}</div>
+                    {{if ChildRequirements && ChildRequirements.length > 0}}
+                    <div class="mt-2" id="ruleconditionplaceholder-c{{>ConditionId}}"></div>
+                    {{/if}}
+                    {{/if}}
+                </div>
+            </div>
+            {{if !IsGroup && !IsLastInGroup}}
+            <div class="interaction-type-label">
+                {{>InteractionType}}
+            </div>
+            {{/if}}
+        </script>
+
+        <div class="card card-default card-add-requirement">
+            <div class="card-header">
+                @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.AddNew")
+            </div>
+            <div class="card-body">
+                <div class="form-group row d-none" id="pnlGroup">
+                    <div class="col-md-3">
+                        <label for="ConditionGroupId">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.ConditionGroup")</label>
+                    </div>
+                    <div class="col-md-9">
+                        <select id="ConditionGroupId" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-9 offset-md-3">
+                        <button type="button" class="btn btn-primary" onclick="openRuleConditionCreatePopup(false)">
+                            <i class="fas fa-plus-square"></i>
+                            @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.AddNew")
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="openRuleConditionCreatePopup(true)">
+                            <i class="fas fa-folder-plus"></i>
+                            @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.AddGroup")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nop-alert asp-alert-id="getRuleConditionsAlert" asp-alert-message="@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Alert.FailedGet")" />
+</div>

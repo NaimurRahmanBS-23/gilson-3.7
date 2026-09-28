@@ -1,0 +1,119 @@
+@model PromotionRuleModel
+
+@{
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), "PromotionRulePage.HideInfoBlock");
+    var hideTiersBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), "PromotionRulePage.HideTiersBlock");
+    var hideProductsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), "PromotionRulePage.HideProductsBlock");
+    var hideExcludedProductsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), "PromotionRulePage.HideExcludedProductsBlock");
+    var hideConditionsBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), "PromotionRulePage.HideConditionsBlock");
+    var hideUsageHistoryBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), "PromotionRulePage.HideUsageHistoryBlock", defaultValue: true);
+
+    var showProductsCard = Model.RuleTypeId == (int)PromotionRuleType.ProductBased ||
+                           Model.RuleTypeId == (int)PromotionRuleType.ComboPricing ||
+                           Model.RuleTypeId == (int)PromotionRuleType.BuyXGetY;
+    var showTiersCard = Model.RuleTypeId == (int)PromotionRuleType.BuyXGetY ||
+                        Model.RuleTypeId == (int)PromotionRuleType.ProductBased ||
+                        Model.RuleTypeId == (int)PromotionRuleType.CartCondition ||
+                        Model.RuleTypeId == (int)PromotionRuleType.SubtotalBased;
+    var showConditionsCard = Model.RuleTypeId == (int)PromotionRuleType.ProductBased ||
+                             Model.RuleTypeId == (int)PromotionRuleType.ComboPricing ||
+                             Model.RuleTypeId == (int)PromotionRuleType.BuyXGetY ||
+                             Model.RuleTypeId == (int)PromotionRuleType.CartCondition ||
+                             Model.RuleTypeId == (int)PromotionRuleType.SubtotalBased;
+
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+
+            <nop-cards id="promotionrule-panels">
+
+                <nop-card asp-name="promotionrule-info"
+                          asp-icon="fas fa-info"
+                          asp-title="@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Info")"
+                          asp-hide-block-attribute-name="PromotionRulePage.HideInfoBlock"
+                          asp-hide="@hideInfoBlock">
+                    @await Html.PartialAsync("_CreateOrUpdate.Info", Model)
+                </nop-card>
+
+                @if (Model.Id > 0)
+                {
+                    <div id="promotionrule-products-card-container" class="promotionrule-card-container" style="@(showProductsCard ? string.Empty : "display:none;")">
+                        <nop-card asp-name="promotionrule-products"
+                                  asp-icon="fas fa-box"
+                                  asp-title="@string.Format(T("Admin.NopStation.DiscountManagerPlus.PromotionRules.ProductsWithCount").Text, Model.RuleProductCount)"
+                                  asp-hide-block-attribute-name="PromotionRulePage.HideProductsBlock"
+                                  asp-hide="@hideProductsBlock">
+                            @await Html.PartialAsync("_CreateOrUpdate.Products", Model.RuleProductSearchModel)
+                        </nop-card>
+                    </div>
+
+                    <div id="promotionrule-tiers-card-container" class="promotionrule-card-container" style="@(showTiersCard ? string.Empty : "display:none;")">
+                        <nop-card asp-name="promotionrule-tiers"
+                                  asp-icon="fas fa-layer-group"
+                                  asp-title="@string.Format(T("Admin.NopStation.DiscountManagerPlus.PromotionRules.TiersWithCount").Text, Model.RuleTierCount)"
+                                  asp-hide-block-attribute-name="PromotionRulePage.HideTiersBlock"
+                                  asp-hide="@hideTiersBlock">
+                            @await Html.PartialAsync("_CreateOrUpdate.Tiers", Model.RuleTierSearchModel)
+                        </nop-card>
+                    </div>
+
+                    <nop-card asp-name="promotionrule-excluded-products"
+                              asp-icon="fas fa-ban"
+                              asp-title="@string.Format(T("Admin.NopStation.DiscountManagerPlus.PromotionRules.ExcludedProductsWithCount").Text, Model.ExcludedProductCount)"
+                              asp-hide-block-attribute-name="PromotionRulePage.HideExcludedProductsBlock"
+                              asp-hide="@hideExcludedProductsBlock">
+                        @await Html.PartialAsync("_CreateOrUpdate.ExcludedProducts", Model.ExcludedProductSearchModel)
+                    </nop-card>
+
+                    <div id="promotionrule-conditions-card-container" class="promotionrule-card-container" style="@(showConditionsCard ? string.Empty : "display:none;")">
+                        <nop-card asp-name="promotionrule-conditions"
+                                  asp-icon="fas fa-filter"
+                                  asp-title="@string.Format(T("Admin.NopStation.DiscountManagerPlus.PromotionRules.ConditionsWithCount").Text, Model.RuleConditionCount)"
+                                  asp-hide-block-attribute-name="PromotionRulePage.HideConditionsBlock"
+                                  asp-hide="@hideConditionsBlock">
+                            @await Html.PartialAsync("_CreateOrUpdate.Conditions", Model.RuleConditionSearchModel)
+                        </nop-card>
+                    </div>
+
+                    <nop-card asp-name="promotionrule-usage-history"
+                              asp-icon="fas fa-clock-rotate-left"
+                              asp-title="@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History")"
+                              asp-hide-block-attribute-name="PromotionRulePage.HideUsageHistoryBlock"
+                              asp-hide="@hideUsageHistoryBlock">
+                        @await Html.PartialAsync("_CreateOrUpdate.History", Model.RuleUsageHistorySearchModel)
+                    </nop-card>
+                }
+
+            </nop-cards>
+
+        </div>
+    </div>
+</section>
+
+<script asp-location="Footer">
+    $(document).ready(function() {
+        toggleRuleTypeSections();
+        $('#@Html.IdFor(model => model.RuleTypeId)').on('change', toggleRuleTypeSections);
+    });
+
+    function toggleRuleTypeSections() {
+        var ruleType = parseInt($('#@Html.IdFor(model => model.RuleTypeId)').val(), 10) || 0;
+        $('#promotionrule-products-card-container').toggle(ruleType === @((int)PromotionRuleType.ProductBased) || ruleType === @((int)PromotionRuleType.ComboPricing) || ruleType === @((int)PromotionRuleType.BuyXGetY));
+        $('#promotionrule-tiers-card-container').toggle(
+            ruleType === @((int)PromotionRuleType.BuyXGetY) ||
+            ruleType === @((int)PromotionRuleType.ProductBased) ||
+            ruleType === @((int)PromotionRuleType.CartCondition) ||
+            ruleType === @((int)PromotionRuleType.SubtotalBased));
+        $('#promotionrule-conditions-card-container').toggle(
+            ruleType === @((int)PromotionRuleType.ProductBased) ||
+            ruleType === @((int)PromotionRuleType.ComboPricing) ||
+            ruleType === @((int)PromotionRuleType.BuyXGetY) ||
+            ruleType === @((int)PromotionRuleType.CartCondition) ||
+            ruleType === @((int)PromotionRuleType.SubtotalBased));
+    }
+</script>

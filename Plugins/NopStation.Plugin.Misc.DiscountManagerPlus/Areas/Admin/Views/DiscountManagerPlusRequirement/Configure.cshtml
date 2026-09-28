@@ -1,0 +1,101 @@
+@model DiscountManagerPlusRequirementModel
+@{
+    Layout = "";
+}
+
+<script>
+    $(document).ready(function () {
+        var saveButton = $('#save-discount-manager-plus-requirement@(Model.RequirementId)');
+        if (!saveButton.length)
+            return;
+
+        saveButton.on('click', function () {
+            var postData = {
+                DiscountId: @Model.DiscountId,
+                RequirementId: @Model.RequirementId
+            };
+            addAntiForgeryToken(postData);
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("Configure", "DiscountManagerPlusRequirement"))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+                    var $alertInfoEl = $("#saveDiscountManagerPlusRequirementAlert@(Model.RequirementId)-info");
+                    let response = jqXHR.responseJSON;
+
+                    if (response instanceof Object && response.hasOwnProperty('Errors')) {
+                        var errorMessages = '';
+                        $.each(response.Errors, function (i, error) {
+                            errorMessages += error;
+                            if (response.Errors.length - 1 != i)
+                                errorMessages += '</br>';
+                        });
+                        $alertInfoEl.html(errorMessages);
+                        $("#saveDiscountManagerPlusRequirementAlert@(Model.RequirementId)").click();
+                        return;
+                    }
+
+                    $('#pnl-save-discount-manager-plus-requirement-result@(Model.RequirementId)').fadeIn("slow").delay(1000).fadeOut("slow");
+@if (Model.RequirementId == 0)
+{
+    <text>$("#discountRequirementContainer").trigger('nopnewdiscountruleadded', [data.NewRequirementId]);</text>
+}
+                },
+                error: function () {
+                    $("#saveDiscountManagerPlusRequirementAlert@(Model.RequirementId)-info").html('@T("Admin.Promotions.Discounts.Requirements.FailedToSave")');
+                    $("#saveDiscountManagerPlusRequirementAlert@(Model.RequirementId)").click();
+                }
+            });
+        });
+    });
+</script>
+
+<div class="form-group row">
+    <div class="col-md-3 requirement-label-col">
+        <label>@T("Admin.NopStation.DiscountManagerPlus.Requirement.Fields.Conditions")</label>
+    </div>
+    <div class="col-md-9 requirement-data-col">
+        <div class="mb-2">
+            @T("Admin.NopStation.DiscountManagerPlus.Requirement.Fields.Conditions.Hint")
+        </div>
+        @if (Model.RequirementId == 0)
+        {
+            <div class="requirement-data-buttons">
+                <button type="button" id="save-discount-manager-plus-requirement@(Model.RequirementId)" class="btn btn-primary">
+                    @T("Admin.NopStation.DiscountManagerPlus.Requirement.Create")
+                </button>
+            </div>
+        }
+    </div>
+</div>
+<div class="form-group row">
+    <div class="offset-md-3 col-md-9 requirement-messages-col">
+        <div id="pnl-save-discount-manager-plus-requirement-result@(Model.RequirementId)" style="display: none;" class="text-green margin-t-5">
+            @T("Admin.Promotions.Discounts.Requirements.Saved")
+        </div>
+    </div>
+</div>
+
+@if (!Model.DefaultDiscountPipelineEnabled)
+{
+    <div class="form-group row">
+        <div class="offset-md-3 col-md-9">
+            <div class="text-danger mb-3">
+                @T("Admin.NopStation.DiscountManagerPlus.Requirement.DefaultPipelineDisabled")
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.RequirementId > 0)
+{
+    <div class="form-group row">
+        <div class="offset-md-3 col-md-9">
+            @await Html.PartialAsync("~/Plugins/NopStation.Plugin.Misc.DiscountManagerPlus/Areas/Admin/Views/DiscountManagerPlusRequirement/_Conditions.cshtml", Model.ConditionSearchModel)
+        </div>
+    </div>
+}
+
+<nop-alert asp-alert-id="saveDiscountManagerPlusRequirementAlert@(Model.RequirementId)" />

@@ -1,0 +1,766 @@
+@using System.Text.Json
+@model PromotionRuleConditionModel
+
+@{
+    var jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+    var initialBuilderStateJson = string.IsNullOrWhiteSpace(Model.ConditionSourceBuilderJson)
+        ? JsonSerializer.Serialize(new ConditionSourceBuilderStateModel
+        {
+            Rows = Model.SourceBuilderRows,
+            Tokens = Model.SelectedSourceTokens
+        }, jsonOptions)
+        : Model.ConditionSourceBuilderJson;
+
+    var specificationAttributeOptions = Model.AvailableSpecificationAttributes
+        .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+        .Select(x => new { value = x.Value, text = x.Text })
+        .ToList();
+    var productAttributeOptions = Model.AvailableProductAttributes
+        .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+        .Select(x => new { value = x.Value, text = x.Text })
+        .ToList();
+    var deviceTypeOptions = Model.AvailableSourceDeviceTypes
+        .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+        .Select(x => new { value = x.Value, text = x.Text })
+        .ToList();
+    var salesChannelOptions = Model.AvailableSourceSalesChannels
+        .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+        .Select(x => new { value = x.Value, text = x.Text })
+        .ToList();
+    var specificationOptionLookup = Model.AvailableSpecificationAttributeOptionsLookup
+        .ToDictionary(
+            x => x.Key.ToString(),
+            x => x.Value
+                .Where(y => !string.IsNullOrWhiteSpace(y.Value))
+                .Select(y => new { value = y.Value, text = y.Text })
+                .ToList());
+    var productAttributeValueLookup = Model.AvailableProductAttributeValuesLookup
+        .ToDictionary(
+            x => x.Key.ToString(),
+            x => x.Value
+                .Where(y => !string.IsNullOrWhiteSpace(y.Value))
+                .Select(y => new { value = y.Value, text = y.Text })
+                .ToList());
+}
+
+<input asp-for="ConditionSourceData" type="hidden" />
+<input asp-for="ConditionSourceBuilderJson" type="hidden" />
+<input asp-for="ConditionSourceBuilderTouched" type="hidden" />
+
+<div class="form-group row" id="condition-source-builder-row">
+    <div class="col-md-4"><nop-label asp-for="ConditionSourceData" /></div>
+    <div class="col-md-8">
+        <div id="condition-source-builder-host"></div>
+        <div class="mt-2">
+            <div class="small font-weight-semibold text-muted">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Preview")</div>
+            <div class="text-muted" id="condition-source-builder-preview"></div>
+        </div>
+        <div class="text-danger mt-2" id="condition-source-builder-warning" style="display:none;"></div>
+        <span asp-validation-for="ConditionSourceData"></span>
+        <div class="text-muted mt-1">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.ConditionSourceData.Hint")</div>
+    </div>
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        const sourceTypeInput = $('#@Html.IdFor(model => model.ConditionSourceTypeId)');
+        const form = sourceTypeInput.closest('form');
+        const sourceDataInput = $('#@Html.IdFor(model => model.ConditionSourceData)');
+        const builderJsonInput = $('#@Html.IdFor(model => model.ConditionSourceBuilderJson)');
+        const builderTouchedInput = $('#@Html.IdFor(model => model.ConditionSourceBuilderTouched)');
+        const builderHost = $('#condition-source-builder-host');
+        const previewHost = $('#condition-source-builder-preview');
+        const warningHost = $('#condition-source-builder-warning');
+        const initialStateRaw = JSON.parse(@Html.Raw(JsonSerializer.Serialize(initialBuilderStateJson)));
+        const texts = {
+            addRow: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.AddRow").Text)),
+            removeRow: @Html.Raw(JsonSerializer.Serialize(T("Admin.Common.Remove").Text)),
+            noValues: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Empty").Text)),
+            emptyState: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.EmptyState").Text)),
+            anyProduct: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.AnyProduct").Text)),
+            legacyWarning: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.LegacyWarning").Text)),
+            entry: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Entry").Text)),
+            options: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Options").Text)),
+            entryPlaceholder: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Entry.Placeholder").Text)),
+            optionsPlaceholder: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Options.Placeholder").Text)),
+            tokensPlaceholder: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.Tokens.Placeholder").Text)),
+            optionalPlaceholder: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.OptionalPlaceholder").Text)),
+            minQuantity: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.MinQuantity").Text)),
+            maxQuantity: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.MaxQuantity").Text)),
+            minDays: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.MinDays").Text)),
+            maxDays: @Html.Raw(JsonSerializer.Serialize(T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SourceBuilder.MaxDays").Text))
+        };
+        const endpointUrls = {
+            products: @Html.Raw(JsonSerializer.Serialize(Url.Action("Products", "Select2", new { area = "Admin" }))),
+            categories: @Html.Raw(JsonSerializer.Serialize(Url.Action("Categories", "Select2", new { area = "Admin" }))),
+            manufacturers: @Html.Raw(JsonSerializer.Serialize(Url.Action("Manufacturers", "Select2", new { area = "Admin" }))),
+            vendors: @Html.Raw(JsonSerializer.Serialize(Url.Action("Vendors", "Select2", new { area = "Admin" })))
+        };
+        const optionSets = {
+            specificationAttributes: @Html.Raw(JsonSerializer.Serialize(specificationAttributeOptions)),
+            productAttributes: @Html.Raw(JsonSerializer.Serialize(productAttributeOptions)),
+            deviceTypes: @Html.Raw(JsonSerializer.Serialize(deviceTypeOptions)),
+            salesChannels: @Html.Raw(JsonSerializer.Serialize(salesChannelOptions)),
+            specificationOptionLookup: @Html.Raw(JsonSerializer.Serialize(specificationOptionLookup)),
+            productAttributeValueLookup: @Html.Raw(JsonSerializer.Serialize(productAttributeValueLookup))
+        };
+        let builderState = normalizeBuilderState(initialStateRaw);
+        let builderWarning = @Html.Raw(JsonSerializer.Serialize(Model.ConditionSourceBuilderWarning ?? string.Empty));
+        let currentSourceType = parseInt(sourceTypeInput.val(), 10) || 0;
+
+        sourceTypeInput.on('change', function () {
+            const nextSourceType = parseInt($(this).val(), 10) || 0;
+            if (nextSourceType !== currentSourceType) {
+                currentSourceType = nextSourceType;
+                builderState = { rows: [], tokens: [] };
+                builderWarning = '';
+                builderTouchedInput.val('true');
+            }
+
+            renderBuilder();
+        });
+
+        form.on('submit.conditionSourceBuilder', function () {
+            syncBuilderJson();
+            if (hasConfiguredBuilderValues(parseInt(sourceTypeInput.val(), 10) || 0)) {
+                builderTouchedInput.val('true');
+            }
+        });
+
+        renderBuilder();
+
+        function renderBuilder() {
+            const sourceType = parseInt(sourceTypeInput.val(), 10) || 0;
+            builderHost.empty();
+
+            if (sourceType <= 0) {
+                previewHost.text('');
+                warningHost.hide().text('');
+                syncBuilderJson();
+                return;
+            }
+
+            if (isSessionSourceType(sourceType)) {
+                renderTokenBuilder(sourceType);
+            } else {
+                renderRowBuilder(sourceType);
+            }
+
+            syncBuilderJson();
+            renderPreview(sourceType);
+        }
+
+        function renderTokenBuilder(sourceType) {
+            const selectId = 'condition-source-token-select';
+            const options = getTokenOptions(sourceType);
+            const html = `
+                <select id="${selectId}" multiple="multiple" class="form-control" style="width:100%"></select>
+            `;
+            builderHost.html(html);
+
+            const select = $('#' + selectId);
+            if (isFixedTokenSourceType(sourceType)) {
+                appendOptions(select, options, builderState.tokens || []);
+                select.select2({
+                    width: '100%',
+                    closeOnSelect: false,
+                    placeholder: texts.tokensPlaceholder,
+                    allowClear: true
+                });
+            } else {
+                const selectedTokens = (builderState.tokens || []).filter(Boolean);
+                appendOptions(select, selectedTokens.map(token => ({ value: token, text: token })), selectedTokens);
+                select.select2({
+                    width: '100%',
+                    tags: true,
+                    tokenSeparators: [','],
+                    placeholder: texts.tokensPlaceholder
+                });
+            }
+
+            select.on('change', function () {
+                builderState.tokens = ($(this).val() || []).filter(Boolean);
+                builderTouchedInput.val('true');
+                builderWarning = '';
+                syncBuilderJson();
+                renderPreview(sourceType);
+            });
+        }
+
+        function renderRowBuilder(sourceType) {
+            if (!Array.isArray(builderState.rows)) {
+                builderState.rows = [];
+            }
+
+            const wrapper = $(`
+                <div>
+                    <button type="button" class="btn btn-primary mb-2" id="condition-source-add-row">
+                        <i class="fas fa-plus"></i> ${texts.addRow}
+                    </button>
+                    <div id="condition-source-row-list"></div>
+                </div>`);
+            builderHost.append(wrapper);
+
+            const rowList = wrapper.find('#condition-source-row-list');
+            if (!builderState.rows.length) {
+                rowList.html(`
+                    <div class="text-muted py-2">
+                        ${texts.emptyState}
+                    </div>`);
+            }
+
+            builderState.rows.forEach((row, index) => {
+                const rowElement = buildRowElement(sourceType, row, index);
+                rowList.append(rowElement);
+                initializeRowElement(sourceType, rowElement, row);
+            });
+
+            wrapper.find('#condition-source-add-row').on('click', function () {
+                builderState.rows.push(createEmptyRow(sourceType));
+                builderTouchedInput.val('true');
+                builderWarning = '';
+                renderBuilder();
+            });
+        }
+
+        function buildRowElement(sourceType, row, index) {
+            const rangeLabels = sourceType === @((int)ConditionSourceType.ExpiryDays)
+                ? { min: texts.minDays, max: texts.maxDays }
+                : { min: texts.minQuantity, max: texts.maxQuantity };
+            const showOptions = sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions) ||
+                sourceType === @((int)ConditionSourceType.ProductAttributeValues);
+            const showRange = supportsRange(sourceType);
+            const rowKey = row.key || ('row-' + (index + 1));
+
+            return $(`
+                <div class="card card-default mb-2 condition-source-entry" data-row-key="${rowKey}">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-5 mb-2">
+                                <label class="form-label">${texts.entry}</label>
+                                <select class="form-control condition-source-entry-select" data-placeholder="${texts.entryPlaceholder}" style="width:100%"></select>
+                            </div>
+                            ${showOptions ? `
+                                <div class="col-md-5 mb-2">
+                                    <label class="form-label">${texts.options}</label>
+                                    <select class="form-control condition-source-option-select" multiple="multiple" data-placeholder="${texts.optionsPlaceholder}" style="width:100%"></select>
+                                </div>` : '<div class="col-md-5 mb-2"></div>'}
+                            <div class="col-md-2 mb-2 d-flex align-items-end justify-content-end">
+                                <button type="button" class="btn btn-danger condition-source-remove-row">${texts.removeRow}</button>
+                            </div>
+                        </div>
+                        ${showRange ? `
+                            <div class="row">
+                                <div class="col-md-3 mb-2">
+                                    <label class="form-label">${rangeLabels.min}</label>
+                                    <input type="number" min="0" class="form-control condition-source-range-min" placeholder="0" value="${row.rangeMin != null ? row.rangeMin : ''}" />
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <label class="form-label">${rangeLabels.max}</label>
+                                    <input type="number" min="0" class="form-control condition-source-range-max" placeholder="${texts.optionalPlaceholder}" value="${row.rangeMax != null ? row.rangeMax : ''}" />
+                                </div>
+                            </div>` : ''}
+                    </div>
+                </div>`);
+        }
+
+        function initializeRowElement(sourceType, rowElement, row) {
+            const entrySelect = rowElement.find('.condition-source-entry-select');
+            const optionSelect = rowElement.find('.condition-source-option-select');
+
+            initializeEntrySelect(sourceType, entrySelect, row);
+            initializeOptionSelect(sourceType, optionSelect, row);
+
+            rowElement.find('.condition-source-remove-row').on('click', function () {
+                const rowKey = row.key;
+                builderState.rows = (builderState.rows || []).filter(x => x.key !== rowKey);
+                builderTouchedInput.val('true');
+                builderWarning = '';
+                renderBuilder();
+            });
+
+            rowElement.find('.condition-source-range-min').on('input', function () {
+                row.rangeMin = $(this).val() !== '' ? parseInt($(this).val(), 10) : null;
+                onRowChanged();
+            });
+
+            rowElement.find('.condition-source-range-max').on('input', function () {
+                row.rangeMax = $(this).val() !== '' ? parseInt($(this).val(), 10) : null;
+                onRowChanged();
+            });
+
+            function onRowChanged() {
+                builderTouchedInput.val('true');
+                builderWarning = '';
+                syncBuilderJson();
+                renderPreview(sourceType);
+            }
+        }
+
+        function initializeEntrySelect(sourceType, select, row) {
+            if (isRemoteEntrySourceType(sourceType)) {
+                initializeRemoteEntrySelect(sourceType, select, row);
+            } else {
+                const options = getEntryOptions(sourceType);
+                appendOptions(select, options, row.entryId ? [row.entryId.toString()] : []);
+                select.select2({
+                    width: '100%',
+                    allowClear: true,
+                    placeholder: select.data('placeholder')
+                });
+
+                if (row.entryId) {
+                    select.val(row.entryId.toString()).trigger('change.select2');
+                }
+            }
+
+            select.on('change', function () {
+                const selectedValue = $(this).val();
+                row.entryId = selectedValue ? parseInt(selectedValue, 10) : null;
+                row.entryName = getSelectedText($(this));
+
+                if (sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions)) {
+                    row.selectedOptionValues = [];
+                    row.selectedOptionTexts = [];
+                    const optionSelect = select.closest('.condition-source-entry').find('.condition-source-option-select');
+                    initializeOptionSelect(sourceType, optionSelect, row);
+                } else if (sourceType === @((int)ConditionSourceType.ProductAttributeValues)) {
+                    row.selectedOptionValues = [];
+                    row.selectedOptionTexts = [];
+                    const optionSelect = select.closest('.condition-source-entry').find('.condition-source-option-select');
+                    initializeOptionSelect(sourceType, optionSelect, row);
+                }
+
+                builderTouchedInput.val('true');
+                builderWarning = '';
+                syncBuilderJson();
+                renderPreview(sourceType);
+            });
+        }
+
+        function initializeRemoteEntrySelect(sourceType, select, row) {
+            const remoteUrl = getRemoteEndpoint(sourceType);
+            if (sourceType === @((int)ConditionSourceType.ExpiryDays)) {
+                select.append(new Option(texts.anyProduct, '', !row.entryId, !row.entryId));
+            }
+
+            if (row.entryId && row.entryName) {
+                select.append(new Option(row.entryName, row.entryId.toString(), true, true));
+            }
+
+            select.select2({
+                width: '100%',
+                allowClear: true,
+                placeholder: select.data('placeholder'),
+                ajax: {
+                    url: remoteUrl,
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return data;
+                    }
+                },
+                minimumInputLength: sourceType === @((int)ConditionSourceType.ExpiryDays) ? 0 : 1
+            });
+
+            if (row.entryId) {
+                select.val(row.entryId.toString()).trigger('change.select2');
+            } else if (sourceType === @((int)ConditionSourceType.ExpiryDays)) {
+                select.val('').trigger('change.select2');
+            }
+        }
+
+        function initializeOptionSelect(sourceType, select, row) {
+            if (!select.length) {
+                return;
+            }
+
+            select.empty();
+            const selectedValues = Array.isArray(row.selectedOptionValues) ? row.selectedOptionValues : [];
+            if (sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions)) {
+                const lookupOptions = row.entryId ? (optionSets.specificationOptionLookup[row.entryId.toString()] || []) : [];
+                appendOptions(select, lookupOptions, selectedValues);
+                select.select2({
+                    width: '100%',
+                    closeOnSelect: false,
+                    placeholder: select.data('placeholder')
+                });
+            } else if (sourceType === @((int)ConditionSourceType.ProductAttributeValues)) {
+                const lookupOptions = row.entryId ? (optionSets.productAttributeValueLookup[row.entryId.toString()] || []) : [];
+                const selectedItems = selectedValues.map(function (value, index) {
+                    const matchedLookup = lookupOptions.find(function (option) { return option.value === value; });
+                    return {
+                        value: value,
+                        text: matchedLookup ? matchedLookup.text : ((row.selectedOptionTexts || [])[index] || value)
+                    };
+                });
+                appendOptions(select, lookupOptions, selectedValues);
+                appendOptions(select, selectedItems, selectedValues);
+                select.select2({
+                    width: '100%',
+                    closeOnSelect: false,
+                    placeholder: select.data('placeholder')
+                });
+            }
+
+            if (selectedValues.length) {
+                select.val(selectedValues).trigger('change.select2');
+            }
+
+            select.off('change.conditionSource').on('change.conditionSource', function () {
+                const values = ($(this).val() || []).filter(Boolean);
+                const texts = [];
+                $(this).find('option:selected').each(function () {
+                    texts.push($(this).text());
+                });
+                row.selectedOptionValues = values;
+                row.selectedOptionTexts = texts;
+                builderTouchedInput.val('true');
+                builderWarning = '';
+                syncBuilderJson();
+                renderPreview(sourceType);
+            });
+        }
+
+        function syncBuilderJson() {
+            syncBuilderStateFromDom();
+
+            const normalizedRows = (builderState.rows || []).map(function (row, index) {
+                return {
+                    key: row.key || ('row-' + (index + 1)),
+                    entryId: row.entryId,
+                    entryName: row.entryName || '',
+                    selectedOptionValues: row.selectedOptionValues || [],
+                    selectedOptionTexts: row.selectedOptionTexts || [],
+                    rangeMin: row.rangeMin,
+                    rangeMax: row.rangeMax
+                };
+            });
+
+            builderState.rows = normalizedRows;
+            builderState.tokens = (builderState.tokens || []).filter(Boolean);
+            builderJsonInput.val(JSON.stringify(builderState));
+            sourceDataInput.val(serializeSourceData(parseInt(sourceTypeInput.val(), 10) || 0));
+        }
+
+        function syncBuilderStateFromDom() {
+            const sourceType = parseInt(sourceTypeInput.val(), 10) || 0;
+            if (sourceType <= 0 || isSessionSourceType(sourceType)) {
+                return;
+            }
+
+            const rowsByKey = new Map((builderState.rows || []).map(function (row) {
+                return [row.key, row];
+            }));
+
+            builderHost.find('.condition-source-entry').each(function () {
+                const rowElement = $(this);
+                const rowKey = rowElement.data('row-key');
+                const row = rowsByKey.get(rowKey);
+                if (!row) {
+                    return;
+                }
+
+                const entrySelect = rowElement.find('.condition-source-entry-select');
+                const optionSelect = rowElement.find('.condition-source-option-select');
+                const rangeMinInput = rowElement.find('.condition-source-range-min');
+                const rangeMaxInput = rowElement.find('.condition-source-range-max');
+
+                const selectedEntryValue = entrySelect.val();
+                row.entryId = selectedEntryValue !== null && selectedEntryValue !== undefined && selectedEntryValue !== ''
+                    ? parseInt(selectedEntryValue, 10)
+                    : null;
+                row.entryName = getSelectedText(entrySelect);
+
+                if (optionSelect.length) {
+                    const selectedValues = (optionSelect.val() || []).filter(Boolean);
+                    const selectedTexts = [];
+                    optionSelect.find('option:selected').each(function () {
+                        selectedTexts.push($(this).text());
+                    });
+                    row.selectedOptionValues = selectedValues;
+                    row.selectedOptionTexts = selectedTexts;
+                }
+
+                if (rangeMinInput.length) {
+                    const rangeMinValue = rangeMinInput.val();
+                    row.rangeMin = rangeMinValue !== '' ? parseInt(rangeMinValue, 10) : null;
+                }
+
+                if (rangeMaxInput.length) {
+                    const rangeMaxValue = rangeMaxInput.val();
+                    row.rangeMax = rangeMaxValue !== '' ? parseInt(rangeMaxValue, 10) : null;
+                }
+            });
+        }
+
+        function renderPreview(sourceType) {
+            if (builderWarning && !hasConfiguredBuilderValues(sourceType)) {
+                warningHost.text(texts.legacyWarning + ': ' + builderWarning).show();
+            } else {
+                warningHost.hide().text('');
+            }
+
+            const previewText = isSessionSourceType(sourceType)
+                ? (builderState.tokens || []).join(', ')
+                : (builderState.rows || [])
+                    .map(function (row) {
+                        let label = row.entryName || (row.entryId ? '#' + row.entryId : texts.anyProduct);
+                        const optionTexts = (row.selectedOptionTexts || []).filter(Boolean);
+                        if (optionTexts.length) {
+                            label += ' [' + optionTexts.join(', ') + ']';
+                        }
+
+                        if (row.rangeMin != null || row.rangeMax != null) {
+                            const rangeText = row.rangeMin != null && row.rangeMax != null
+                                ? row.rangeMin + '-' + row.rangeMax
+                                : row.rangeMin != null
+                                    ? row.rangeMin + '+'
+                                    : '0-' + row.rangeMax;
+                            label += sourceType === @((int)ConditionSourceType.ExpiryDays)
+                                ? ' (' + rangeText + ' days)'
+                                : ' (' + rangeText + ')';
+                        }
+
+                        return label;
+                    })
+                    .filter(Boolean)
+                    .join('; ');
+
+            previewHost.text(previewText || texts.noValues);
+        }
+
+        function createEmptyRow(sourceType) {
+            return {
+                key: 'row-' + Date.now() + '-' + Math.floor(Math.random() * 10000),
+                entryId: null,
+                entryName: '',
+                selectedOptionValues: [],
+                selectedOptionTexts: [],
+                rangeMin: null,
+                rangeMax: null
+            };
+        }
+
+        function normalizeBuilderState(rawState) {
+            const parsedState = typeof rawState === 'string'
+                ? tryParseJson(rawState)
+                : (rawState || {});
+
+            return {
+                rows: Array.isArray(parsedState.rows) ? parsedState.rows.map(normalizeRowState) : [],
+                tokens: Array.isArray(parsedState.tokens) ? parsedState.tokens : []
+            };
+        }
+
+        function normalizeRowState(row) {
+            row = row || {};
+            return {
+                key: row.key || row.Key || '',
+                entryId: row.entryId != null ? row.entryId : row.EntryId,
+                entryName: row.entryName || row.EntryName || '',
+                selectedOptionValues: Array.isArray(row.selectedOptionValues) ? row.selectedOptionValues : (Array.isArray(row.SelectedOptionValues) ? row.SelectedOptionValues : []),
+                selectedOptionTexts: Array.isArray(row.selectedOptionTexts) ? row.selectedOptionTexts : (Array.isArray(row.SelectedOptionTexts) ? row.SelectedOptionTexts : []),
+                rangeMin: row.rangeMin != null ? row.rangeMin : row.RangeMin,
+                rangeMax: row.rangeMax != null ? row.rangeMax : row.RangeMax
+            };
+        }
+
+        function tryParseJson(rawJson) {
+            if (!rawJson) {
+                return {};
+            }
+
+            try {
+                return JSON.parse(rawJson);
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function isSessionSourceType(sourceType) {
+            return sourceType === @((int)ConditionSourceType.DeviceType) ||
+                sourceType === @((int)ConditionSourceType.SalesChannel) ||
+                sourceType === @((int)ConditionSourceType.CampaignSource) ||
+                sourceType === @((int)ConditionSourceType.ReferralSource);
+        }
+
+        function isFixedTokenSourceType(sourceType) {
+            return sourceType === @((int)ConditionSourceType.DeviceType) ||
+                sourceType === @((int)ConditionSourceType.SalesChannel);
+        }
+
+        function supportsRange(sourceType) {
+            return sourceType === @((int)ConditionSourceType.Products) ||
+                sourceType === @((int)ConditionSourceType.Categories) ||
+                sourceType === @((int)ConditionSourceType.Manufacturers) ||
+                sourceType === @((int)ConditionSourceType.Vendors) ||
+                sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions) ||
+                sourceType === @((int)ConditionSourceType.ProductAttributeValues) ||
+                sourceType === @((int)ConditionSourceType.ExpiryDays);
+        }
+
+        function hasConfiguredBuilderValues(sourceType) {
+            if (isSessionSourceType(sourceType)) {
+                return (builderState.tokens || []).length > 0;
+            }
+
+            return (builderState.rows || []).some(function (row) {
+                return row.entryId || ((row.selectedOptionValues || []).length > 0) || row.rangeMin != null || row.rangeMax != null;
+            });
+        }
+
+        function isRemoteEntrySourceType(sourceType) {
+            return sourceType === @((int)ConditionSourceType.Products) ||
+                sourceType === @((int)ConditionSourceType.Categories) ||
+                sourceType === @((int)ConditionSourceType.Manufacturers) ||
+                sourceType === @((int)ConditionSourceType.Vendors) ||
+                sourceType === @((int)ConditionSourceType.ExpiryDays);
+        }
+
+        function getEntryOptions(sourceType) {
+            switch (sourceType) {
+                case @((int)ConditionSourceType.SpecificationAttributeOptions):
+                    return optionSets.specificationAttributes;
+                case @((int)ConditionSourceType.ProductAttributeValues):
+                    return optionSets.productAttributes;
+                default:
+                    return [];
+            }
+        }
+
+        function getRemoteEndpoint(sourceType) {
+            switch (sourceType) {
+                case @((int)ConditionSourceType.Products):
+                case @((int)ConditionSourceType.ExpiryDays):
+                    return endpointUrls.products;
+                case @((int)ConditionSourceType.Categories):
+                    return endpointUrls.categories;
+                case @((int)ConditionSourceType.Manufacturers):
+                    return endpointUrls.manufacturers;
+                case @((int)ConditionSourceType.Vendors):
+                    return endpointUrls.vendors;
+                default:
+                    return '';
+            }
+        }
+
+        function getTokenOptions(sourceType) {
+            switch (sourceType) {
+                case @((int)ConditionSourceType.DeviceType):
+                    return optionSets.deviceTypes;
+                case @((int)ConditionSourceType.SalesChannel):
+                    return optionSets.salesChannels;
+                default:
+                    return [];
+            }
+        }
+
+        function appendOptions(select, options, selectedValues) {
+            const selectedSet = new Set((selectedValues || []).map(function (value) { return value != null ? value.toString() : ''; }));
+            (options || []).forEach(function (option) {
+                if (!option || option.value == null)
+                    return;
+
+                const value = option.value.toString();
+                const existingOption = select.find('option').filter(function () {
+                    return $(this).val() === value;
+                }).first();
+                if (existingOption.length) {
+                    if (selectedSet.has(value)) {
+                        existingOption.prop('selected', true);
+                    }
+                    return;
+                }
+                const optionElement = new Option(option.text, value, selectedSet.has(value), selectedSet.has(value));
+                select.append(optionElement);
+            });
+        }
+
+        function serializeSourceData(sourceType) {
+            if (sourceType <= 0) {
+                return '';
+            }
+
+            if (isSessionSourceType(sourceType)) {
+                return (builderState.tokens || [])
+                    .map(normalizeToken)
+                    .filter(Boolean)
+                    .filter(function (value, index, array) {
+                        return array.indexOf(value) === index;
+                    })
+                    .join(', ');
+            }
+
+            return (builderState.rows || [])
+                .map(function (row) { return serializeRow(sourceType, row); })
+                .filter(Boolean)
+                .join(', ');
+        }
+
+        function serializeRow(sourceType, row) {
+            if (!row) {
+                return '';
+            }
+
+            const supportsZeroId = sourceType === @((int)ConditionSourceType.ExpiryDays);
+            const entryId = row.entryId != null && row.entryId !== '' ? parseInt(row.entryId, 10) : null;
+            if (!supportsZeroId && (!entryId || entryId <= 0)) {
+                return '';
+            }
+
+            if (supportsZeroId && entryId != null && entryId < 0) {
+                return '';
+            }
+
+            let serialized = (entryId || 0).toString();
+            const optionTokens = buildOptionTokens(sourceType, row);
+            if (optionTokens.length) {
+                serialized += '(' + optionTokens.join('|') + ')';
+            }
+
+            if (row.rangeMin != null || row.rangeMax != null) {
+                serialized += ':';
+                if (row.rangeMin != null && row.rangeMax != null) {
+                    serialized += row.rangeMin + '-' + row.rangeMax;
+                } else if (row.rangeMin != null) {
+                    serialized += row.rangeMin;
+                } else {
+                    serialized += '0-' + row.rangeMax;
+                }
+            }
+
+            return serialized;
+        }
+
+        function buildOptionTokens(sourceType, row) {
+            const values = (row.selectedOptionValues || [])
+                .map(function (value) { return value == null ? '' : value.toString().trim().replace(/^["']|["']$/g, ''); })
+                .filter(Boolean);
+
+            return values.filter(function (value, index, array) {
+                return array.findIndex(function (candidate) {
+                    return candidate.toLowerCase() === value.toLowerCase();
+                }) === index;
+            });
+        }
+
+        function normalizeToken(value) {
+            return value == null
+                ? ''
+                : value.toString().trim().replace(/^["']|["']$/g, '').toLowerCase();
+        }
+
+        function getSelectedText(select) {
+            const selectedOption = select.find('option:selected');
+            return selectedOption.length ? selectedOption.text() : '';
+        }
+    });
+</script>

@@ -1,0 +1,207 @@
+@model PromotionRuleConditionSearchModel
+
+<script src="~/lib_npm/jsrender/jsrender.min.js" asp-location="Head"></script>
+
+@{
+    var requirementId = Model.DiscountRequirementId;
+}
+
+<div class="card-body px-0 pt-0">
+    <div class="cards-group">
+        <script>
+            $(function () {
+                loadRequirementConditions@(requirementId)();
+            });
+
+            function refreshRequirementConditionsGrid@(requirementId)() {
+                loadRequirementConditions@(requirementId)();
+            }
+
+            function loadRequirementConditions@(requirementId)(conditionId, groupId, interactionTypeId, deleteCondition, deleteGroup) {
+                var postData = {
+                    discountRequirementId: @requirementId,
+                    conditionId: (typeof conditionId === 'undefined' ? 0 : conditionId),
+                    groupId: (typeof groupId === 'undefined' ? 0 : groupId),
+                    interactionTypeId: (typeof interactionTypeId === 'undefined' ? 0 : interactionTypeId),
+                    deleteCondition: (typeof deleteCondition === 'undefined' ? false : deleteCondition),
+                    deleteGroup: (typeof deleteGroup === 'undefined' ? false : deleteGroup)
+                };
+
+                addAntiForgeryToken(postData);
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "@(Url.Action("GetRequirementConditions", "DiscountManagerPlusRequirement"))",
+                    data: postData,
+                    success: function (data) {
+                        loadRequirementConditionBoxes@(requirementId)(data.Conditions, "#discount-manager-plus-requirement-container-@(requirementId)", true);
+                        updateRequirementGroupSelect@(requirementId)(data.AvailableGroups, data.NextGroupId);
+                    },
+                    error: function () {
+                        $("#getRequirementConditionsAlert@(requirementId)").trigger("click");
+                    }
+                });
+            }
+
+            function loadRequirementConditionBoxes@(requirementId)(conditions, placeholder, hideEmptyString) {
+                if (conditions.length > 0 || hideEmptyString)
+                    $(placeholder).html('');
+                else
+                    $(placeholder).html('@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.GroupIsEmpty")');
+
+                $(placeholder).append($("#discountManagerPlusRequirementTemplate@(requirementId)").render(conditions));
+
+                for (var i = 0; i < conditions.length; i++) {
+                    if (!conditions[i].ChildRequirements || conditions[i].ChildRequirements.length === 0)
+                        continue;
+
+                    var placeholderName = conditions[i].IsGroup
+                        ? '#discount-manager-plus-requirement-placeholder-g-@(requirementId)-' + conditions[i].GroupId
+                        : '#discount-manager-plus-requirement-placeholder-c-@(requirementId)-' + conditions[i].ConditionId;
+                    $(placeholderName).html('loading...');
+                    loadRequirementConditionBoxes@(requirementId)(conditions[i].ChildRequirements, placeholderName, false);
+                }
+            }
+
+            function updateRequirementGroupSelect@(requirementId)(groups, nextGroupId) {
+                var groupsElement = $("#ConditionGroupId@(requirementId)");
+                groupsElement.html('');
+                $.each(groups, function (id, option) {
+                    groupsElement.append($('<option></option>').val(option.Value).html(option.Text));
+                });
+
+                groupsElement.data('nextGroup', nextGroupId || 1);
+                if (groups.length > 1) {
+                    $("#pnlGroup@(requirementId)").showElement();
+                } else {
+                    $("#pnlGroup@(requirementId)").hideElement();
+                }
+            }
+
+            function openRequirementConditionCreatePopup@(requirementId)(addNewGroup) {
+                var groupId = 0;
+                if (addNewGroup) {
+                    groupId = $("#ConditionGroupId@(requirementId)").data('nextGroup') || 1;
+                } else {
+                    groupId = parseInt($("#ConditionGroupId@(requirementId)").val(), 10) || 1;
+                }
+
+                var url = '@(Url.Action("RequirementConditionCreatePopup", "DiscountManagerPlusRequirement", new { discountRequirementId = requirementId }))';
+                if (groupId > 0)
+                    url += '&conditionGroup=' + groupId;
+
+                OpenWindow(url, 860, 760, true);
+                return false;
+            }
+
+            function openRequirementConditionEditPopup@(requirementId)(id) {
+                OpenWindow('@Url.Action("RequirementConditionEditPopup", "DiscountManagerPlusRequirement")?id=' + id, 860, 760, true);
+                return false;
+            }
+
+            function deleteRequirementCondition@(requirementId)(id) {
+                loadRequirementConditions@(requirementId)(id, 0, 0, true, false);
+            }
+
+            function deleteRequirementConditionGroup@(requirementId)(groupId) {
+                loadRequirementConditions@(requirementId)(0, groupId, 0, false, true);
+            }
+
+            function changeRequirementInteraction@(requirementId)(groupId, typeId) {
+                loadRequirementConditions@(requirementId)(0, groupId, typeId, false, false);
+            }
+        </script>
+
+        <div id="discount-manager-plus-requirement-container-@(requirementId)"></div>
+
+        <script id="discountManagerPlusRequirementTemplate@(requirementId)" type="text/x-jsrender">
+            <div class="requirement-container {{if IsGroup}}requirement-group{{/if}}" id="discountmanagerplusrequirement{{if IsGroup}}{{>GroupId}}{{else}}{{>ConditionId}}{{/if}}">
+                <div class="requirement-heading clearfix">
+                    {{if IsGroup}}
+                    <span class="float-left margin-r-5">
+                        @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Group.Title")
+                        <i>{{:RuleName}}</i>
+                    </span>
+                    <div class="interaction-type float-left clearfix">
+                        <span class="float-left margin-r-10">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.InteractionTypeInGroup")</span>
+                        <select class="form-control input-sm float-left"
+                                id="interactiontype@(requirementId)-{{>GroupId}}"
+                                name="interactiontype@(requirementId)-{{>GroupId}}"
+                                onchange="changeRequirementInteraction@(requirementId)({{>GroupId}}, this.value)">
+                            {{for AvailableInteractionTypes}}
+                                {{if Selected}}
+                                    <option value="{{>Value}}" selected>{{>Text}}</option>
+                                {{else}}
+                                    <option value="{{>Value}}">{{>Text}}</option>
+                                {{/if}}
+                            {{/for}}
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-link" onclick="deleteRequirementConditionGroup@(requirementId)({{>GroupId}})">
+                        <i class="far fa-trash-can"></i>
+                        @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.RemoveGroup")
+                    </button>
+                    {{else}}
+                    <div class="float-left">
+                        @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Condition.Title")
+                    </div>
+                    <div class="float-right">
+                        <button type="button" class="btn btn-link" onclick="openRequirementConditionEditPopup@(requirementId)({{>ConditionId}})">
+                            <i class="far fa-pen-to-square"></i>
+                            @T("Admin.Common.Edit")
+                        </button>
+                        <button type="button" class="btn btn-link" onclick="deleteRequirementCondition@(requirementId)({{>ConditionId}})">
+                            <i class="far fa-trash-can"></i>
+                            @T("Admin.Common.Delete")
+                        </button>
+                    </div>
+                    {{/if}}
+                </div>
+                <div class="requirement-body">
+                    {{if IsGroup}}
+                    <div id="discount-manager-plus-requirement-placeholder-g-@(requirementId)-{{>GroupId}}"></div>
+                    {{else}}
+                    <div class="requirement-summary">{{:Summary}}</div>
+                    {{if ChildRequirements && ChildRequirements.length > 0}}
+                    <div class="mt-2" id="discount-manager-plus-requirement-placeholder-c-@(requirementId)-{{>ConditionId}}"></div>
+                    {{/if}}
+                    {{/if}}
+                </div>
+            </div>
+            {{if !IsGroup && !IsLastInGroup}}
+            <div class="interaction-type-label">
+                {{>InteractionType}}
+            </div>
+            {{/if}}
+        </script>
+
+        <div class="card card-default card-add-requirement">
+            <div class="card-header">
+                @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.AddNew")
+            </div>
+            <div class="card-body">
+                <div class="form-group row d-none" id="pnlGroup@(requirementId)">
+                    <div class="col-md-3">
+                        <label for="ConditionGroupId@(requirementId)">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.ConditionGroup")</label>
+                    </div>
+                    <div class="col-md-9">
+                        <select id="ConditionGroupId@(requirementId)" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-9 offset-md-3">
+                        <button type="button" class="btn btn-primary" onclick="openRequirementConditionCreatePopup@(requirementId)(false)">
+                            <i class="fas fa-plus-square"></i>
+                            @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.AddNew")
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="openRequirementConditionCreatePopup@(requirementId)(true)">
+                            <i class="fas fa-folder-plus"></i>
+                            @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.AddGroup")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nop-alert asp-alert-id="getRequirementConditionsAlert@(requirementId)" asp-alert-message="@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Alert.FailedGet")" />
+</div>

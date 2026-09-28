@@ -1,0 +1,93 @@
+@using Nop.Web.Areas.Admin.Components
+@model ConfigurationModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.DiscountManagerPlus.Configuration").Text;
+    NopHtml.SetActiveMenuItemSystemName("DiscountManagerPlus.Configuration");
+}
+
+<form asp-controller="DiscountManagerPlus" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DiscountManagerPlus.Configuration")
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
+                <div asp-validation-summary="All"></div>
+
+                <div class="cards-group">
+                    <div class="card card-default">
+                        <div class="card-body">
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="IsEnabled_OverrideForStore" asp-input="IsEnabled" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="IsEnabled" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="IsEnabled" />
+                                    <span asp-validation-for="IsEnabled"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="MaxRuleEvaluationTimeMs_OverrideForStore" asp-input="MaxRuleEvaluationTimeMs" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="MaxRuleEvaluationTimeMs" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="MaxRuleEvaluationTimeMs" />
+                                    <span asp-validation-for="MaxRuleEvaluationTimeMs"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnablePromotionBadge_OverrideForStore" asp-input="EnablePromotionBadge" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnablePromotionBadge" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnablePromotionBadge" />
+                                    <span asp-validation-for="EnablePromotionBadge"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="EnableCartSavingsBreakdown_OverrideForStore" asp-input="EnableCartSavingsBreakdown" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="EnableCartSavingsBreakdown" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="EnableCartSavingsBreakdown" />
+                                    <span asp-validation-for="EnableCartSavingsBreakdown"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <nop-override-store-checkbox asp-for="UseDefaultDiscountPipeline_OverrideForStore" asp-input="UseDefaultDiscountPipeline" asp-store-scope="Model.ActiveStoreScopeConfiguration" />
+                                    <nop-label asp-for="UseDefaultDiscountPipeline" />
+                                </div>
+                                <div class="col-md-9">
+                                    <nop-editor asp-for="UseDefaultDiscountPipeline" />
+                                    <span asp-validation-for="UseDefaultDiscountPipeline"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

@@ -1,0 +1,195 @@
+@model PromotionRuleAnalyticsSearchModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.DiscountManagerPlus.Analytics").Text;
+    NopHtml.SetActiveMenuItemSystemName("DiscountManagerPlus.Analytics");
+
+    const string hideSearchBlockAttributeName = "PromotionAnalyticsListPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="PromotionAnalytics" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DiscountManagerPlus.Analytics")
+        </h1>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <div class="cards-group">
+                    <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row search-row @(!hideSearchBlock ? "opened" : string.Empty)" data-hideattribute="@hideSearchBlockAttributeName">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                            </div>
+                            <div class="search-body @(hideSearchBlock ? "closed" : string.Empty)">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <div class="col-md-4"><nop-label asp-for="SearchCreatedFrom" /></div>
+                                            <div class="col-md-8"><nop-editor asp-for="SearchCreatedFrom" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <div class="col-md-4"><nop-label asp-for="SearchCreatedTo" /></div>
+                                            <div class="col-md-8"><nop-editor asp-for="SearchCreatedTo" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <div class="col-md-4"><nop-label asp-for="SearchStoreId" /></div>
+                                            <div class="col-md-8"><nop-select asp-for="SearchStoreId" asp-items="@Model.AvailableStores" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center col-12">
+                                        <button type="button" id="search-analytics" class="btn btn-primary btn-search">
+                                            <i class="fas fa-magnifying-glass"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="analytics-summary-row">
+                        <div class="col-md-3">
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3 id="summary-total-usage">0</h3>
+                                    <p>@T("Admin.NopStation.DiscountManagerPlus.Analytics.Summary.TotalUsage")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3 id="summary-total-discount">0.00</h3>
+                                    <p>@T("Admin.NopStation.DiscountManagerPlus.Analytics.Summary.TotalDiscount")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    <h3 id="summary-impact-rate">0%</h3>
+                                    <p>@T("Admin.NopStation.DiscountManagerPlus.Analytics.Summary.OrderImpactRate")</p>
+                                    <small id="summary-impacted-orders">0 / 0</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3 id="summary-total-revenue">0.00</h3>
+                                    <p>@T("Admin.NopStation.DiscountManagerPlus.Analytics.Summary.TotalRevenue")</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "promotion-analytics-grid",
+                                UrlRead = new DataUrl("List", "PromotionAnalytics", null),
+                                SearchButtonId = "search-analytics",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                Filters = new List<FilterParameter>
+                                {
+                                    new(nameof(Model.SearchCreatedFrom)),
+                                    new(nameof(Model.SearchCreatedTo)),
+                                    new(nameof(Model.SearchStoreId))
+                                },
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new(nameof(PromotionRuleAnalyticsModel.RuleName)) { Title = T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.RuleName").Text },
+                                    new(nameof(PromotionRuleAnalyticsModel.RuleTypeName)) { Title = T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.RuleType").Text, Width = "140" },
+                                    new(nameof(PromotionRuleAnalyticsModel.UsageCount)) { Title = T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.UsageCount").Text, Width = "100" },
+                                    new(nameof(PromotionRuleAnalyticsModel.ImpactedOrdersCount)) { Title = T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.ImpactedOrders").Text, Width = "120" },
+                                    new(nameof(PromotionRuleAnalyticsModel.ImpactedCustomersCount)) { Title = T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.ImpactedCustomers").Text, Width = "120" },
+                                    new(nameof(PromotionRuleAnalyticsModel.TotalDiscountAmount)) { Title = T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.TotalDiscount").Text, Width = "120" },
+                                    new(nameof(PromotionRuleAnalyticsModel.AverageDiscountPerOrder)) { Title = T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.AverageDiscountPerOrder").Text, Width = "130" },
+                                    new(nameof(PromotionRuleAnalyticsModel.TotalRevenueAmount)) { Title = T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.TotalRevenue").Text, Width = "120" },
+                                    new(nameof(PromotionRuleAnalyticsModel.OrderImpactRatePercent)) { Title = T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.OrderImpactRate").Text, Width = "110" },
+                                    new(nameof(PromotionRuleAnalyticsModel.IsActive))
+                                    {
+                                        Title = T("Admin.NopStation.DiscountManagerPlus.Analytics.Fields.IsActive").Text,
+                                        Width = "80",
+                                        Render = new RenderBoolean()
+                                    },
+                                    new(nameof(PromotionRuleAnalyticsModel.Id))
+                                    {
+                                        Title = T("Admin.Common.Edit").Text,
+                                        Width = "80",
+                                        ClassName = NopColumnClassDefaults.Button,
+                                        Render = new RenderButtonCustom(NopButtonClassDefaults.Default, T("Admin.Common.Edit").Text)
+                                        {
+                                            OnClickFunctionName = "editPromotionRule"
+                                        }
+                                    }
+                                }
+                            })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        loadAnalyticsSummary();
+
+        $('#search-analytics').on('click', function () {
+            $('#promotion-analytics-grid').DataTable().ajax.reload();
+            loadAnalyticsSummary();
+            return false;
+        });
+    });
+
+    function editPromotionRule(id) {
+        window.location = '@Url.Action("Edit", "PromotionRule")?id=' + id;
+        return false;
+    }
+
+    function loadAnalyticsSummary() {
+        var postData = {
+            SearchCreatedFrom: $('#@Html.IdFor(model => model.SearchCreatedFrom)').val(),
+            SearchCreatedTo: $('#@Html.IdFor(model => model.SearchCreatedTo)').val(),
+            SearchStoreId: $('#@Html.IdFor(model => model.SearchStoreId)').val()
+        };
+        addAntiForgeryToken(postData);
+
+        $.ajax({
+            cache: false,
+            type: 'POST',
+            url: '@Url.Action("Summary", "PromotionAnalytics")',
+            data: postData,
+            success: function (data) {
+                var totalUsageCount = data.totalUsageCount ?? data.TotalUsageCount ?? 0;
+                var totalDiscountAmount = data.totalDiscountAmount ?? data.TotalDiscountAmount ?? 0;
+                var orderImpactRatePercent = data.orderImpactRatePercent ?? data.OrderImpactRatePercent ?? 0;
+                var totalImpactedOrdersCount = data.totalImpactedOrdersCount ?? data.TotalImpactedOrdersCount ?? 0;
+                var totalOrdersCount = data.totalOrdersCount ?? data.TotalOrdersCount ?? 0;
+                var totalRevenueAmount = data.totalRevenueAmount ?? data.TotalRevenueAmount ?? 0;
+
+                $('#summary-total-usage').text(totalUsageCount);
+                $('#summary-total-discount').text(Number(totalDiscountAmount).toFixed(2));
+                $('#summary-impact-rate').text(Number(orderImpactRatePercent).toFixed(2) + '%');
+                $('#summary-impacted-orders').text(totalImpactedOrdersCount + ' / ' + totalOrdersCount);
+                $('#summary-total-revenue').text(Number(totalRevenueAmount).toFixed(2));
+            }
+        });
+    }
+</script>

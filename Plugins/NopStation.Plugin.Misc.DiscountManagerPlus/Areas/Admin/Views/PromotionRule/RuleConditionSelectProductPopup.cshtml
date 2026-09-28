@@ -1,0 +1,122 @@
+@model PromotionRuleSelectProductSearchModel
+
+@{
+    Layout = "_AdminPopupLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SelectProduct").Text;
+}
+
+<form asp-controller="PromotionRule" asp-action="RuleConditionSelectProductPopup"
+      asp-route-productIdInput="@Context.Request.Query["productIdInput"]"
+      asp-route-productNameInput="@Context.Request.Query["productNameInput"]"
+      asp-route-btnId="@Context.Request.Query["btnId"]">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.SelectProduct")
+        </h1>
+        <div class="float-right">
+            &nbsp;
+        </div>
+    </div>
+
+    @if (ViewBag.RefreshPage == true)
+    {
+        <script>
+            try {
+                window.opener.document.getElementById('@(Context.Request.Query["productIdInput"])').value = '@(ViewBag.ProductId)';
+                window.opener.document.getElementById('@(Context.Request.Query["productNameInput"])').innerHTML = '@(ViewBag.ProductName)';
+                window.opener.document.getElementById('@(Context.Request.Query["btnId"])').click();
+            } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        <input type="hidden" asp-for="AddProductModel.AssociatedToProductId" />
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="form-horizontal">
+                    <div class="cards-group">
+                        <div class="card card-default card-search card-popup">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group row">
+                                            <div class="col-sm-5">
+                                                <nop-label asp-for="SearchProductName" />
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <nop-editor asp-for="SearchProductName" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <button type="button" id="search-products" class="btn btn-primary btn-search">
+                                            <i class="fas fa-magnifying-glass"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card card-default">
+                            <div class="card-body">
+                                @await Html.PartialAsync("Table", new DataTablesModel
+                                {
+                                    Name = "products-grid",
+                                    UrlRead = new DataUrl("RuleConditionSelectProductPopupList", "PromotionRule", null),
+                                    SearchButtonId = "search-products",
+                                    Length = Model.PageSize,
+                                    LengthMenu = Model.AvailablePageSizes,
+                                    Filters = new List<FilterParameter>
+                                    {
+                                        new FilterParameter(nameof(Model.SearchProductName))
+                                    },
+                                    ColumnCollection = new List<ColumnProperty>
+                                    {
+                                        new ColumnProperty(nameof(PromotionRuleSelectProductModel.Id))
+                                        {
+                                            Title = T("Admin.Common.Select").Text,
+                                            Render = new RenderCustom("renderColumnSelectProduct"),
+                                            ClassName = NopColumnClassDefaults.Button,
+                                            Width = "50"
+                                        },
+                                        new ColumnProperty(nameof(PromotionRuleSelectProductModel.Name))
+                                        {
+                                            Title = T("Admin.Catalog.Products.Fields.Name").Text
+                                        },
+                                        new ColumnProperty(nameof(PromotionRuleSelectProductModel.Published))
+                                        {
+                                            Title = T("Admin.Catalog.Products.Fields.Published").Text,
+                                            Width = "100",
+                                            ClassName = NopColumnClassDefaults.CenterAll,
+                                            Render = new RenderBoolean()
+                                        }
+                                    }
+                                })
+                                <script>
+                                    function renderColumnSelectProduct(data, type, row, meta) {
+                                        return '<button type="button" onclick="selectConditionProduct(' + row.Id + ')" class="btn btn-default">@T("Admin.Common.Select").Text</button>';
+                                    }
+
+                                    function selectConditionProduct(productId) {
+                                        $("#@Html.IdFor(model => model.AddProductModel.AssociatedToProductId)").val(productId);
+                                        $('#save').trigger('click');
+                                    }
+                                </script>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" id="save" name="save" class="btn btn-default" style="display: none">
+                                    @T("Admin.Common.Save")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+</form>

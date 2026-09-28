@@ -1,0 +1,126 @@
+@model NopStation.Plugin.Misc.DiscountManagerPlus.Areas.Admin.Models.DiscountDetailsPromotionRulesModel
+
+@{
+    const string hideDiscountManagerPlusRulesBlockAttributeName = "DiscountPage.HideDiscountManagerPlusRulesBlock";
+    var customer = await workContext.GetCurrentCustomerAsync();
+    var hideDiscountManagerPlusRulesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideDiscountManagerPlusRulesBlockAttributeName, defaultValue: false);
+}
+
+<nop-card asp-name="discountmanagerplus-rules"
+          asp-icon="fas fa-tags"
+          asp-title="@T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.Title")"
+          asp-hide-block-attribute-name="@hideDiscountManagerPlusRulesBlockAttributeName"
+          asp-hide="@hideDiscountManagerPlusRulesBlock">
+    <div class="card-body">
+        @if (!Model.IsSavedDiscount)
+        {
+            <div class="text-muted mb-0">
+                @T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.SaveDiscountFirst")
+            </div>
+        }
+        else
+        {
+            <div class="mb-3 d-flex justify-content-between align-items-center">
+                <div class="text-muted">
+                    @T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.SafeSetupHint")
+                </div>
+                <button type="button"
+                        class="btn btn-primary"
+                        onclick="OpenWindow('@Url.Action("CreateParentDiscountRulePopup", "PromotionRule", new { discountId = Model.DiscountId })', 980, 780, true); return false;">
+                    <i class="fas fa-plus-square"></i>
+                    @T("Admin.Common.AddNew")
+                </button>
+            </div>
+
+            @if (!Model.Rules.Any())
+            {
+                <div class="text-muted mb-0">
+                    @T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.Empty")
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.Name")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.RuleType")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.CarryDefaultDiscount")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.SetupStatus")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.SetupSection.Products")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.SetupSection.Tiers")</th>
+                                <th>@T("Admin.NopStation.DiscountManagerPlus.PromotionRules.SetupSection.Conditions")</th>
+                                <th class="text-center">@T("Admin.Common.Actions")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var rule in Model.Rules)
+                            {
+                                <tr>
+                                    <td>
+                                        <div>@rule.Name</div>
+                                        <small class="text-muted">@rule.SystemName</small>
+                                    </td>
+                                    <td>@rule.RuleTypeName</td>
+                                    <td>@(rule.CarryDefaultDiscount ? T("Admin.Common.Yes").Text : T("Admin.Common.No").Text)</td>
+                                    <td>
+                                        <div>@rule.SetupStatus</div>
+                                        @if (!string.IsNullOrWhiteSpace(rule.SetupDetails))
+                                        {
+                                            <small class="text-muted">@rule.SetupDetails</small>
+                                        }
+                                    </td>
+                                    <td>@rule.RuleProductCount</td>
+                                    <td>@rule.RuleTierCount</td>
+                                    <td>@rule.RuleConditionCount</td>
+                                    <td class="text-center text-nowrap">
+                                        <button type="button"
+                                                class="btn btn-default"
+                                                onclick="OpenWindow('@Url.Action("EditParentDiscountRulePopup", "PromotionRule", new { id = rule.Id, discountId = Model.DiscountId })', 980, 780, true); return false;">
+                                            @T("Admin.Common.Edit")
+                                        </button>
+                                        <a class="btn btn-secondary"
+                                           href="@Url.Action("Edit", "PromotionRule", new { id = rule.Id })"
+                                           target="_blank">
+                                            @T("Admin.NopStation.DiscountManagerPlus.DiscountIntegration.Actions.OpenRule")
+                                        </a>
+                                        <button type="button"
+                                                class="btn btn-danger"
+                                                onclick="deleteDiscountManagerPlusRule(@rule.Id, @Model.DiscountId); return false;">
+                                            @T("Admin.Common.Delete")
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <script asp-location="Footer">
+                function deleteDiscountManagerPlusRule(id, discountId) {
+                    if (!confirm('@T("Admin.Common.AreYouSure")')) {
+                        return;
+                    }
+
+                    $.ajax({
+                        cache: false,
+                        type: "POST",
+                        url: "@Url.Action("DeleteParentDiscountRule", "PromotionRule")",
+                        data: addAntiForgeryToken({
+                            id: id,
+                            discountId: discountId
+                        }),
+                        success: function () {
+                            location.reload();
+                        },
+                        error: function () {
+                            location.reload();
+                        }
+                    });
+                }
+            </script>
+        }
+    </div>
+</nop-card>

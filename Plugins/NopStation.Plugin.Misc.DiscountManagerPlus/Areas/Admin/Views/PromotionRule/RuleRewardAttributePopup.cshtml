@@ -1,0 +1,72 @@
+@model PromotionRuleRewardAttributePopupModel
+
+@{
+    Layout = "_AdminPopupLayout";
+    ViewBag.PageTitle = T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.Choose").Text;
+}
+
+<form asp-controller="PromotionRule" asp-action="RuleRewardAttributePopup" method="post" enctype="multipart/form-data" id="reward-attribute-form">
+    <input asp-for="ProductId" type="hidden" />
+    <input type="hidden" name="valueIdsInput" value="@(ViewBag.ValueIdsInput ?? string.Empty)" />
+    <input type="hidden" name="btnId" value="@(ViewBag.BtnId ?? string.Empty)" />
+
+    <div class="content-header clearfix">
+        <h1 class="float-left">@T("Admin.NopStation.DiscountManagerPlus.RuleProducts.Fields.RewardAttributeValueIds.Choose")</h1>
+        <div class="float-right">&nbsp;</div>
+    </div>
+
+    @if (ViewBag.RefreshPage == true)
+    {
+        <script>
+            try {
+                var input = window.opener.document.getElementById('@(ViewBag.ValueIdsInput ?? string.Empty)');
+                if (input) {
+                    input.value = '@Model.RewardAttributeValueIds';
+                }
+                var btn = window.opener.document.getElementById('@(ViewBag.BtnId ?? string.Empty)');
+                if (btn) {
+                    btn.click();
+                }
+            } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        <section class="content">
+            <div class="container-fluid">
+                <div class="form-horizontal">
+                    <div class="cards-group">
+                        <div class="card card-default card-popup">
+                            <div class="card-body">
+                                <div asp-validation-summary="All"></div>
+
+                                @if (Model.Warnings.Any())
+                                {
+                                    <div class="callout callout-danger">
+                                        <ul>
+                                            @foreach (var warning in Model.Warnings)
+                                            {
+                                                <li>@warning</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+
+                                @{
+                                    var dataDict = new ViewDataDictionary(ViewData) { new KeyValuePair<string, object>("productId", Model.ProductId) };
+                                }
+                                @await Html.PartialAsync("~/Plugins/NopStation.Plugin.Misc.DiscountManagerPlus/Areas/Admin/Views/PromotionRule/_RewardProductAttributes.cshtml", Model.ProductAttributes, dataDict)
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="far fa-save"></i>@T("Admin.Common.Save")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+</form>

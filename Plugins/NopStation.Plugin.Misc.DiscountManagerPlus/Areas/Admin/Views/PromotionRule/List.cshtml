@@ -1,0 +1,129 @@
+@model PromotionRuleSearchModel
+
+@{
+    ViewBag.PageTitle = T("Admin.NopStation.DiscountManagerPlus.PromotionRules").Text;
+    NopHtml.SetActiveMenuItemSystemName("DiscountManagerPlus.Rules");
+
+    const string hideSearchBlockAttributeName = "PromotionRuleListPage.HideSearchBlock";
+    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+}
+
+<form asp-controller="PromotionRule" asp-action="List" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @T("Admin.NopStation.DiscountManagerPlus.PromotionRules")
+        </h1>
+        <div class="float-right">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-square-plus"></i>
+                @T("Admin.Common.AddNew")
+            </a>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+
+                <div class="cards-group">
+                    <div class="card card-default card-search">
+                        <div class="card-body">
+                            <div class="row search-row @(!hideSearchBlock ? "opened" : string.Empty)" data-hideattribute="@hideSearchBlockAttributeName">
+                                <div class="search-text">@T("Admin.Common.Search")</div>
+                                <div class="icon-search"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></div>
+                                <div class="icon-collapse"><i class="far fa-angle-@(!hideSearchBlock ? "up" : "down")" aria-hidden="true"></i></div>
+                            </div>
+                            <div class="search-body @(hideSearchBlock ? "closed" : string.Empty)">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group row">
+                                            <div class="col-md-4"><nop-label asp-for="SearchName" /></div>
+                                            <div class="col-md-8"><nop-editor asp-for="SearchName" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group row">
+                                            <div class="col-md-4"><nop-label asp-for="SearchRuleTypeId" /></div>
+                                            <div class="col-md-8">
+                                                <nop-select asp-for="SearchRuleTypeId" asp-items="@Model.AvailableRuleTypes" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group row">
+                                            <div class="col-md-4"><nop-label asp-for="SearchIsActive" /></div>
+                                            <div class="col-md-8"><nop-editor asp-for="SearchIsActive" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="text-center col-12">
+                                        <button type="button" id="search-promotion-rules" class="btn btn-primary btn-search">
+                                            <i class="fas fa-magnifying-glass"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "promotion-rules-grid",
+                                UrlRead = new DataUrl("List", "PromotionRule", null),
+                                SearchButtonId = "search-promotion-rules",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                Filters = new List<FilterParameter>
+                                {
+                                    new(nameof(Model.SearchName)),
+                                    new(nameof(Model.SearchRuleTypeId)),
+                                    new(nameof(Model.SearchIsActive))
+                                },
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new(nameof(PromotionRuleModel.Name)) { Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.Name").Text },
+                                    new(nameof(PromotionRuleModel.RuleTypeName)) { Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.RuleType").Text },
+                                    new(nameof(PromotionRuleModel.DiscountTypeName)) { Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.DiscountType").Text },
+                                    new(nameof(PromotionRuleModel.DiscountScopeName)) { Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.DiscountScope").Text, Width = "140" },
+                                    new(nameof(PromotionRuleModel.DiscountValue)) { Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.DiscountValue").Text },
+                                    new(nameof(PromotionRuleModel.SetupStatus)) { Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.SetupStatus").Text, Width = "140" },
+                                    new(nameof(PromotionRuleModel.SetupDetails)) { Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.SetupDetails").Text },
+                                    new(nameof(PromotionRuleModel.Priority)) { Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.Priority").Text, Width = "80" },
+                                    new(nameof(PromotionRuleModel.IsActive))
+                                    {
+                                        Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.Fields.IsActive").Text,
+                                        Width = "80",
+                                        Render = new RenderBoolean()
+                                    },
+                                    new(nameof(PromotionRuleModel.Id))
+                                    {
+                                        Title = T("Admin.Common.Edit").Text,
+                                        Width = "80",
+                                        ClassName = NopColumnClassDefaults.Button,
+                                        Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                    }
+                                }
+                            })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</form>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('#search-promotion-rules').on('click', function () {
+            $('#promotion-rules-grid').DataTable().ajax.reload();
+            return false;
+        });
+    });
+</script>

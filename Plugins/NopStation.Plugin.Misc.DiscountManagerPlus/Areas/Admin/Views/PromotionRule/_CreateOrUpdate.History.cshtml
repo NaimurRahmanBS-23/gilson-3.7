@@ -1,0 +1,65 @@
+@model PromotionRuleUsageHistorySearchModel
+
+<div class="card-body">
+    @if (Model.UseParentDiscountHistory)
+    {
+        <div class="text-muted mb-2">
+            @string.Format(T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.ParentDiscount.Note").Text, Model.ParentDiscountName)
+        </div>
+    }
+
+    @await Html.PartialAsync("Table", new DataTablesModel
+    {
+        Name = "rule-usage-history-grid",
+        UrlRead = new DataUrl("RuleUsageHistoryList", "PromotionRule", new RouteValueDictionary { [nameof(Model.PromotionRuleId)] = Model.PromotionRuleId }),
+        Length = Model.PageSize,
+        LengthMenu = Model.AvailablePageSizes,
+        ColumnCollection = new List<ColumnProperty>
+        {
+            new(nameof(PromotionRuleUsageHistoryModel.CreatedOn))
+            {
+                Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.CreatedOn").Text,
+                Width = "180",
+                Render = new RenderDate()
+            },
+            new(nameof(PromotionRuleUsageHistoryModel.CustomOrderNumber))
+            {
+                Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.Order").Text,
+                Width = "200",
+                ClassName = NopColumnClassDefaults.Button,
+                Render = new RenderCustom("renderRuleUsageOrderInfo")
+            },
+            new(nameof(PromotionRuleUsageHistoryModel.CustomerEmail))
+            {
+                Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.Customer").Text,
+                Width = "220"
+            },
+            new(nameof(PromotionRuleUsageHistoryModel.OrderTotal))
+            {
+                Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.OrderTotal").Text,
+                Width = "120"
+            },
+            new(nameof(PromotionRuleUsageHistoryModel.DiscountAmountApplied))
+            {
+                Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.Discount").Text,
+                Width = "130"
+            },
+            new(nameof(PromotionRuleUsageHistoryModel.HistorySource))
+            {
+                Title = T("Admin.NopStation.DiscountManagerPlus.PromotionRules.History.Fields.Source").Text,
+                Width = "200"
+            }
+        }
+    })
+
+    <script asp-location="Footer">
+        function renderRuleUsageOrderInfo(data, type, row, meta) {
+            var textRenderer = $.fn.dataTable.render.text().display;
+            if (row.OrderId > 0) {
+                return '<a class="btn btn-default" href="@Url.Content("~/Admin/Order/Edit/")' + row.OrderId + '"><i class="far fa-eye"></i>' + textRenderer(row.CustomOrderNumber) + ' - @T("Admin.Common.View").Text</a>';
+            }
+
+            return textRenderer(row.CustomOrderNumber);
+        }
+    </script>
+</div>

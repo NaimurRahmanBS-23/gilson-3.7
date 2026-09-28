@@ -1,0 +1,407 @@
+@model PromotionRuleConditionModel
+
+@{
+    Layout = "_AdminPopupLayout";
+    var isEditMode = Model.Id > 0;
+    var popupTitle = isEditMode
+        ? T("Admin.NopStation.DiscountManagerPlus.RuleConditions.EditDetails").Text
+        : T("Admin.NopStation.DiscountManagerPlus.RuleConditions.AddNew").Text;
+    ViewBag.PageTitle = popupTitle;
+    var formAction = isEditMode ? "RuleConditionEditPopup" : "RuleConditionCreatePopup";
+}
+
+<form asp-controller="PromotionRule" asp-action="@formAction" method="post">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="PromotionRuleId" type="hidden" />
+    <input asp-for="RuleTypeId" type="hidden" />
+
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            @popupTitle
+        </h1>
+        <div class="float-right">
+            &nbsp;
+        </div>
+    </div>
+
+    @if (ViewBag.RefreshPage == true)
+    {
+        <script>
+            try { window.opener.refreshConditionsGrid(); } catch (e) {}
+            window.close();
+        </script>
+    }
+    else
+    {
+        <section class="content">
+            <div class="container-fluid">
+                <div class="form-horizontal">
+                    <div class="cards-group">
+                        <div class="card card-default card-popup">
+                            <div class="card-body">
+                                <div asp-validation-summary="All"></div>
+
+                                <div class="form-group row" id="condition-operator-row">
+                                    <div class="col-md-4"><nop-label asp-for="ConditionOperatorId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="ConditionOperatorId" asp-items="@Model.AvailableConditionOperators" />
+                                        <span asp-validation-for="ConditionOperatorId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-4"><nop-label asp-for="ConditionGroup" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="ConditionGroup" />
+                                        <span asp-validation-for="ConditionGroup"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-4"><nop-label asp-for="ParentConditionId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="ParentConditionId" asp-items="@Model.AvailableParentConditions" />
+                                        <span asp-validation-for="ParentConditionId"></span>
+                                        <div class="text-muted mt-1">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.ParentCondition.Hint")</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-4"><nop-label asp-for="LogicalOperatorId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="LogicalOperatorId" asp-items="@Model.AvailableLogicalOperators" />
+                                        <span asp-validation-for="LogicalOperatorId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-min-value-row">
+                                    <div class="col-md-4"><nop-label asp-for="MinValue" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="MinValue" />
+                                        <span asp-validation-for="MinValue"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-max-value-row">
+                                    <div class="col-md-4"><nop-label asp-for="MaxValue" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="MaxValue" />
+                                        <span asp-validation-for="MaxValue"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-required-product-row">
+                                    <div class="col-md-4"><nop-label asp-for="RequiredProductId" /></div>
+                                    <div class="col-md-8">
+                                        <input type="hidden" asp-for="RequiredProductId" />
+                                        <span id="required-product-name">@Model.RequiredProductName</span>
+                                        <span asp-validation-for="RequiredProductId"></span>
+                                        <button type="submit"
+                                                onclick="javascript:OpenWindow('@(Url.Action("RuleConditionSelectProductPopup", "PromotionRule", new { productIdInput = Html.IdFor(model => model.RequiredProductId), productNameInput = "required-product-name", btnId = "btnRefreshRequiredProduct" }))', 800, 850, true); return false;"
+                                                class="btn btn-primary">
+                                            @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.Product.Choose")
+                                        </button>
+                                        <button type="submit" id="required-product-name-remove" class="btn btn-danger">
+                                            @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.Product.Remove")
+                                        </button>
+                                        <button type="submit" id="btnRefreshRequiredProduct" style="display: none"></button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-excluded-product-row">
+                                    <div class="col-md-4"><nop-label asp-for="ExcludedProductId" /></div>
+                                    <div class="col-md-8">
+                                        <input type="hidden" asp-for="ExcludedProductId" />
+                                        <span id="excluded-product-name">@Model.ExcludedProductName</span>
+                                        <span asp-validation-for="ExcludedProductId"></span>
+                                        <button type="submit"
+                                                onclick="javascript:OpenWindow('@(Url.Action("RuleConditionSelectProductPopup", "PromotionRule", new { productIdInput = Html.IdFor(model => model.ExcludedProductId), productNameInput = "excluded-product-name", btnId = "btnRefreshExcludedProduct" }))', 800, 850, true); return false;"
+                                                class="btn btn-primary">
+                                            @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.Product.Choose")
+                                        </button>
+                                        <button type="submit" id="excluded-product-name-remove" class="btn btn-danger">
+                                            @T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.Product.Remove")
+                                        </button>
+                                        <button type="submit" id="btnRefreshExcludedProduct" style="display: none"></button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-source-restriction-row">
+                                    <div class="col-md-4"><nop-label asp-for="ConditionRestrictionTypeId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="ConditionRestrictionTypeId" asp-items="@Model.AvailableConditionRestrictionTypes" />
+                                        <span asp-validation-for="ConditionRestrictionTypeId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-source-type-row">
+                                    <div class="col-md-4"><nop-label asp-for="ConditionSourceTypeId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="ConditionSourceTypeId" asp-items="@Model.AvailableConditionSourceTypes" />
+                                        <span asp-validation-for="ConditionSourceTypeId"></span>
+                                        <div class="text-muted mt-1">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.ConditionSourceType.Hint")</div>
+                                    </div>
+                                </div>
+
+                                @await Html.PartialAsync("~/Plugins/NopStation.Plugin.Misc.DiscountManagerPlus/Areas/Admin/Views/Shared/_ConditionSourceBuilder.cshtml", Model)
+
+                                <div class="form-group row" id="condition-same-line-row">
+                                    <div class="col-md-4"><nop-label asp-for="RequireSameLineMatch" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="RequireSameLineMatch" />
+                                        <span asp-validation-for="RequireSameLineMatch"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-quantity-min-row">
+                                    <div class="col-md-4"><nop-label asp-for="QuantityMin" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="QuantityMin" />
+                                        <span asp-validation-for="QuantityMin"></span>
+                                        <div class="text-muted mt-1">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.QuantityMin.Hint")</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-quantity-max-row">
+                                    <div class="col-md-4"><nop-label asp-for="QuantityMax" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="QuantityMax" />
+                                        <span asp-validation-for="QuantityMax"></span>
+                                        <div class="text-muted mt-1">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.QuantityMax.Hint")</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-attribute-match-mode-row">
+                                    <div class="col-md-4"><nop-label asp-for="AttributeMatchModeId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="AttributeMatchModeId" asp-items="@Model.AvailableAttributeMatchModes" />
+                                        <span asp-validation-for="AttributeMatchModeId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-required-category-row">
+                                    <div class="col-md-4"><nop-label asp-for="RequiredCategoryId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="RequiredCategoryId" asp-items="@Model.AvailableCategories" />
+                                        <span asp-validation-for="RequiredCategoryId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-required-vendor-row">
+                                    <div class="col-md-4"><nop-label asp-for="RequiredVendorId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="RequiredVendorId" asp-items="@Model.AvailableVendors" />
+                                        <span asp-validation-for="RequiredVendorId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-required-role-row">
+                                    <div class="col-md-4"><nop-label asp-for="RequiredCustomerRoleId" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="RequiredCustomerRoleId" asp-items="@Model.AvailableCustomerRoles" />
+                                        <span asp-validation-for="RequiredCustomerRoleId"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-first-order-row">
+                                    <div class="col-md-4"><nop-label asp-for="IsFirstOrderOnly" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="IsFirstOrderOnly" />
+                                        <span asp-validation-for="IsFirstOrderOnly"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-new-customer-row">
+                                    <div class="col-md-4"><nop-label asp-for="IsNewCustomerOnly" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="IsNewCustomerOnly" />
+                                        <span asp-validation-for="IsNewCustomerOnly"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-country-row">
+                                    <div class="col-md-4"><nop-label asp-for="RequiredCountryCodesCsv" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="SelectedCountryCodes" asp-items="@Model.AvailableCountries" asp-multiple="true" />
+                                        <span asp-validation-for="SelectedCountryCodes"></span>
+                                        <div class="text-muted mt-1">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.RequiredCountryCodesCsv.Hint")</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-payment-row">
+                                    <div class="col-md-4"><nop-label asp-for="RequiredPaymentMethodsCsv" /></div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="SelectedPaymentMethodSystemNames" asp-items="@Model.AvailablePaymentMethods" asp-multiple="true" />
+                                        <span asp-validation-for="SelectedPaymentMethodSystemNames"></span>
+                                        <div class="text-muted mt-1">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.RequiredPaymentMethodsCsv.Hint")</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-order-count-min-row">
+                                    <div class="col-md-4"><nop-label asp-for="RequiredOrderCountMin" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="RequiredOrderCountMin" />
+                                        <span asp-validation-for="RequiredOrderCountMin"></span>
+                                        <div class="text-muted mt-1">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.RequiredOrderCountMin.Hint")</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="condition-order-count-max-row">
+                                    <div class="col-md-4"><nop-label asp-for="RequiredOrderCountMax" /></div>
+                                    <div class="col-md-8">
+                                        <nop-editor asp-for="RequiredOrderCountMax" />
+                                        <span asp-validation-for="RequiredOrderCountMax"></span>
+                                        <div class="text-muted mt-1">@T("Admin.NopStation.DiscountManagerPlus.RuleConditions.Fields.RequiredOrderCountMax.Hint")</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="far fa-save"></i>@T("Admin.Common.Save")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script asp-location="Footer">
+            $(document).ready(function() {
+                toggleConditionFields();
+                $('#ConditionOperatorId').on('change', toggleConditionMaxValue);
+                $('#ConditionSourceTypeId').on('change', toggleConditionSourceFields);
+                $('#ConditionSourceTypeId').on('change', toggleContextualConditionRows);
+                $('#@Html.IdFor(model => model.RequiredCategoryId)').select2({ width: '100%' });
+                $('#@Html.IdFor(model => model.RequiredVendorId)').select2({ width: '100%' });
+                $('#@Html.IdFor(model => model.RequiredCustomerRoleId)').select2({ width: '100%' });
+                $('#@Html.IdFor(model => model.SelectedCountryCodes)').select2({ closeOnSelect: false });
+                $('#@Html.IdFor(model => model.SelectedPaymentMethodSystemNames)').select2({ closeOnSelect: false });
+                toggleProductRemoveButtons();
+                toggleContextualConditionRows();
+
+                $('#required-product-name-remove').on('click', function() {
+                    clearSelectedProduct('#@Html.IdFor(model => model.RequiredProductId)', '#required-product-name');
+                    toggleProductRemoveButtons();
+                    return false;
+                });
+
+                $('#excluded-product-name-remove').on('click', function() {
+                    clearSelectedProduct('#@Html.IdFor(model => model.ExcludedProductId)', '#excluded-product-name');
+                    toggleProductRemoveButtons();
+                    return false;
+                });
+
+                $('#btnRefreshRequiredProduct, #btnRefreshExcludedProduct').on('click', function() {
+                    toggleProductRemoveButtons();
+                    toggleContextualConditionRows();
+                    return false;
+                });
+
+                $('#RequiredCategoryId, #RequiredVendorId').on('change', toggleContextualConditionRows);
+            });
+
+            function clearSelectedProduct(idSelector, nameSelector) {
+                $(idSelector).val('');
+                $(nameSelector).text('');
+            }
+
+            function toggleProductRemoveButtons() {
+                var requiredId = parseInt($('#@Html.IdFor(model => model.RequiredProductId)').val(), 10) || 0;
+                var excludedId = parseInt($('#@Html.IdFor(model => model.ExcludedProductId)').val(), 10) || 0;
+
+                if (requiredId > 0) {
+                    $('#required-product-name-remove').showElement();
+                } else {
+                    $('#required-product-name-remove').hideElement();
+                }
+
+                if (excludedId > 0) {
+                    $('#excluded-product-name-remove').showElement();
+                } else {
+                    $('#excluded-product-name-remove').hideElement();
+                }
+            }
+
+            function toggleConditionFields() {
+                var ruleType = parseInt($('#RuleTypeId').val(), 10) || 0;
+                var isSubtotalBased = ruleType === @((int)PromotionRuleType.SubtotalBased);
+                var supportsCartMetric = isSubtotalBased || ruleType === @((int)PromotionRuleType.CartCondition);
+                var supportsSourceConditions = !isSubtotalBased;
+
+                $('#condition-operator-row').toggle(supportsCartMetric);
+                $('#condition-min-value-row').toggle(supportsCartMetric);
+                $('#condition-required-product-row').toggle(supportsSourceConditions);
+                $('#condition-excluded-product-row').toggle(supportsSourceConditions);
+                toggleConditionSourceFields();
+
+                if (supportsCartMetric) {
+                    toggleConditionMaxValue();
+                    if (isSubtotalBased) {
+                        clearSelectedProduct('#@Html.IdFor(model => model.RequiredProductId)', '#required-product-name');
+                        clearSelectedProduct('#@Html.IdFor(model => model.ExcludedProductId)', '#excluded-product-name');
+                        toggleProductRemoveButtons();
+                    }
+                } else {
+                    $('#condition-max-value-row').hide();
+                    $('#MinValue').val('0');
+                    $('#MaxValue').val('0');
+                }
+
+                toggleContextualConditionRows();
+            }
+
+            function toggleConditionSourceFields() {
+                var ruleType = parseInt($('#RuleTypeId').val(), 10) || 0;
+                var isSubtotalBased = ruleType === @((int)PromotionRuleType.SubtotalBased);
+                var sourceType = parseInt($('#ConditionSourceTypeId').val(), 10) || 0;
+
+                $('#condition-source-restriction-row').toggle(!isSubtotalBased);
+                $('#condition-source-type-row').toggle(!isSubtotalBased);
+                $('#condition-source-builder-row').toggle(!isSubtotalBased && sourceType > 0);
+                $('#condition-quantity-min-row').toggle(!isSubtotalBased);
+                $('#condition-quantity-max-row').toggle(!isSubtotalBased);
+                $('#condition-attribute-match-mode-row').toggle(!isSubtotalBased && sourceType === @((int)ConditionSourceType.ProductAttributeValues));
+            }
+
+            function toggleContextualConditionRows() {
+                var ruleType = parseInt($('#RuleTypeId').val(), 10) || 0;
+                var isSubtotalBased = ruleType === @((int)PromotionRuleType.SubtotalBased);
+                var sourceType = parseInt($('#ConditionSourceTypeId').val(), 10) || 0;
+                var requiredProductId = parseInt($('#@Html.IdFor(model => model.RequiredProductId)').val(), 10) || 0;
+                var excludedProductId = parseInt($('#@Html.IdFor(model => model.ExcludedProductId)').val(), 10) || 0;
+                var requiredCategoryId = parseInt($('#RequiredCategoryId').val(), 10) || 0;
+                var requiredVendorId = parseInt($('#RequiredVendorId').val(), 10) || 0;
+                var hasLineScopedSource = sourceType === @((int)ConditionSourceType.Products) ||
+                    sourceType === @((int)ConditionSourceType.Categories) ||
+                    sourceType === @((int)ConditionSourceType.Manufacturers) ||
+                    sourceType === @((int)ConditionSourceType.Vendors) ||
+                    sourceType === @((int)ConditionSourceType.SpecificationAttributeOptions) ||
+                    sourceType === @((int)ConditionSourceType.ProductAttributeValues) ||
+                    sourceType === @((int)ConditionSourceType.ExpiryDays);
+                var hasLineScopedCriteria = requiredProductId > 0 ||
+                    excludedProductId > 0 ||
+                    requiredCategoryId > 0 ||
+                    requiredVendorId > 0 ||
+                    hasLineScopedSource;
+
+                $('#condition-same-line-row').toggle(!isSubtotalBased && hasLineScopedCriteria);
+                if (isSubtotalBased || !hasLineScopedCriteria) {
+                    $('#RequireSameLineMatch').prop('checked', false);
+                }
+            }
+
+            function toggleConditionMaxValue() {
+                var op = parseInt($('#ConditionOperatorId').val(), 10) || 0;
+                var isBetween = op === @((int)ConditionOperator.Between);
+                $('#condition-max-value-row').toggle(isBetween);
+
+                if (!isBetween) {
+                    $('#MaxValue').val('0');
+                }
+            }
+
+        </script>
+    }
+</form>
