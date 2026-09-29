@@ -66,7 +66,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
             var settings = new DiscountManagerPlusSettings
             {
                 IsEnabled = true,
-                EnableCartSavingsBreakdown = true,
                 UseDefaultDiscountPipeline = true,
                 EnableLogging = false
             };
@@ -204,27 +203,14 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
         {
             return new List<string>
             {
-                "header_after",
-                "order_summary_content_before",
-                "order_summary_cart_footer",
-                "order_summary_content_after"
+                "header_after"
             };
         }
 
         public void GetDisplayWidgetRoute(string widgetZone, out string actionName, out string controllerName, out RouteValueDictionary routeValues)
         {
             controllerName = "DiscountManagerPlusPublic";
-
-            if (widgetZone == "order_summary_content_before" ||
-                widgetZone == "order_summary_cart_footer" ||
-                widgetZone == "order_summary_content_after")
-            {
-                actionName = "CartSavings";
-            }
-            else
-            {
-                actionName = "OffersLink";
-            }
+            actionName = "OffersLink";
 
             routeValues = new RouteValueDictionary
             {
@@ -321,8 +307,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Saved"] = "Configuration saved successfully.",
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.IsEnabled"] = "Plugin enabled",
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.IsEnabled.Hint"] = "Check to enable the Discount Manager Plus.",
-            ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableCartSavingsBreakdown"] = "Show cart savings breakdown",
-            ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableCartSavingsBreakdown.Hint"] = "Show a per-rule savings breakdown on the cart page.",
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.UseDefaultDiscountPipeline"] = "Use default nopCommerce discount pipeline",
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.UseDefaultDiscountPipeline.Hint"] = "When enabled, DiscountManagerPlus validates rule eligibility for nopCommerce discounts instead of calculating cart line discounts directly.",
             ["Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableLogging"] = "Enable plugin logging",
@@ -750,6 +734,8 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
             ["Plugins.NopStation.DiscountManagerPlus.CartSavings.Metric.PendingRewards"] = "Pending rewards",
             ["Plugins.NopStation.DiscountManagerPlus.CartSavings.Section.AppliedTitle"] = "Applied promotions",
             ["Plugins.NopStation.DiscountManagerPlus.CartSavings.Section.AppliedHint"] = "Each line below shows one promotion rule and the savings it is contributing to the cart right now.",
+            ["Plugins.NopStation.DiscountManagerPlus.CartSavings.AppliedCoupon.Title"] = "Applied discount code",
+            ["Plugins.NopStation.DiscountManagerPlus.CartSavings.AppliedCoupon.Text"] = "Discount code \"{0}\" is applied to your cart. Savings appear when your cart meets the offer rules.",
             ["Plugins.NopStation.DiscountManagerPlus.CartSavings.Footer"] = "Promotion totals update automatically when cart products, quantities, or reward selections change.",
             ["Plugins.NopStation.DiscountManagerPlus.CartSavings.RuleLabel"] = "Triggered by",
             ["Plugins.NopStation.DiscountManagerPlus.CartSavings.QuantityLabel"] = "Reward quantity",
@@ -826,10 +812,14 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus
             this.AddOrUpdatePluginLocaleResource("Admin.Common.None", "None");
             this.AddOrUpdatePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableLogging", "Enable plugin logging");
             this.AddOrUpdatePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableLogging.Hint", "Write Discount Manager Plus diagnostic messages to System > Log. Leave unchecked in production. Errors are still logged.");
+            this.AddOrUpdatePluginLocaleResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.AppliedCoupon.Title", "Applied discount code");
+            this.AddOrUpdatePluginLocaleResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.AppliedCoupon.Text", "Discount code \"{0}\" is applied to your cart. Savings appear when your cart meets the offer rules.");
             this.DeletePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.MaxRuleEvaluationTimeMs");
             this.DeletePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.MaxRuleEvaluationTimeMs.Hint");
             this.DeletePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnablePromotionBadge");
             this.DeletePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnablePromotionBadge.Hint");
+            this.DeletePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableCartSavingsBreakdown");
+            this.DeletePluginLocaleResource("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableCartSavingsBreakdown.Hint");
             this.DeletePluginLocaleResource("Plugins.NopStation.DiscountManagerPlus.PromotionBadge");
             _sharedResourcesEnsured = true;
         }

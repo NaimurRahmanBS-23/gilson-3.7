@@ -9,10 +9,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Admin.Models
         public bool IsEnabled { get; set; }
         public bool IsEnabled_OverrideForStore { get; set; }
 
-        [NopResourceDisplayName("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.EnableCartSavingsBreakdown")]
-        public bool EnableCartSavingsBreakdown { get; set; }
-        public bool EnableCartSavingsBreakdown_OverrideForStore { get; set; }
-
         [NopResourceDisplayName("Admin.NopStation.DiscountManagerPlus.Configuration.Fields.UseDefaultDiscountPipeline")]
         public bool UseDefaultDiscountPipeline { get; set; }
         public bool UseDefaultDiscountPipeline_OverrideForStore { get; set; }

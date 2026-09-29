@@ -12,6 +12,7 @@ using Nop.Plugin.Misc.DiscountManagerPlus.Domain;
 using Nop.Plugin.Misc.DiscountManagerPlus.Models;
 using Nop.Plugin.Misc.DiscountManagerPlus.Services;
 using Nop.Services.Catalog;
+using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
@@ -169,185 +170,8 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Controllers
         [ChildActionOnly]
         public ActionResult CartSavings(string widgetZone, object additionalData)
         {
-            if (HasAlreadyRenderedForRequest())
-                return Content("");
-
-            var store = _storeContext.CurrentStore;
-            var settings = _settingService.LoadSetting<DiscountManagerPlusSettings>(store.Id);
-            if (!settings.IsEnabled)
-                return Content("");
-
-            var cart = GetCart();
-            if (!cart.Any())
-                return Content("");
-
-            var appliedPromotions = _discountManagerPlusService.EvaluateCart(cart, store.Id);
-            var pendingRewards = appliedPromotions
-                .Where(x => x.RequiresRewardSelection)
-                .GroupBy(x => x.PromotionRuleId)
-                .Select(g => new
-                {
-                    PromotionRuleId = g.Key,
-                    RewardProductId = g.Select(x => x.RewardProductId).FirstOrDefault(x => x.HasValue && x.Value > 0),
-                    RewardQuantity = g.Max(x => x.RewardQuantity)
-                })
-                .ToList();
-
-            var reminderMessages = BuildTierUpgradeReminders(cart, store.Id, appliedPromotions);
-            var model = new CartSavingsModel();
-
-            if (settings.EnableCartSavingsBreakdown)
-            {
-                var ruleDiscountMap = _discountManagerPlusService.BuildRuleDiscountMap(cart, store.Id);
-                var groupedSavings = appliedPromotions
-                    .Select(x => new
-                    {
-                        Promotion = x,
-                        EffectiveAmount = ruleDiscountMap.ContainsKey(x.PromotionRuleId) ? ruleDiscountMap[x.PromotionRuleId] : 0m
-                    })
-                    .Where(x => x.EffectiveAmount > 0)
-                    .GroupBy(x => new { x.Promotion.PromotionRuleId, x.Promotion.RuleName })
-                    .Select(g => new
-                    {
-                        g.Key.PromotionRuleId,
-                        g.Key.RuleName,
-                        DiscountAmount = g.Sum(x => x.EffectiveAmount),
-                        RepresentativePromotion = g.Select(x => x.Promotion).FirstOrDefault()
-                    })
-                    .OrderByDescending(x => x.DiscountAmount)
-                    .ToList();
-
-                if (groupedSavings.Any())
-                {
-                    foreach (var groupedSaving in groupedSavings)
-                    {
-                        var representative = groupedSaving.RepresentativePromotion;
-                        var targetProductName = representative != null ? representative.TargetProductName ?? string.Empty : string.Empty;
-                        var appliedToText = !string.IsNullOrEmpty(targetProductName)
-                            ? string.Format("(Applied to {0})", targetProductName)
-                            : string.Empty;
-                        var isCoordinatedDiscount = groupedSavings.Count >= 2 && representative != null &&
-                            representative.RuleTypeId == (int)PromotionRuleType.BuyXGetY;
-                        var discountPriority = isCoordinatedDiscount
-                            ? groupedSavings.Count - groupedSavings.IndexOf(groupedSaving)
-                            : 0;
-
-                        model.Items.Add(new CartSavingsItemModel
-                        {
-                            PromotionRuleId = groupedSaving.PromotionRuleId,
-                            RuleName = groupedSaving.RuleName,
-                            BadgeText = GetSavingsBadge(representative),
-                            DetailText = GetSavingsDetail(representative),
-                            IsBogoStyle = representative != null && representative.RuleTypeId == (int)PromotionRuleType.BuyXGetY,
-                            DiscountAmount = groupedSaving.DiscountAmount,
-                            DiscountAmountFormatted = _priceFormatter.FormatPrice(groupedSaving.DiscountAmount, true, false),
-                            TargetProductName = targetProductName,
-                            AppliedToText = appliedToText,
-                            DiscountType = GetDiscountTypeLabel(representative),
-                            TargetSelectionText = GetCheapestItemSelectionText(representative),
-                            IsCoordinatedDiscount = isCoordinatedDiscount,
-                            DiscountPriority = discountPriority
-                        });
-                    }
-
-                    model.Title = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Title");
-                    model.TotalLabel = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Total");
-                    model.TotalSavings = model.Items.Sum(x => x.DiscountAmount);
-                    model.TotalSavingsFormatted = _priceFormatter.FormatPrice(model.TotalSavings, true, false);
-                    var savingsSummaryTemplate = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings");
-                    model.SummaryText = string.Format(savingsSummaryTemplate, model.TotalSavingsFormatted);
-                }
-            }
-
-            if (pendingRewards.Any())
-            {
-                model.PendingRewardsTitle = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.RewardSelection.Title");
-                model.PendingRewardsDescription = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.RewardSelection.Description");
-                model.PendingRewardsSelectText = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.RewardSelection.SelectReward");
-                model.PendingRewardsAddText = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.RewardSelection.AddToCart");
-
-                var addToCartUrl = Url.Action("AddRewardToCart", "DiscountManagerPlusPublic",
-                    new RouteValueDictionary { { "Namespaces", "Nop.Plugin.Misc.DiscountManagerPlus.Controllers" }, { "area", "" } }) ?? string.Empty;
-
-                var index = 0;
-                foreach (var pending in pendingRewards)
-                {
-                    var rule = _promotionRuleService.GetPromotionRuleById(pending.PromotionRuleId);
-                    if (rule == null)
-                        continue;
-
-                    var rewardOptionIds = GetPendingRewardOptionProductIds(rule, pending.RewardProductId, store.Id);
-                    if (!rewardOptionIds.Any())
-                        continue;
-
-                    var applied = appliedPromotions.FirstOrDefault(x => x.PromotionRuleId == pending.PromotionRuleId);
-                    var rewardSelection = new CartRewardSelectionModel
-                    {
-                        PromotionRuleId = pending.PromotionRuleId,
-                        RuleName = applied != null ? applied.RuleName : string.Empty,
-                        RewardQuantity = pending.RewardQuantity > 0 ? pending.RewardQuantity : 1,
-                        MaxSelectableQuantity = pending.RewardQuantity > 0 ? pending.RewardQuantity : 1,
-                        FormId = string.Format("promotion-reward-form-{0}-{1}", pending.PromotionRuleId, index),
-                        PopupId = string.Format("promotion-reward-popup-{0}-{1}", pending.PromotionRuleId, index),
-                        AddToCartUrl = addToCartUrl
-                    };
-
-                    foreach (var rewardOptionId in rewardOptionIds)
-                    {
-                        var product = _productService.GetProductById(rewardOptionId);
-                        if (product == null || product.Deleted || product.ProductType != ProductType.SimpleProduct)
-                            continue;
-
-                        var productModel = PrepareRewardProductDetailsModel(product);
-                        productModel.AddToCart.EnteredQuantity = pending.RewardQuantity > 0 ? pending.RewardQuantity : 1;
-
-                        rewardSelection.Options.Add(new CartRewardOptionModel
-                        {
-                            RewardProductId = rewardOptionId,
-                            RewardProductName = productModel.Name,
-                            RewardProductOldPrice = productModel.ProductPrice != null ? productModel.ProductPrice.OldPrice ?? string.Empty : string.Empty,
-                            RewardProductPrice = productModel.ProductPrice != null ? productModel.ProductPrice.Price ?? string.Empty : string.Empty,
-                            ImageUrl = productModel.PictureModels != null && productModel.PictureModels.Any()
-                                ? productModel.PictureModels.First().ImageUrl ?? string.Empty
-                                : string.Empty,
-                            IsSelected = rewardSelection.Options.Count == 0,
-                            Product = productModel
-                        });
-                    }
-
-                    if (rewardSelection.Options.Any())
-                    {
-                        model.PendingRewards.Add(rewardSelection);
-                        index++;
-                    }
-                }
-            }
-
-            if (reminderMessages.Any())
-            {
-                model.ReminderTitle = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Reminder.Title");
-                foreach (var reminder in reminderMessages)
-                    model.Reminders.Add(reminder);
-            }
-
-            foreach (var warning in BuildExcludedProductWarnings(cart, store.Id, appliedPromotions))
-                model.ExcludedProductWarnings.Add(warning);
-
-            foreach (var notice in BuildMultipleDiscountNotices(appliedPromotions))
-                model.MultipleDiscountNotices.Add(notice);
-
-            foreach (var detail in BuildCheapestItemSelectionDetails(cart, appliedPromotions))
-                model.CheapestItemSelectionDetails.Add(detail);
-
-            GenerateDualOfferMessaging(cart, appliedPromotions, model);
-
-            if (!model.Items.Any() && !model.PendingRewards.Any() && !model.Reminders.Any() &&
-                !model.ExcludedProductWarnings.Any() && !model.MultipleDiscountNotices.Any() &&
-                !model.CheapestItemSelectionDetails.Any() && !model.AttentionMessages.Any())
-                return Content("");
-
-            MarkRenderedForRequest();
-            return View(ViewRoot + "CartSavings.cshtml", model);
+            // Cart savings widget UI is disabled. Applied coupon messaging uses DiscountBox.
+            return Content("");
         }
 
         [ChildActionOnly]
@@ -643,53 +467,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Controllers
             return model;
         }
 
-        private string GetSavingsBadge(AppliedPromotion promotion)
-        {
-            if (promotion == null)
-                return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Badge.Discount");
-
-            if (promotion.RuleTypeId == (int)PromotionRuleType.BuyXGetY)
-                return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Badge.Bogo");
-
-            if (promotion.DiscountTypeId == (int)DiscountType.Percentage)
-                return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Badge.Percentage");
-
-            if (promotion.DiscountTypeId == (int)DiscountType.FixedAmount ||
-                promotion.DiscountTypeId == (int)DiscountType.FixedBundlePrice)
-                return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Badge.Fixed");
-
-            return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Badge.Discount");
-        }
-
-        private string GetSavingsDetail(AppliedPromotion promotion)
-        {
-            if (promotion == null)
-                return string.Empty;
-
-            if (promotion.RuleTypeId == (int)PromotionRuleType.BuyXGetY)
-            {
-                if (promotion.DiscountTypeId == (int)DiscountType.FreeItem)
-                {
-                    return string.Format(
-                        _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Detail.BogoFree"),
-                        promotion.RewardQuantity > 0 ? promotion.RewardQuantity : 1);
-                }
-
-                return string.Format(
-                    _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Detail.BogoDiscounted"),
-                    promotion.RewardQuantity > 0 ? promotion.RewardQuantity : 1);
-            }
-
-            if (promotion.DiscountTypeId == (int)DiscountType.Percentage)
-                return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Detail.Percentage");
-
-            if (promotion.DiscountTypeId == (int)DiscountType.FixedAmount ||
-                promotion.DiscountTypeId == (int)DiscountType.FixedBundlePrice)
-                return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Detail.Fixed");
-
-            return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Detail.Default");
-        }
-
         private IList<string> BuildTierUpgradeReminders(IList<ShoppingCartItem> cart, int storeId, IList<AppliedPromotion> appliedPromotions)
         {
             var reminders = new List<string>();
@@ -951,57 +728,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Controllers
             var discountType = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Badge.Discount");
             var template = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.CheapestItemDetail");
             return string.Format(template, discountType, productName, discountAmount);
-        }
-
-        private string GetDiscountTypeLabel(AppliedPromotion promotion)
-        {
-            if (promotion == null)
-                return string.Empty;
-
-            if (promotion.RuleTypeId == (int)PromotionRuleType.BuyXGetY)
-            {
-                if (promotion.DiscountTypeId == (int)DiscountType.FreeItem)
-                    return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Badge.Bogo");
-
-                var discountPercent = promotion.DiscountValue > 0 ? promotion.DiscountValue : 50;
-                return string.Format(
-                    _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Detail.BogoDiscounted"),
-                    promotion.RewardQuantity > 0 ? promotion.RewardQuantity : 1, discountPercent);
-            }
-
-            if (promotion.DiscountTypeId == (int)DiscountType.Percentage)
-                return string.Format(_localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Detail.Percentage"), promotion.DiscountValue.ToString("0.##"));
-
-            if (promotion.DiscountTypeId == (int)DiscountType.FixedAmount)
-                return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Detail.Fixed");
-
-            return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.Detail.Default");
-        }
-
-        private string GetCheapestItemSelectionText(AppliedPromotion promotion)
-        {
-            if (promotion == null)
-                return string.Empty;
-
-            if (promotion.RuleTypeId != (int)PromotionRuleType.BuyXGetY)
-                return string.Empty;
-
-            var targetProduct = promotion.TargetProductName;
-            if (string.IsNullOrEmpty(targetProduct) && promotion.LineDiscounts != null && promotion.LineDiscounts.Any())
-                return _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.MultipleOfferApplied");
-
-            if (string.IsNullOrEmpty(targetProduct))
-                return string.Empty;
-
-            if (promotion.DiscountTypeId == (int)DiscountType.FreeItem)
-            {
-                var template = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.CheapestItemSelected");
-                return string.Format(template, targetProduct);
-            }
-
-            var discountTemplate = _localizationService.GetResource("Plugins.NopStation.DiscountManagerPlus.CartSavings.CheapestItemSelectedDiscount");
-            var discountPercent = promotion.DiscountValue > 0 ? promotion.DiscountValue.ToString("0.##") : "50";
-            return string.Format(discountTemplate, targetProduct, discountPercent);
         }
 
         private void GenerateDualOfferMessaging(IList<ShoppingCartItem> cart, IList<AppliedPromotion> appliedPromotions, CartSavingsModel model)

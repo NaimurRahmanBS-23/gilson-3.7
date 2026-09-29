@@ -44,6 +44,14 @@
 <div class="ns-discount-manager-plus-cart-root ns-dmp-cart-savings-root"
      data-auto-open-popup="@(string.IsNullOrWhiteSpace(autoOpenPopupId) ? string.Empty : "#" + autoOpenPopupId)"
      data-reward-error="@rewardAddFailedMessage">
+    @if (Model.HasAppliedCoupon)
+    {
+        <div class="ns-discount-manager-plus-applied-coupon">
+            <div class="title">@Model.AppliedCouponTitle</div>
+            <div class="message">@Model.AppliedCouponText</div>
+        </div>
+    }
+
     @if (Model.Reminders.Any())
     {
         <div class="ns-discount-manager-plus-reminders">
@@ -326,58 +334,13 @@
         }
     }
 
-    @if (Model.Items.Any())
-    {
-        <div class="ns-discount-manager-plus-savings">
-            @if (!string.IsNullOrWhiteSpace(Model.SummaryText))
-            {
-                <div class="summary">@Model.SummaryText</div>
-            }
-            <div class="title">@Model.Title</div>
-            <ul>
-                @foreach (var item in Model.Items)
-                {
-                    <li class="@(item.IsBogoStyle ? "bogo-item" : "discount-item")">
-                        <span class="item-left">
-                            @if (!string.IsNullOrWhiteSpace(item.BadgeText))
-                            {
-                                <span class="badge">@item.BadgeText</span>
-                            }
-                            <span class="name">@item.RuleName</span>
-                            @if (!string.IsNullOrWhiteSpace(item.DetailText))
-                            {
-                                <small class="detail">@item.DetailText</small>
-                            }
-                            @if (!string.IsNullOrWhiteSpace(item.AppliedToText))
-                            {
-                                <small class="applied-to">@item.AppliedToText</small>
-                            }
-                        </span>
-                        <span class="amount">@item.DiscountAmountFormatted</span>
-                    </li>
-                }
-            </ul>
-            <div class="total">
-                <span>@Model.TotalLabel</span>
-                <strong>@Model.TotalSavingsFormatted</strong>
-            </div>
-            <div class="offers-link">
-                <a href="@(Url.RouteUrl(DiscountManagerPlusDefaults.OffersRouteName) ?? "/promotions/offers")">@T("Plugins.NopStation.DiscountManagerPlus.Offers.LinkText")</a>
-            </div>
-        </div>
-    }
 </div>
 
-@if (Model.Items.Any() || Model.PendingRewards.Any() || Model.Reminders.Any())
+@if (Model.PendingRewards.Any() || Model.Reminders.Any() || Model.HasAppliedCoupon)
 {
     <script type="text/javascript">
         $(function () {
             var rootContainer = $('.ns-discount-manager-plus-cart-root').first();
-            var savingsBlock = rootContainer.find('.ns-discount-manager-plus-savings').first();
-            var orderSummaryContent = $('.order-summary-content').first();
-            if (savingsBlock.length > 0 && orderSummaryContent.length > 0) {
-                savingsBlock.insertBefore(orderSummaryContent);
-            }
             if (rootContainer.length > 0) {
                 rootContainer.css('display', 'block');
             }

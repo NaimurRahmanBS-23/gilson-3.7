@@ -42,16 +42,6 @@
         </tr>
         <tr>
             <td class="adminTitle">
-                @Html.OverrideStoreCheckboxFor(model => model.EnableCartSavingsBreakdown_OverrideForStore, model => model.EnableCartSavingsBreakdown, Model.ActiveStoreScopeConfiguration)
-                @Html.NopLabelFor(model => model.EnableCartSavingsBreakdown):
-            </td>
-            <td class="adminData">
-                @Html.EditorFor(model => model.EnableCartSavingsBreakdown)
-                @Html.ValidationMessageFor(model => model.EnableCartSavingsBreakdown)
-            </td>
-        </tr>
-        <tr>
-            <td class="adminTitle">
                 @Html.OverrideStoreCheckboxFor(model => model.UseDefaultDiscountPipeline_OverrideForStore, model => model.UseDefaultDiscountPipeline, Model.ActiveStoreScopeConfiguration)
                 @Html.NopLabelFor(model => model.UseDefaultDiscountPipeline):
             </td>

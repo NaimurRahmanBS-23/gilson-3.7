@@ -24,6 +24,13 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Models
         public string TotalLabel { get; set; }
         public decimal TotalSavings { get; set; }
         public string TotalSavingsFormatted { get; set; }
+        public string AppliedCouponCode { get; set; }
+        public string AppliedCouponTitle { get; set; }
+        public string AppliedCouponText { get; set; }
+        public bool HasAppliedCoupon
+        {
+            get { return !string.IsNullOrWhiteSpace(AppliedCouponCode); }
+        }
         public IList<CartSavingsItemModel> Items { get; set; }
         public string PendingRewardsTitle { get; set; }
         public string PendingRewardsDescription { get; set; }

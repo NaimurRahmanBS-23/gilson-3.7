@@ -77,7 +77,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers
             var model = new ConfigurationModel
             {
                 IsEnabled = settings.IsEnabled,
-                EnableCartSavingsBreakdown = settings.EnableCartSavingsBreakdown,
                 UseDefaultDiscountPipeline = settings.UseDefaultDiscountPipeline,
                 EnableLogging = settings.EnableLogging,
                 ActiveStoreScopeConfiguration = storeScope
@@ -86,7 +85,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers
             if (storeScope > 0)
             {
                 model.IsEnabled_OverrideForStore = _settingService.SettingExists(settings, x => x.IsEnabled, storeScope);
-                model.EnableCartSavingsBreakdown_OverrideForStore = _settingService.SettingExists(settings, x => x.EnableCartSavingsBreakdown, storeScope);
                 model.UseDefaultDiscountPipeline_OverrideForStore = _settingService.SettingExists(settings, x => x.UseDefaultDiscountPipeline, storeScope);
                 model.EnableLogging_OverrideForStore = _settingService.SettingExists(settings, x => x.EnableLogging, storeScope);
             }
@@ -108,7 +106,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers
             var settings = _settingService.LoadSetting<DiscountManagerPlusSettings>(storeScope);
 
             settings.IsEnabled = model.IsEnabled;
-            settings.EnableCartSavingsBreakdown = model.EnableCartSavingsBreakdown;
             settings.UseDefaultDiscountPipeline = model.UseDefaultDiscountPipeline;
             settings.EnableLogging = model.EnableLogging;
 
@@ -116,11 +113,6 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers
                 _settingService.SaveSetting(settings, x => x.IsEnabled, storeScope, false);
             else if (storeScope > 0)
                 _settingService.DeleteSetting(settings, x => x.IsEnabled, storeScope);
-
-            if (model.EnableCartSavingsBreakdown_OverrideForStore || storeScope == 0)
-                _settingService.SaveSetting(settings, x => x.EnableCartSavingsBreakdown, storeScope, false);
-            else if (storeScope > 0)
-                _settingService.DeleteSetting(settings, x => x.EnableCartSavingsBreakdown, storeScope);
 
             if (model.UseDefaultDiscountPipeline_OverrideForStore || storeScope == 0)
                 _settingService.SaveSetting(settings, x => x.UseDefaultDiscountPipeline, storeScope, false);
@@ -153,7 +145,8 @@ namespace Nop.Plugin.Misc.DiscountManagerPlus.Admin.Controllers
             foreach (var setting in _settingService.GetAllSettings())
             {
                 if (string.Equals(setting.Name, "discountmanagerplussettings.maxruleevaluationtimems", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(setting.Name, "discountmanagerplussettings.enablepromotionbadge", StringComparison.OrdinalIgnoreCase))
+                    string.Equals(setting.Name, "discountmanagerplussettings.enablepromotionbadge", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(setting.Name, "discountmanagerplussettings.enablecartsavingsbreakdown", StringComparison.OrdinalIgnoreCase))
                 {
                     _settingService.DeleteSetting(setting);
                 }

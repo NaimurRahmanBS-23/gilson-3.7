@@ -38,6 +38,24 @@
     background: linear-gradient(180deg, #f2fbff 0%, #ffffff 100%);
 }
 
+.ns-discount-manager-plus-applied-coupon {
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    border: 1px solid #c6e6d3;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #f1fbf5 0%, #ffffff 100%);
+}
+
+.ns-discount-manager-plus-applied-coupon .title {
+    font-weight: 700;
+    color: #166534;
+    margin-bottom: 4px;
+}
+
+.ns-discount-manager-plus-applied-coupon .message {
+    color: #14532d;
+}
+
 .ns-discount-manager-plus-reminders .title {
     margin: 0 0 8px;
     color: #0e7490;
